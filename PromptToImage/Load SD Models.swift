@@ -9,12 +9,13 @@ import Foundation
 import CoreML
 
 
-func loadModels(computeUnits:MLComputeUnits,
-                guidanceScale:Float) {
+// MARK: Create Pipeline
+
+func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
     
     // show wait window
     (wins["main"] as! SDMainWindowController).waitProgr.startAnimation(nil)
-    (wins["main"] as! SDMainWindowController).waitLabel.stringValue = "Loading CoreML models..."
+    (wins["main"] as! SDMainWindowController).waitLabel.stringValue = "Creating pipeline..."
     (wins["main"] as! SDMainWindowController).window?.beginSheet((wins["main"] as! SDMainWindowController).waitWin)
     
     DispatchQueue.global().async {
@@ -24,7 +25,7 @@ func loadModels(computeUnits:MLComputeUnits,
         do {
             let config = MLModelConfiguration()
             config.computeUnits = computeUnits
-            sdPipeline = try StableDiffusionPipeline(resourcesAt: Bundle.main.resourceURL!,
+            sdPipeline = try StableDiffusionPipeline(resourcesAt: url,
                                                      configuration:config)
             try sdPipeline?.loadResources()
         } catch {}

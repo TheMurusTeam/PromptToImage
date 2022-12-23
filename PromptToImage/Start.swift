@@ -20,8 +20,7 @@ extension AppDelegate {
         wins["main"] = SDMainWindowController(windowNibName: "SDMainWindowController",
                                               info: nil)
         // load CoreML models
-        loadModels(computeUnits: defaultComputeUnits,
-                   guidanceScale: defaultGuidanceScale)
+        createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:modelResourcesURL)
         
     }
     

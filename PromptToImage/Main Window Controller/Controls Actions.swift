@@ -10,6 +10,8 @@ import AppKit
 import CoreML
 import AVFoundation
 
+var generatedImages = [NSImage]()
+
 
 extension SDMainWindowController {
     
@@ -19,8 +21,6 @@ extension SDMainWindowController {
     @IBAction func clickGenerateImage(_ sender: NSButton) {
         // clear views
         self.imageview.image = nil
-        self.outputImages = [NSImage]()
-        self.outputImagesArrayController.content = nil
         //
         self.saveBtn.isEnabled = false
         isRunning = true
@@ -30,7 +30,7 @@ extension SDMainWindowController {
         if self.seedBtn.state == .off && (self.seedView.integerValue < Int(UInt32.max)) && (self.seedView.integerValue > 0) {
             seed = self.seedView.integerValue
         }
-        self.seedView.integerValue = seed
+        self.seedView.stringValue = String(seed)
         
         // generate image
         self.generateImage(prompt: self.promptView.stringValue,
@@ -61,14 +61,14 @@ extension SDMainWindowController {
     @IBAction func clickSave(_ sender: NSButton) {
         var items = [NSImage]()
         
-        if let image = self.imageview.image {
+        if generatedImages.count == 1 {
             // SHARE SINGLE IMAGE
             print("share single image")
-            items = [image]
-        } else if !self.outputImages.isEmpty {
+            items = [generatedImages[0]]
+        } else if generatedImages.count > 1 {
             // SHARE MULTIPLE IMAGES
-            print("share \(self.outputImages.count) images")
-            items = self.outputImages
+            print("share \(generatedImages.count) images")
+            items = generatedImages
         }
         
         let sharingPicker = NSSharingServicePicker(items: items)
@@ -83,6 +83,23 @@ extension SDMainWindowController {
     
     // MARK: Collection View Item Actions
     
+    
+    @IBAction func selectHistoryItem(_ sender: NSButton) {
+        var i = 0
+        for _ in self.colView.content {
+            if let cvitem = self.colView.item(at: i) {
+                if sender.isDescendant(of: cvitem.view) {
+                    print("clicked item at position \(i)")
+                    // show image
+                    self.imageview.image = self.history[i].upscaledImage ?? self.history[i].image
+                }
+            }
+            i = i + 1
+        }
+    }
+    
+
+    
     // save from collection view item
     @IBAction func clickSaveInCollectionViewItem(_ sender: NSButton) {
         var i = 0
@@ -91,7 +108,7 @@ extension SDMainWindowController {
                 if sender.isDescendant(of: cvitem.view) {
                     print("clicked item at position \(i)")
                     // save
-                    let items : [NSImage] = [self.outputImages[i]]
+                    let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
                     let sharingPicker = NSSharingServicePicker(items: items)
                     sharingPicker.delegate = self
                     sharingPicker.show(relativeTo: NSZeroRect,
@@ -102,21 +119,62 @@ extension SDMainWindowController {
             i = i + 1
         }
     }
+    
+    
 
-    // preview image
+    // display image info popover
     @IBAction func clickPreviewImage(_ sender: NSButton) {
         var i = 0
         for _ in self.colView.content {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
                     print("clicked item at position \(i)")
-                    winCtrl["preview"] = SDPreviewWindowController(windowNibName: "SDPreviewWindowController", image: self.outputImages[i])
-                    (winCtrl["preview"] as? SDPreviewWindowController)?.window?.makeKeyAndOrderFront(nil)
+                    self.presentPopover(originview: sender as NSView, edge: NSRectEdge.maxX, historyItem: self.history[i])
                 }
             }
             i = i + 1
         }
     }
+    
+    
+    
+    // create info Popover
+    func presentPopover(originview:NSView,edge:NSRectEdge?,historyItem:HistoryItem) {
+        self.setInfoPopover(item: historyItem)
+        infoPopover = NSPopover()
+        let popoverCtrl = NSViewController()
+        popoverCtrl.view = self.infoPopoverView
+        infoPopover!.contentViewController = popoverCtrl
+        infoPopover!.behavior = NSPopover.Behavior.transient
+        infoPopover!.animates = true
+        infoPopover!.show(relativeTo: originview.bounds, of: originview, preferredEdge: edge ?? NSRectEdge.minY)
+    }
+    
+    
+    // draw info popover
+    func setInfoPopover(item:HistoryItem) {
+        self.info_date.stringValue = dateFormatter.string(from: item.date)
+        self.info_prompt.stringValue = item.prompt
+        self.info_negativePrompt.stringValue = item.negativePrompt
+        self.info_seed.stringValue = String(item.seed)
+        self.info_steps.stringValue = String(item.steps)
+        self.info_guidance.stringValue = String(item.guidanceScale)
+        self.info_strenght.stringValue = String(item.strenght)
+        self.info_inputImage.image = NSImage()
+        if let cgimage = item.inputImage {
+            self.info_inputImage.image = NSImage(cgImage: cgimage, size: .zero)
+            self.info_noInputImageLabel.isHidden = true
+            self.info_strenght.isHidden = false
+        } else {
+            self.info_noInputImageLabel.isHidden = false
+            self.info_strenght.isHidden = true
+        }
+        let size = item.upscaledSize ?? item.originalSize
+        self.info_size.stringValue = "\(String(Int(size.width)))x\(String(Int(size.height)))"
+        self.info_upscaledLabel.isHidden = !item.upscaled
+    }
+    
+    
     
     // move selected image to input image
     @IBAction func clickCopyImageToInputImage(_ sender: NSButton) {
@@ -125,7 +183,7 @@ extension SDMainWindowController {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
                     print("clicked item at position \(i)")
-                    self.inputImageview.image = self.outputImages[i]
+                    self.inputImageview.image = self.history[i].image
                 }
             }
             i = i + 1
@@ -143,6 +201,7 @@ extension SDMainWindowController {
     // MARK: Switch model
     
     @IBAction func switchModelsPopup(_ sender: NSPopUpButton) {
+        /*
         if sender.indexOfSelectedItem == 0 {
             defaultModel = "Unet-ORIGINAL.mlmodelc"
             self.unitsPopup.selectItem(at: 1)
@@ -152,6 +211,7 @@ extension SDMainWindowController {
             self.unitsPopup.isEnabled = true
         }
         self.reloadModel()
+        */
     }
     
     // Reload MLModel
@@ -163,8 +223,7 @@ extension SDMainWindowController {
         default: units = .cpuAndNeuralEngine
         }
         // update pipeline
-        loadModels(computeUnits: units,
-                   guidanceScale: 7.5)
+        createStableDiffusionPipeline(computeUnits: units, url:modelResourcesURL)
     }
     
     
@@ -240,3 +299,12 @@ extension SDMainWindowController {
 
 
 
+let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale.autoupdatingCurrent
+    formatter.timeZone = TimeZone.autoupdatingCurrent
+    formatter.dateStyle = .long
+    formatter.timeStyle = .medium
+    formatter.doesRelativeDateFormatting = true
+    return formatter
+}()

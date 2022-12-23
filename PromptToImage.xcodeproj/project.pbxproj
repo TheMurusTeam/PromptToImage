@@ -11,7 +11,6 @@
 		3F169868293E7F6B008A2BF0 /* Load SD Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F169867293E7F6B008A2BF0 /* Load SD Models.swift */; };
 		3F16986A293E8467008A2BF0 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F169869293E8467008A2BF0 /* Share.swift */; };
 		3F16986C293E8503008A2BF0 /* Controls Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16986B293E8503008A2BF0 /* Controls Actions.swift */; };
-		3F3F70CD2953FA6D003F01F6 /* Unet-ORIGINAL.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F3F70CC2953FA6D003F01F6 /* Unet-ORIGINAL.mlmodelc */; };
 		3F444E59293EA4F2007A7D9F /* SDMainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F444E57293EA4F2007A7D9F /* SDMainWindowController.swift */; };
 		3F444E5A293EA4F2007A7D9F /* SDMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F444E58293EA4F2007A7D9F /* SDMainWindowController.xib */; };
 		3F444E5D293EA964007A7D9F /* Global Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F444E5C293EA964007A7D9F /* Global Vars.swift */; };
@@ -50,6 +49,9 @@
 		3FC49529293AAD2B00B2F32D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FC49527293AAD2B00B2F32D /* MainMenu.xib */; };
 		3FC49545293AD5AA00B2F32D /* Generate Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49544293AD5AA00B2F32D /* Generate Image.swift */; };
 		3FC49547293AD62700B2F32D /* Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49546293AD62700B2F32D /* Start.swift */; };
+		3FD921C82954F6E4008D797E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD921C72954F6E4008D797E /* Models.swift */; };
+		3FD921CB2954FBC2008D797E /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD921CA2954FBC2008D797E /* ZIPFoundation */; };
+		3FD921CD29552C05008D797E /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD921CC29552C05008D797E /* History.swift */; };
 		3FE7E3E1293BD58000720E18 /* Upscaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE7E3E0293BD58000720E18 /* Upscaler.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,7 +60,6 @@
 		3F169867293E7F6B008A2BF0 /* Load SD Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Load SD Models.swift"; sourceTree = "<group>"; };
 		3F169869293E8467008A2BF0 /* Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share.swift; sourceTree = "<group>"; };
 		3F16986B293E8503008A2BF0 /* Controls Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controls Actions.swift"; sourceTree = "<group>"; };
-		3F3F70CC2953FA6D003F01F6 /* Unet-ORIGINAL.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "Unet-ORIGINAL.mlmodelc"; sourceTree = "<group>"; };
 		3F444E57293EA4F2007A7D9F /* SDMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDMainWindowController.swift; sourceTree = "<group>"; };
 		3F444E58293EA4F2007A7D9F /* SDMainWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SDMainWindowController.xib; sourceTree = "<group>"; };
 		3F444E5C293EA964007A7D9F /* Global Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Vars.swift"; sourceTree = "<group>"; };
@@ -99,6 +100,8 @@
 		3FC4952A293AAD2B00B2F32D /* PromptToImage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PromptToImage.entitlements; sourceTree = "<group>"; };
 		3FC49544293AD5AA00B2F32D /* Generate Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Generate Image.swift"; sourceTree = "<group>"; };
 		3FC49546293AD62700B2F32D /* Start.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Start.swift; sourceTree = "<group>"; };
+		3FD921C72954F6E4008D797E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		3FD921CC29552C05008D797E /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		3FE7E3E0293BD58000720E18 /* Upscaler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upscaler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FD921CB2954FBC2008D797E /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +209,7 @@
 				3F47B2452950D243000C33EC /* bigsd-ship.png */,
 				3F47B2412950C6E2000C33EC /* tree.png */,
 				3F47B2332950C03D000C33EC /* testimage.png */,
+				3FD921C72954F6E4008D797E /* Models.swift */,
 				3F169865293E7E8B008A2BF0 /* Extensions.swift */,
 				3F444E5C293EA964007A7D9F /* Global Vars.swift */,
 				3FE7E3DB293BD53700720E18 /* Upscale Model */,
@@ -219,6 +224,7 @@
 				3FC49525293AAD2B00B2F32D /* Assets.xcassets */,
 				3FC49527293AAD2B00B2F32D /* MainMenu.xib */,
 				3FC4952A293AAD2B00B2F32D /* PromptToImage.entitlements */,
+				3FD921CC29552C05008D797E /* History.swift */,
 			);
 			path = PromptToImage;
 			sourceTree = "<group>";
@@ -227,7 +233,6 @@
 			isa = PBXGroup;
 			children = (
 				3F9C6BB629535140001D4252 /* merges.txt */,
-				3F3F70CC2953FA6D003F01F6 /* Unet-ORIGINAL.mlmodelc */,
 				3F9C6BB129535140001D4252 /* TextEncoder.mlmodelc */,
 				3F9C6BB429535140001D4252 /* Unet.mlmodelc */,
 				3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */,
@@ -262,6 +267,7 @@
 			);
 			name = PromptToImage;
 			packageProductDependencies = (
+				3FD921CA2954FBC2008D797E /* ZIPFoundation */,
 			);
 			productName = PromptToImage;
 			productReference = 3FC49520293AAD2A00B2F32D /* PromptToImage.app */;
@@ -292,6 +298,7 @@
 			);
 			mainGroup = 3FC49517293AAD2A00B2F32D;
 			packageReferences = (
+				3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 3FC49521293AAD2A00B2F32D /* Products */;
 			projectDirPath = "";
@@ -319,7 +326,6 @@
 				3F47B2442950C7DB000C33EC /* sd-ship.png in Resources */,
 				3F9C6BB829535140001D4252 /* VAEEncoder.mlmodelc in Resources */,
 				3F9C6BBC29535140001D4252 /* merges.txt in Resources */,
-				3F3F70CD2953FA6D003F01F6 /* Unet-ORIGINAL.mlmodelc in Resources */,
 				3F9C6BB929535140001D4252 /* vocab.json in Resources */,
 				3FC49529293AAD2B00B2F32D /* MainMenu.xib in Resources */,
 			);
@@ -341,6 +347,7 @@
 				3F47B2262950B5DA000C33EC /* SampleTimer.swift in Sources */,
 				3F47B2272950B5DA000C33EC /* StableDiffusionPipeline+Resources.swift in Sources */,
 				3F169866293E7E8B008A2BF0 /* Extensions.swift in Sources */,
+				3FD921C82954F6E4008D797E /* Models.swift in Sources */,
 				3FC49524293AAD2A00B2F32D /* AppDelegate.swift in Sources */,
 				3F16986A293E8467008A2BF0 /* Share.swift in Sources */,
 				3F47B2202950B5DA000C33EC /* Random.swift in Sources */,
@@ -354,6 +361,7 @@
 				3F47B2252950B5DA000C33EC /* AlphasCumprodCalculation.swift in Sources */,
 				3FC49545293AD5AA00B2F32D /* Generate Image.swift in Sources */,
 				3F444E5D293EA964007A7D9F /* Global Vars.swift in Sources */,
+				3FD921CD29552C05008D797E /* History.swift in Sources */,
 				3F4D2D2E29414E960075324F /* realesrgan512.mlmodel in Sources */,
 				3F47B2302950B5E6000C33EC /* BPETokenizer.swift in Sources */,
 				3F47B2212950B5DA000C33EC /* ResourceManaging.swift in Sources */,
@@ -575,6 +583,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.9;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3FD921CA2954FBC2008D797E /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3FC49518293AAD2A00B2F32D /* Project object */;
 }

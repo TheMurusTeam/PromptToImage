@@ -21,8 +21,7 @@ public extension StableDiffusionPipeline {
 
         public init(resourcesAt baseURL: URL) {
             textEncoderURL = baseURL.appending(path: "TextEncoder.mlmodelc")
-            //unetURL = baseURL.appending(path: "Unet.mlmodelc")
-            unetURL = baseURL.appending(path: defaultModel)
+            unetURL = baseURL.appending(path: "Unet.mlmodelc")
             unetChunk1URL = baseURL.appending(path: "UnetChunk1.mlmodelc")
             unetChunk2URL = baseURL.appending(path: "UnetChunk2.mlmodelc")
             decoderURL = baseURL.appending(path: "VAEDecoder.mlmodelc")

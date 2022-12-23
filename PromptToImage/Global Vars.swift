@@ -9,6 +9,9 @@ import Foundation
 import CoreML
 import AppKit
 
+// stable diffusion model resources URL
+var modelResourcesURL : URL = Bundle.main.resourceURL!
+
 // file format
 let savefileFormat : NSBitmapImageRep.FileType = .png
 
@@ -19,7 +22,8 @@ let modelHeight: Double = 512
 // sd pipeline
 var sdPipeline : StableDiffusionPipeline? = nil
 
-var defaultModel = "Unet-ORIGINAL.mlmodelc"
+
+
 var defaultComputeUnits : MLComputeUnits = .cpuAndGPU
 var defaultGuidanceScale : Float = 7.5
 var defaultUpscaleModelPath = Bundle.main.path(forResource: "realesrgan512", ofType: "mlmodelc")

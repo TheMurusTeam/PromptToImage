@@ -27,16 +27,17 @@ extension SDMainWindowController {
                        guidanceScale:Float,
                        stepsPreview:Bool) {
         
+        generatedImages.removeAll() // cleanup save clipboard
+        
         let upscale = self.upscaleCheckBox.state == .on
-        self.copyOutputBtn.isHidden = imageCount > 1
         
         // input image
-        if let startingImage = startingImage {print("Starting image size: \(startingImage.width)x\(startingImage.height)")}
+        if let startingImage = startingImage {print("original input image size: \(startingImage.width)x\(startingImage.height)")}
         var inputImage : CGImage? = startingImage
         if let iimage = inputImage {
             if (iimage.width != Int(modelWidth)) || (iimage.height != Int(modelHeight)) {
                 inputImage = startingImage?.resize(size: NSSize(width: modelWidth, height: modelHeight))
-                print("Resized starting image size: \(inputImage?.width)x\(inputImage?.height)")
+                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
             }
         }
         
@@ -98,7 +99,15 @@ extension SDMainWindowController {
                     // DISPLAY OUTPUT IMAGES
                     print("images array count: \(images.count)")
                     print("displaying images...")
-                    self.displayResult(images: images, upscale: upscale)
+                    self.displayResult(images: images,
+                                       upscale: upscale,
+                                       prompt: prompt,
+                                       negativePrompt: negativePrompt,
+                                       startingImage: inputImage,
+                                       strength: strength,
+                                       stepCount: stepCount,
+                                       seed: seed,
+                                       guidanceScale: guidanceScale)
                     
                     
                 } else {
@@ -123,26 +132,36 @@ extension SDMainWindowController {
     
     // MARK: Display Results
     
-    func displayResult(images:[CGImage?],upscale:Bool) {
-        DispatchQueue.main.async {
-            self.imageview.isHidden = false
-            self.colScrollView.isHidden = true
-        }
+    func displayResult(images:[CGImage?],
+                       upscale:Bool,
+                       prompt:String,
+                       negativePrompt:String,
+                       startingImage: CGImage?,
+                       strength: Float,
+                       stepCount:Int,
+                       seed:Int,
+                       guidanceScale:Float) {
+        
         if images.count == 1 {
-            self.displaySingleImage(image: images[0], upscale: upscale)
+            self.displaySingleImage(image: images[0], upscale: upscale, prompt: prompt, negativePrompt: negativePrompt, startingImage: startingImage, strength: strength, stepCount: stepCount, seed: seed, guidanceScale: guidanceScale)
         } else if images.count > 1 {
-            self.displayMultipleImages(images: images, upscale: upscale)
+            self.displayMultipleImages(images: images, upscale: upscale, prompt: prompt, negativePrompt: negativePrompt, startingImage: startingImage, strength: strength, stepCount: stepCount, seed: seed, guidanceScale: guidanceScale)
         }
     }
     
     
     // display collection view
-    func displayMultipleImages(images:[CGImage?], upscale:Bool) {
+    func displayMultipleImages(images:[CGImage?],
+                               upscale:Bool,
+                               prompt:String,
+                               negativePrompt:String,
+                               startingImage: CGImage?,
+                               strength: Float,
+                               stepCount:Int,
+                               seed:Int,
+                               guidanceScale:Float) {
+        
         DispatchQueue.main.async {
-            self.imageview.isHidden = true
-            self.colScrollView.isHidden = false
-            self.outputImages = [NSImage]()
-            self.outputImagesArrayController.content = nil
             self.progrLabel.stringValue = "Upscaling images..."
             self.indindicator.isHidden = false
             self.indicator.isHidden = true
@@ -151,22 +170,36 @@ extension SDMainWindowController {
         for cgimage in images {
             if cgimage != nil {
                 let nsimage = NSImage(cgImage: cgimage!,size: .zero)
-                    if upscale {
-                        if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
+                if upscale {
+                    if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
+                        DispatchQueue.main.async {
+                            // copy images to save clipboard
+                            generatedImages.append(upscaledImage)
+                            // add history item
+                            let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
                             DispatchQueue.main.async {
-                                self.outputImages.append(upscaledImage)
+                                self.historyArrayController.addObject(item)
                             }
                         }
-                    } else {
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        // copy images to save clipboard
+                        generatedImages.append(nsimage)
+                        // add history item
+                        let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
                         DispatchQueue.main.async {
-                            self.outputImages.append(nsimage)
+                            self.historyArrayController.addObject(item)
                         }
                     }
+                }
             }
         }
+        
         DispatchQueue.main.async {
             self.saveBtn.isEnabled = true
             self.window?.endSheet(self.progrWin)
+            self.imageview.image = generatedImages.first ?? NSImage()
         }
     }
     
@@ -174,12 +207,20 @@ extension SDMainWindowController {
     
     
     // display image view
-    func displaySingleImage(image:CGImage??, upscale:Bool) {
+    func displaySingleImage(image:CGImage??,
+                            upscale:Bool,
+                            prompt:String,
+                            negativePrompt:String,
+                            startingImage: CGImage?,
+                            strength: Float,
+                            stepCount:Int,
+                            seed:Int,
+                            guidanceScale:Float) {
+        
         if image != nil {
             let nsimage = NSImage(cgImage: image!!,
                                   size: .zero)
             DispatchQueue.main.async {
-                self.imageview.image = nsimage
                 isRunning = false
                 
                 if upscale {
@@ -192,13 +233,30 @@ extension SDMainWindowController {
                     DispatchQueue.global().async {
                         if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
                             DispatchQueue.main.async {
-                                self.imageview.image = upscaledImage
+                                // copy images to save clipboard
+                                generatedImages.append(upscaledImage)
+                                // add history item
+                                let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
+                                DispatchQueue.main.async {
+                                    self.historyArrayController.addObject(item)
+                                    self.imageview.image = upscaledImage
+                                }
+                                // close wait window
                                 self.window?.endSheet(self.progrWin)
                                 self.saveBtn.isEnabled = true
                             }
                         }
                     }
                 } else {
+                    // copy images to save clipboard
+                    generatedImages.append(nsimage)
+                    // add history item
+                    let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
+                    DispatchQueue.main.async {
+                        self.historyArrayController.addObject(item)
+                        self.imageview.image = nsimage
+                    }
+                    // close wait window
                     self.window?.endSheet(self.progrWin)
                     self.saveBtn.isEnabled = true
                 }
