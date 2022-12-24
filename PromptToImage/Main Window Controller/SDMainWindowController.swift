@@ -123,17 +123,19 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet var settingsWindow: NSWindow!
     @IBAction func displaySettings(_ sender: Any) {
         self.setModelsPopup()
-        self.settingsWindow.makeKeyAndOrderFront(nil)
+        //self.settingsWindow.makeKeyAndOrderFront(nil)
+        self.window?.beginSheet(self.settingsWindow)
+    }
+    @IBAction func closeSettingsWindow(_ sender: Any) {
+        self.window?.endSheet(self.settingsWindow)
     }
     
-    @IBAction func clickRevealModelsInFinder(_ sender: Any) {
-        revealCustomModelsDirInFinder()
-    }
+   
     
     @IBOutlet weak var modelsPopupMenu: NSMenu!
     
     
-    
+    var currentHistoryItem : HistoryItem? = nil
     
     
     

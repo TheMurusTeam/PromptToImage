@@ -27,7 +27,8 @@ var sdPipeline : StableDiffusionPipeline? = nil
 
 
 
+let defaultComputeUnits : MLComputeUnits = .cpuAndGPU
+var currentComputeUnits : MLComputeUnits = .cpuAndGPU
 
-var defaultComputeUnits : MLComputeUnits = .cpuAndGPU
 var defaultGuidanceScale : Float = 7.5
 var defaultUpscaleModelPath = Bundle.main.path(forResource: "realesrgan512", ofType: "mlmodelc")

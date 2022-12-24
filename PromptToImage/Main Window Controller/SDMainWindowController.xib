@@ -60,7 +60,7 @@
                 <outlet property="strenghtSlider" destination="YAY-Kv-hT6" id="E7v-8e-Geq"/>
                 <outlet property="unitsPopup" destination="KjR-iA-yOt" id="8Lx-R0-Nvd"/>
                 <outlet property="upscaleCheckBox" destination="B0p-Yp-sNC" id="h1Q-PB-8VM"/>
-                <outlet property="waitInfoLabel" destination="B7f-XC-7ft" id="Hg5-Yq-ttn"/>
+                <outlet property="waitInfoLabel" destination="0K2-OY-Jlh" id="7aJ-Rs-ixF"/>
                 <outlet property="waitLabel" destination="U7x-40-aL5" id="aTr-di-70W"/>
                 <outlet property="waitProgr" destination="7yU-gE-M3p" id="cTg-rN-gE0"/>
                 <outlet property="waitWin" destination="5Xs-p5-gnm" id="YuQ-Aa-SdO"/>
@@ -614,14 +614,14 @@ DQ
         <window title="Generate Image" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="KAG-at-Zex" userLabel="progress window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="206" width="240" height="164"/>
+            <rect key="contentRect" x="196" y="206" width="316" height="164"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" id="ozh-Ck-Cru">
-                <rect key="frame" x="0.0" y="0.0" width="240" height="164"/>
+                <rect key="frame" x="0.0" y="0.0" width="316" height="164"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TeU-YU-jzh">
-                        <rect key="frame" x="47" y="13" width="146" height="32"/>
+                        <rect key="frame" x="85" y="13" width="146" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="132" id="WvB-uW-PvI"/>
                             <constraint firstAttribute="height" constant="20" id="lPR-Wg-wEI"/>
@@ -635,7 +635,7 @@ DQ
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Fg-p1-JvM">
-                        <rect key="frame" x="18" y="80" width="204" height="16"/>
+                        <rect key="frame" x="18" y="80" width="280" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="O8E-WK-Bx1"/>
                         </constraints>
@@ -646,22 +646,24 @@ DQ
                         </textFieldCell>
                     </textField>
                     <progressIndicator maxValue="100" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="DV1-Dc-d67">
-                        <rect key="frame" x="104" y="112" width="32" height="32"/>
+                        <rect key="frame" x="142" y="112" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="32" id="Se0-P8-Y8x"/>
                             <constraint firstAttribute="height" constant="32" id="T0l-zM-4lw"/>
                         </constraints>
                     </progressIndicator>
                     <progressIndicator maxValue="100" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="NUZ-rz-7yU">
-                        <rect key="frame" x="104" y="112" width="32" height="32"/>
+                        <rect key="frame" x="142" y="112" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="32" id="G32-M5-adz"/>
                             <constraint firstAttribute="width" constant="32" id="npy-De-7pk"/>
                         </constraints>
                     </progressIndicator>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jsU-lS-sAZ">
-                        <rect key="frame" x="18" y="61" width="204" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jsU-lS-sAZ">
+                        <rect key="frame" x="18" y="58" width="280" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="ngl-Va-f4k"/>
+                        </constraints>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Speed: 1.0 step/sec" id="QW8-Lc-004">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -675,13 +677,16 @@ DQ
                     <constraint firstItem="TeU-YU-jzh" firstAttribute="centerX" secondItem="ozh-Ck-Cru" secondAttribute="centerX" id="H3l-11-Xsz"/>
                     <constraint firstItem="DV1-Dc-d67" firstAttribute="top" secondItem="ozh-Ck-Cru" secondAttribute="top" constant="20" symbolic="YES" id="Pen-A3-PZz"/>
                     <constraint firstAttribute="trailing" secondItem="2Fg-p1-JvM" secondAttribute="trailing" constant="20" symbolic="YES" id="PrA-XY-xl1"/>
+                    <constraint firstAttribute="trailing" secondItem="jsU-lS-sAZ" secondAttribute="trailing" constant="20" symbolic="YES" id="Qp5-83-7mo"/>
+                    <constraint firstItem="jsU-lS-sAZ" firstAttribute="leading" secondItem="ozh-Ck-Cru" secondAttribute="leading" constant="20" symbolic="YES" id="RJO-uP-7Pk"/>
                     <constraint firstItem="NUZ-rz-7yU" firstAttribute="top" secondItem="ozh-Ck-Cru" secondAttribute="top" constant="20" symbolic="YES" id="TaA-UG-nzl"/>
+                    <constraint firstItem="jsU-lS-sAZ" firstAttribute="top" secondItem="2Fg-p1-JvM" secondAttribute="bottom" constant="6" id="Z9h-aY-Zaz"/>
                     <constraint firstItem="DV1-Dc-d67" firstAttribute="centerX" secondItem="ozh-Ck-Cru" secondAttribute="centerX" id="ZmP-Um-RYn"/>
                     <constraint firstItem="2Fg-p1-JvM" firstAttribute="top" secondItem="DV1-Dc-d67" secondAttribute="bottom" constant="16" id="keF-Sc-aQS"/>
                     <constraint firstItem="NUZ-rz-7yU" firstAttribute="centerX" secondItem="ozh-Ck-Cru" secondAttribute="centerX" id="mIP-pL-0ob"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="436" y="-227"/>
+            <point key="canvasLocation" x="83" y="-158"/>
         </window>
         <window title="Load Model" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="5Xs-p5-gnm" userLabel="wait window">
             <windowStyleMask key="styleMask" titled="YES"/>
@@ -705,10 +710,10 @@ DQ
                         <rect key="frame" x="142" y="98" width="32" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B7f-XC-7ft">
-                        <rect key="frame" x="18" y="31" width="280" height="16"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0K2-OY-Jlh">
+                        <rect key="frame" x="6" y="13" width="303" height="34"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" alignment="center" title="Stable Diffusion 2.1 SPLIT EINSUM" id="Xq5-ma-v0F">
+                        <textFieldCell key="cell" selectable="YES" alignment="center" title="Stable Diffusion 2.1 SPLIT EINSUM" id="9EU-Cg-mr6">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -716,7 +721,7 @@ DQ
                     </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="83" y="-293"/>
+            <point key="canvasLocation" x="83" y="-413"/>
         </window>
         <arrayController id="Jhs-WJ-FKv" userLabel="History Array Controller">
             <connections>
@@ -1002,7 +1007,7 @@ DQ
                             </connections>
                         </button>
                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yna-Qo-Bqm">
-                            <rect key="frame" x="20" y="68" width="24" height="24"/>
+                            <rect key="frame" x="20" y="38" width="24" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="CVD-yd-QQI">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1125,102 +1130,115 @@ DQ
             </subviews>
             <point key="canvasLocation" x="324.5" y="334"/>
         </customView>
-        <window title="Settings" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="settingsWindow" animationBehavior="default" id="VUn-uX-nwP">
+        <window title="Settings" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="settingsWindow" animationBehavior="default" id="VUn-uX-nwP">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="783" y="593" width="399" height="329"/>
+            <rect key="contentRect" x="783" y="593" width="462" height="339"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" id="mo0-5A-QS9">
-                <rect key="frame" x="0.0" y="0.0" width="399" height="329"/>
+                <rect key="frame" x="0.0" y="0.0" width="462" height="339"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pcb-6P-QCE">
-                        <rect key="frame" x="2" y="2" width="394" height="323"/>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KjR-iA-yOt">
+                        <rect key="frame" x="15" y="119" width="217" height="49"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <tabViewItems>
-                            <tabViewItem label="Models" identifier="" id="MqH-43-8kq">
-                                <view key="view" id="uYd-Ad-h5z">
-                                    <rect key="frame" x="10" y="33" width="374" height="277"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KjR-iA-yOt">
-                                            <rect key="frame" x="12" y="133" width="217" height="49"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="CPU and GPU" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ebA-ge-uve" id="Foo-xR-CPU">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="F5M-qI-IxP">
-                                                    <items>
-                                                        <menuItem title="CPU and Neural Engine" id="yeC-8r-BgD"/>
-                                                        <menuItem title="CPU and GPU" state="on" id="ebA-ge-uve"/>
-                                                        <menuItem title="All Compute Units" id="jra-rT-sSm"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="switchUnitsPopup:" target="-2" id="7UU-Hg-Aby"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ClX-zw-iCX">
-                                            <rect key="frame" x="12" y="212" width="349" height="40"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="oD5-uH-buP">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="Lza-ad-PcG">
-                                                    <connections>
-                                                        <outlet property="delegate" destination="-2" id="k4I-di-xrZ"/>
-                                                    </connections>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="switchModelsPopup:" target="-2" id="jbs-to-wt4"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dbj-fg-N6e">
-                                            <rect key="frame" x="15" y="247" width="42" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Model" id="ePa-dS-HVI">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUc-cQ-jcJ">
-                                            <rect key="frame" x="17" y="173" width="95" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Compute Units" id="sjv-Ec-yzT">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqu-GE-O9G">
-                                            <rect key="frame" x="11" y="11" width="217" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Reveal Models Dir in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IuN-Yq-etr">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="clickRevealModelsInFinder:" target="-2" id="7aL-vx-a38"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                </view>
-                            </tabViewItem>
-                            <tabViewItem label="History" identifier="" id="TvS-Xq-MW8">
-                                <view key="view" id="XoF-3Y-VQn">
-                                    <rect key="frame" x="10" y="33" width="374" height="277"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </view>
-                            </tabViewItem>
-                        </tabViewItems>
-                    </tabView>
+                        <popUpButtonCell key="cell" type="push" title="CPU and GPU (Default)" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ebA-ge-uve" id="Foo-xR-CPU">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="F5M-qI-IxP">
+                                <items>
+                                    <menuItem title="CPU and Neural Engine" id="yeC-8r-BgD"/>
+                                    <menuItem title="CPU and GPU (Default)" state="on" id="ebA-ge-uve"/>
+                                    <menuItem title="All Compute Units" id="jra-rT-sSm"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="switchUnitsPopup:" target="-2" id="7UU-Hg-Aby"/>
+                        </connections>
+                    </popUpButton>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ClX-zw-iCX">
+                        <rect key="frame" x="15" y="268" width="432" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="oD5-uH-buP">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="Lza-ad-PcG">
+                                <connections>
+                                    <outlet property="delegate" destination="-2" id="k4I-di-xrZ"/>
+                                </connections>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="switchModelsPopup:" target="-2" id="jbs-to-wt4"/>
+                        </connections>
+                    </popUpButton>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dbj-fg-N6e">
+                        <rect key="frame" x="18" y="303" width="42" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Model" id="ePa-dS-HVI">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUc-cQ-jcJ">
+                        <rect key="frame" x="20" y="159" width="95" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Compute Units" id="sjv-Ec-yzT">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqu-GE-O9G">
+                        <rect key="frame" x="14" y="196" width="219" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Reveal Models Dir in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IuN-Yq-etr">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="clickRevealModelsInFinder:" target="-2" id="7aL-vx-a38"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQi-96-kru">
+                        <rect key="frame" x="18" y="230" width="426" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" selectable="YES" id="6gD-m0-yFM">
+                            <font key="font" metaFont="system" size="11"/>
+                            <string key="title">To install a custom model create a new folder in Models Directory and copy all model files. New models will automatically appear in Models popup</string>
+                            <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y9N-aL-Dhl">
+                        <rect key="frame" x="18" y="85" width="426" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" selectable="YES" id="gtf-9W-6Gu">
+                            <font key="font" metaFont="system" size="11"/>
+                            <string key="title">Use 'CPU and GPU' for best compatibility. Use "CPU and Neural Engine" on M1/M2 using models compiled with attention implementation SPLIT EINSUM only.</string>
+                            <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DgT-6c-2zi">
+                        <rect key="frame" x="160" y="14" width="143" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Close Panel" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1td-xT-Rdj">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeSettingsWindow:" target="-2" id="Z77-5I-K0A"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-83" y="-175"/>
+            <point key="canvasLocation" x="-52" y="-170.5"/>
         </window>
     </objects>
     <resources>

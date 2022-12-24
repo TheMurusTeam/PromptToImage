@@ -18,13 +18,10 @@ var wins = [String:NSWindowController]()
 @main
 class AppDelegate: NSObject, NSApplicationDelegate, NSSharingServicePickerDelegate {
 
-    func applicationWillTerminate(_ aNotification: Notification) { }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { return true }
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { return true }
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.startPromptToImage()
-    }
-
+    func applicationDidFinishLaunching(_ aNotification: Notification) { self.startPromptToImage() }
+    func applicationWillTerminate(_ aNotification: Notification) { self.willTerminate() }
 }
 
 

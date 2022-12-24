@@ -85,6 +85,7 @@
 		3F47B2432950C7DB000C33EC /* sd-ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sd-ship.png"; sourceTree = "<group>"; };
 		3F47B2452950D243000C33EC /* bigsd-ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bigsd-ship.png"; sourceTree = "<group>"; };
 		3F4D2D2D29414E960075324F /* realesrgan512.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = realesrgan512.mlmodel; sourceTree = "<group>"; };
+		3F951377295767CB0055D783 /* PromptToImageDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PromptToImageDebug.entitlements; sourceTree = "<group>"; };
 		3F9C6BAD2952B033001D4252 /* SDPreviewWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDPreviewWindowController.swift; sourceTree = "<group>"; };
 		3F9C6BAE2952B033001D4252 /* SDPreviewWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SDPreviewWindowController.xib; sourceTree = "<group>"; };
 		3F9C6BB129535140001D4252 /* TextEncoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TextEncoder.mlmodelc; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 		3FC49522293AAD2A00B2F32D /* PromptToImage */ = {
 			isa = PBXGroup;
 			children = (
+				3F951377295767CB0055D783 /* PromptToImageDebug.entitlements */,
 				3F47B2432950C7DB000C33EC /* sd-ship.png */,
 				3F47B2452950D243000C33EC /* bigsd-ship.png */,
 				3F47B2412950C6E2000C33EC /* tree.png */,
@@ -504,7 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PromptToImage/PromptToImage.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PromptToImage/PromptToImageDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;

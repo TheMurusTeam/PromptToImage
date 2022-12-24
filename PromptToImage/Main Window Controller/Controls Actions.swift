@@ -59,6 +59,7 @@ extension SDMainWindowController {
      
     // main view share button
     @IBAction func clickSave(_ sender: NSButton) {
+        
         var items = [NSImage]()
         
         if generatedImages.count == 1 {
@@ -76,6 +77,7 @@ extension SDMainWindowController {
         sharingPicker.show(relativeTo: NSZeroRect,
                            of: sender,
                            preferredEdge: .minY)
+        
     }
     
     
@@ -107,8 +109,9 @@ extension SDMainWindowController {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
                     // save
-                    // let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
-                    let items : [HistoryItem] = [self.history[i]]
+                    let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
+                    self.currentHistoryItem = self.history[i]
+                    //let items : [HistoryItem] = [self.history[i]]
                     let sharingPicker = NSSharingServicePicker(items: items)
                     sharingPicker.delegate = self
                     sharingPicker.show(relativeTo: NSZeroRect,
@@ -202,12 +205,18 @@ extension SDMainWindowController {
     // MARK: Switch Compute Units
     
     @IBAction func switchUnitsPopup(_ sender: NSPopUpButton) {
-        self.settingsWindow.close()
+        //self.settingsWindow.close()
+        self.window?.endSheet(self.settingsWindow)
+        switch sender.indexOfSelectedItem {
+        case 1: currentComputeUnits = .cpuAndGPU
+        case 2: currentComputeUnits = .all
+        default: currentComputeUnits = .cpuAndNeuralEngine
+        }
         self.reloadModel()
     }
     
     func setUnitsPopup() {
-        switch defaultComputeUnits {
+        switch currentComputeUnits {
         case .cpuAndNeuralEngine: self.unitsPopup.selectItem(at: 0)
         case .cpuAndGPU: self.unitsPopup.selectItem(at: 1)
         default: self.unitsPopup.selectItem(at: 2) // all
@@ -218,12 +227,14 @@ extension SDMainWindowController {
     // MARK: Switch model
     
     @IBAction func switchModelsPopup(_ sender: NSPopUpButton) {
-        self.settingsWindow.close()
+        //self.settingsWindow.close()
+        self.window?.endSheet(self.settingsWindow)
         if sender.indexOfSelectedItem == 0 {
             modelResourcesURL = defaultModelResourcesURL
         } else {
             if let modelurl = sender.selectedItem?.representedObject as? URL {
                 modelResourcesURL = modelurl
+                print("setting modelResourcesURL to \(modelResourcesURL)")
             }
         }
         self.reloadModel()
@@ -232,30 +243,37 @@ extension SDMainWindowController {
     
     // Reload MLModel
     func reloadModel() {
-        var units : MLComputeUnits = .cpuAndNeuralEngine
-        switch self.unitsPopup.indexOfSelectedItem {
-        case 1: units = .cpuAndGPU
-        case 2: units = .all
-        default: units = .cpuAndNeuralEngine
-        }
-        // update pipeline
-        if !createStableDiffusionPipeline(computeUnits: units, url:modelResourcesURL) {
-            // error
-            print("error creating pipeline")
-            DispatchQueue.main.async {
-                self.displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
-                // restore default model and compute units
-                let _ = createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
-                modelResourcesURL = defaultModelResourcesURL
-                // set user defaults
+        DispatchQueue.global().async {
+            createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
+            if sdPipeline == nil {
+                // error
+                print("error creating pipeline")
+                DispatchQueue.main.async {
+                    self.displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
+                    // restore default model and compute units
+                    createStableDiffusionPipeline(computeUnits: defaultComputeUnits,
+                                                  url: defaultModelResourcesURL)
+                    modelResourcesURL = defaultModelResourcesURL
+                    // set user defaults
+                    UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+                }
+            } else {
+                // save to user defaults
                 UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
             }
-        } else {
-            // set user defaults
-            UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
         }
-            
     }
+    
+    // MARK: Reveal models dir in Finder
+    
+    @IBAction func clickRevealModelsInFinder(_ sender: Any) {
+        self.window?.endSheet(self.settingsWindow)
+        revealCustomModelsDirInFinder()
+    }
+    
+    
+    
+    
     
     
     func displayErrorAlert(txt:String) {

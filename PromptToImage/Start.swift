@@ -23,23 +23,77 @@ extension AppDelegate {
     func startPromptToImage() {
         print("Starting PromptToImage")
         
-        // create custom models directory in app sandbox if needed
-        createModelsDir()
-        
-        // read user defaults
-        modelResourcesURL = UserDefaults.standard.url(forKey: "modelResourcesURL") ?? defaultModelResourcesURL
-        
         // set app appearance
         // NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
         
+        // create custom models directory in app sandbox if needed
+        createModelsDir()
+        
+        // set model and compute units
+        if CGEventSource.keyState(CGEventSourceStateID.init(rawValue: 0)!, key: 0x3a) ||
+            CGEventSource.keyState(CGEventSourceStateID.init(rawValue: 0)!, key: 0x37) {
+            // app has been launched keeping ALT or COMMAND pressed, use factory settings
+            modelResourcesURL = defaultModelResourcesURL
+            currentComputeUnits = defaultComputeUnits
+        } else {
+            // set model
+            modelResourcesURL = UserDefaults.standard.url(forKey: "modelResourcesURL") ?? defaultModelResourcesURL
+            // set compute units
+            if let str = UserDefaults.standard.value(forKey: "computeUnits") as? String {
+                print("Compute units: \(str)")
+                currentComputeUnits = str2cu(str: str)
+            }
+        }
+           
         // show main window
-        wins["main"] = SDMainWindowController(windowNibName: "SDMainWindowController",
-                                              info: nil)
-        // load Stable Diffusion and Upscaler CoreML models
-        if !createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:modelResourcesURL) {
-            let _ = createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
+        wins["main"] = SDMainWindowController(windowNibName: "SDMainWindowController", info: nil)
+        
+        // load upscaler CoreML model
+        loadUpscalerModel()
+        
+        DispatchQueue.global().async {
+            // load latest Stable Diffusion CoreML models
+            createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
+            if sdPipeline == nil {
+                // load factory models
+                createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
+            }
         }
         
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func willTerminate() {
+        UserDefaults.standard.setValue(cu2str(cu: currentComputeUnits), forKey: "computeUnits")
+    }
+    
+    
+    func cu2str(cu:MLComputeUnits) -> String {
+        switch cu {
+        case .cpuAndGPU: return "cpuAndGPU"
+        case .cpuAndNeuralEngine: return "cpuAndNeuralEngine"
+        case .cpuOnly: return "cpuOnly"
+        default: return "all"
+        }
+    }
+    
+    func str2cu(str:String) -> MLComputeUnits {
+        switch str {
+        case "cpuAndGPU": return .cpuAndGPU
+        case "cpuAndNeuralEngine": return .cpuAndNeuralEngine
+        case "cpuOnly": return .cpuOnly
+        default: return .all
+        }
     }
     
 }
