@@ -71,7 +71,7 @@ extension SDMainWindowController {
             menu.removeAllItems()
             // default model
             let item1 = NSMenuItem()
-            item1.title = "Stable Diffusion 2.1 SPLIT EINSUM"
+            item1.title = "Stable Diffusion 2.1 SPLIT EINSUM (Default)"
             item1.representedObject = defaultModelResourcesURL
             menu.addItem(item1)
             //

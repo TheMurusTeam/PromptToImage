@@ -9,7 +9,29 @@ import Foundation
 import Cocoa
 import CoreML
 
-
+func resizeImage(image:NSImage) -> NSImage? {
+    let new_width: CGFloat = modelWidth
+    let new_height : CGFloat = modelHeight
+    let newSize = NSSize(width: new_width, height: new_height)
+    
+    if let bitmapRep = NSBitmapImageRep(
+        bitmapDataPlanes: nil, pixelsWide: Int(newSize.width), pixelsHigh: Int(newSize.height),
+        bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+        colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0
+    ) {
+        bitmapRep.size = newSize
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
+        image.draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height), from: .zero, operation: .copy, fraction: 1.0)
+        NSGraphicsContext.restoreGraphicsState()
+        
+        let resizedImage = NSImage(size: newSize)
+        resizedImage.addRepresentation(bitmapRep)
+        
+        return resizedImage
+    }
+    return nil
+}
 
 
 extension SDMainWindowController {
@@ -31,20 +53,32 @@ extension SDMainWindowController {
         
         let upscale = self.upscaleCheckBox.state == .on
         
+        var inputImage : CGImage? = nil
         // input image
-        /*if let startingImage = startingImage {
+        if let startingImage = startingImage {
             print("original input image size: \(startingImage.width)x\(startingImage.height)")
-        }*/
+            if let nsinputimage = resizeImage(image: NSImage(cgImage: startingImage, size: .zero)) {
+                inputImage = nsinputimage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
+            }
+            
+        }
+        
+        /*
+        if let startingImage = startingImage {
+            print("original input image size: \(startingImage.width)x\(startingImage.height)")
+        }
         var inputImage : CGImage? = startingImage
         if let iimage = inputImage {
             if (iimage.width != Int(modelWidth)) || (iimage.height != Int(modelHeight)) {
                 inputImage = startingImage?.resize(size: NSSize(width: modelWidth, height: modelHeight))
-                //print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
+                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
             }
         }
+        */
         
         self.indicator.doubleValue = 0
-        self.indicator.maxValue = inputImage == nil ? Double(stepCount) : Double(Float(stepCount) * strength)
+        self.indicator.maxValue = startingImage == nil ? Double(stepCount) : Double(Float(stepCount) * strength)
         self.indicator.isHidden = true
         self.indindicator.isHidden = false
         self.indindicator.startAnimation(nil)
@@ -71,7 +105,7 @@ extension SDMainWindowController {
                                                              seed: seed,
                                                              guidanceScale: guidanceScale,
                                                              disableSafety: true,
-                                                             scheduler: inputImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler)
+                                                             scheduler: startingImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler)
                     { (sdprogress) -> Bool in
                         
                         // CALCULATE AND DISPLAY SPEED

@@ -24,7 +24,7 @@ extension AppDelegate {
         print("Starting PromptToImage")
         
         // set app appearance
-        // NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
         
         // create custom models directory in app sandbox if needed
         createModelsDir()

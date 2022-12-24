@@ -146,6 +146,7 @@ class SDMainWindowController: NSWindowController,
         self.init(windowNibName: windowNibName)
         NSApplication.shared.activate(ignoringOtherApps: true)
         self.window?.makeKeyAndOrderFront(nil)
+        self.window?.appearance = NSAppearance(named: .darkAqua)
     }
     
     override func windowDidLoad() {
