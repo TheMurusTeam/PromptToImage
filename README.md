@@ -11,11 +11,11 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 
 # Available on the Mac App Store
 Public beta available though TestFlight. Requires valid Apple ID.
-Beta includes Stable Diffusion 2.1 model.
+Beta includes Stable Diffusion 2.1 model.<br>
 Link: coming soon
 
 # System Requirements
-Requires an Apple Silicon Mac running macOS 13.1 Ventura
+Requires an Apple Silicon Mac running macOS 13.1 Ventura<br>
 Intel Macs not supported.
 
 # Models
