@@ -12,7 +12,7 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 - save image with EXIF metadata
 - sandboxed
 
-# Available on the Mac App Store
+# Download App
 Public beta available though TestFlight. Requires valid Apple ID.
 Beta includes Stable Diffusion 2.1 model.<br>
 Link: coming soon
