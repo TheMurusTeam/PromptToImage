@@ -48,6 +48,12 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) -> Bool
         DispatchQueue.main.async {
             (wins["main"] as! SDMainWindowController).window?.endSheet((wins["main"] as! SDMainWindowController).waitWin)
             (wins["main"] as! SDMainWindowController).enableImg2Img()
+            
+            if let shape = (sdPipeline?.unet.models[0].loadedModel?.modelDescription.inputDescriptionsByName["sample"] as? MLFeatureDescription)?.multiArrayConstraint?.shape {
+                modelWidth = Double(shape[3]) * 8
+                modelHeight = Double(shape[2]) * 8
+                print("Model resolution: \(modelWidth)x\(modelHeight)")
+            }
         }
     }
     

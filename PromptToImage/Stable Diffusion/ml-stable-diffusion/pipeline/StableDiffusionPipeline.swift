@@ -149,6 +149,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
         progressHandler: (Progress) -> Bool = { _ in true }
     ) throws -> [CGImage?] {
         
+        print("* encoding prompt")
         // Encode the input prompt and negative prompt
         let promptEmbedding = try textEncoder.encode(prompt)
         let negativePromptEmbedding = try textEncoder.encode(negativePrompt)
@@ -164,6 +165,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
         let hiddenStates = toHiddenStates(concatEmbedding)
 
         /// Setup schedulers
+        print("* setup schedulers")
         let scheduler: [Scheduler] = (0..<imageCount).map { _ in
             switch schedulerType {
             case .pndmScheduler: return PNDMScheduler(stepCount: stepCount)
@@ -173,10 +175,12 @@ public struct StableDiffusionPipeline: ResourceManaging {
         let stdev = scheduler[0].initNoiseSigma
 
         // Generate random latent samples from specified seed
+        print("* generate random latent samples")
         var latents: [MLShapedArray<Float32>]
         let timestepStrength: Float?
         
         if let startingImage {
+            print("* generate img2img latent samples")
             timestepStrength = strength
             guard let encoder else {
                 throw Error.startingImageProvidedWithoutEncoder
@@ -197,12 +201,14 @@ public struct StableDiffusionPipeline: ResourceManaging {
                     alphasCumprodStep: scheduler[0].calculateAlphasCumprod(strength: strength))
             })
         } else {
+            print("* generate txt2img latent samples")
             timestepStrength = nil
             // Generate random latent samples from specified seed
             latents = generateLatentSamples(imageCount, stdev: stdev, seed: seed)
         }
 
         // De-noising loop
+        print("* starting denoising loop")
         let timeSteps: [Int] = scheduler[0].calculateTimesteps(strength: timestepStrength)
         for (step,t) in timeSteps.enumerated() {
 
@@ -220,7 +226,6 @@ public struct StableDiffusionPipeline: ResourceManaging {
                 hiddenStates: hiddenStates
             )
 
-            //noise = performGuidance(noise)
             noise = performGuidance(noise, guidanceScale)
 
             // Have the scheduler compute the previous (t-1) latent
@@ -254,6 +259,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
         }
 
         // Decode the latent samples to images
+        print("decode latent samples to images")
         return try decodeToImages(latents, disableSafety: disableSafety)
     }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import AVFoundation
 
 extension SDMainWindowController {
     
@@ -17,6 +18,23 @@ extension SDMainWindowController {
         
         let btnimage = NSImage(systemSymbolName: "display.and.arrow.down", accessibilityDescription: nil) // item icon
         var share = proposedServices
+        
+        if let currentImages = items as? [HistoryItem] {
+            let customService = NSSharingService(title: "Save As...", image: btnimage ?? NSImage(), alternateImage: btnimage, handler: {
+                if currentImages.count == 1 {
+                    // write single image to file
+                    self.displaySavePanel(item:currentImages[0])
+                } else if currentImages.count > 1 {
+                    // write multiple images to folder
+                    //self.displaySavePanel(images: currentImages)
+                } else {
+                    // error!
+                }
+            })
+            share.insert(customService, at: 0)
+        }
+        
+        /*
         if let currentImages = items as? [NSImage] {
             let customService = NSSharingService(title: "Save As...", image: btnimage ?? NSImage(), alternateImage: btnimage, handler: {
                 if currentImages.count == 1 {
@@ -31,6 +49,7 @@ extension SDMainWindowController {
             })
             share.insert(customService, at: 0)
         }
+        */
         
         return share
     }
@@ -40,6 +59,51 @@ extension SDMainWindowController {
     // MARK: Save Panel for single image
 
     // save panel for single image
+    func displaySavePanel(item:HistoryItem) {
+        print("displaying save panel for single image")
+        let image = item.upscaledImage ?? item.image
+        guard let img = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+            NSLog("*** Image was not valid!")
+            return
+        }
+        let panel = NSSavePanel()
+        panel.nameFieldLabel = "Image file name:"
+        panel.allowedContentTypes = [.png]
+        // suggested file name
+        panel.nameFieldStringValue = "\(String(self.promptView.stringValue.prefix(50))).\(self.seedView.stringValue).png"
+        // panel strings
+        panel.title = "Save image"
+        panel.prompt = "Save Image"
+        if panel.runModal().rawValue == 1 {
+            guard let url = panel.url else { return }
+            let ext = url.pathExtension.lowercased()
+            guard let data = CFDataCreateMutable(nil, 0) else { return }
+            guard let destination = CGImageDestinationCreateWithData(data, (ext == "png" ? UTType.png.identifier : UTType.jpeg.identifier) as CFString, 1, nil) else { return }
+            let iptc = [
+                kCGImagePropertyIPTCOriginatingProgram: "Mochi Diffusion",
+                kCGImagePropertyIPTCCaptionAbstract: metadata(),
+                kCGImagePropertyIPTCProgramVersion: "\(self.seedView.stringValue)"]
+            let meta = [kCGImagePropertyIPTCDictionary: iptc]
+            CGImageDestinationAddImage(destination, img, meta as CFDictionary)
+            guard CGImageDestinationFinalize(destination) else { return }
+            do {
+                // Try save image with metadata
+                try (data as Data).write(to: url)
+            } catch {
+                NSLog("*** Error saving image file: \(error)")
+            }
+        }
+    }
+           
+    private func metadata() -> String {
+        return title() + "\nSeed: \(self.seedView.stringValue)\nModel name: \(currentModelName())\nSteps: \(self.stepsLabel.stringValue)\nGuidance Scale: \(self.guidanceLabel.stringValue)"
+    }
+
+    private func title() -> String {
+        return "Prompt: \(self.promptView.stringValue)\nNegative Prompt: \(self.negativePromptView.stringValue)"
+    }
+    
+    /*
     func displaySavePanel(image:NSImage) {
         print("displaying save panel for single image")
         let panel = NSSavePanel()
@@ -57,6 +121,7 @@ extension SDMainWindowController {
             }
         }
     }
+    */
     
     
     // MARK: Save Panel for multiple images

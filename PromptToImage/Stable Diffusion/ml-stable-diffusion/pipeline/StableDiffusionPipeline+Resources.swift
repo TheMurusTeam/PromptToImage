@@ -66,10 +66,10 @@ public extension StableDiffusionPipeline {
         } else {
             unet = Unet(modelAt: urls.unetURL, configuration: config)
         }
-
+        
         // Image Decoder
         let decoder = Decoder(modelAt: urls.decoderURL, configuration: config)
-
+        
         // Optional safety checker
         var safetyChecker: SafetyChecker? = nil
         if !disableSafety &&

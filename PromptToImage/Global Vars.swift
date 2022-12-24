@@ -19,8 +19,8 @@ var modelResourcesURL : URL = Bundle.main.resourceURL!
 let savefileFormat : NSBitmapImageRep.FileType = .png
 
 // model image size
-let modelWidth : Double = 512
-let modelHeight: Double = 512
+var modelWidth : Double = 512
+var modelHeight: Double = 512
 
 // sd pipeline
 var sdPipeline : StableDiffusionPipeline? = nil

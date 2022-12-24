@@ -106,9 +106,9 @@ extension SDMainWindowController {
         for _ in self.colView.content {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
-                    print("clicked item at position \(i)")
                     // save
-                    let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
+                    // let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
+                    let items : [HistoryItem] = [self.history[i]]
                     let sharingPicker = NSSharingServicePicker(items: items)
                     sharingPicker.delegate = self
                     sharingPicker.show(relativeTo: NSZeroRect,

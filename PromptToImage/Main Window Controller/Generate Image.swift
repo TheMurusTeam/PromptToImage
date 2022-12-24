@@ -32,12 +32,14 @@ extension SDMainWindowController {
         let upscale = self.upscaleCheckBox.state == .on
         
         // input image
-        if let startingImage = startingImage {print("original input image size: \(startingImage.width)x\(startingImage.height)")}
+        /*if let startingImage = startingImage {
+            print("original input image size: \(startingImage.width)x\(startingImage.height)")
+        }*/
         var inputImage : CGImage? = startingImage
         if let iimage = inputImage {
             if (iimage.width != Int(modelWidth)) || (iimage.height != Int(modelHeight)) {
                 inputImage = startingImage?.resize(size: NSSize(width: modelWidth, height: modelHeight))
-                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
+                //print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
             }
         }
         
@@ -51,7 +53,7 @@ extension SDMainWindowController {
         
         self.window?.beginSheet(self.progrWin)
         
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .userInitiated).async {
             do {
                 if let pipeline = sdPipeline {
                     print("generating \(imageCount) images...")
@@ -80,7 +82,7 @@ extension SDMainWindowController {
                         if sdprogress.stepCount != sdprogress.step {
                             sampleTimer.start()
                         }
-                        print("step \(sdprogress.step) of \(sdprogress.stepCount) (\(Int(Float(stepCount) * strength)))")
+                        //print("step \(sdprogress.step) of \(sdprogress.stepCount) (\(Int(Float(stepCount) * strength)))")
                         // UPDATE PROGRESS INDICATORS
                         DispatchQueue.main.async {
                             self.indicator.doubleValue = Double(sdprogress.step)
@@ -91,6 +93,7 @@ extension SDMainWindowController {
                                 self.indicator.isHidden = false
                             }
                         }
+                        
                         
                         if !isRunning { print("stop") }
                         return isRunning
