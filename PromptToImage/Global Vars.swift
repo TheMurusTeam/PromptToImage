@@ -10,6 +10,9 @@ import CoreML
 import AppKit
 
 // stable diffusion model resources URL
+let defaultModelResourcesURL : URL = Bundle.main.resourceURL!
+let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"
+
 var modelResourcesURL : URL = Bundle.main.resourceURL!
 
 // file format
@@ -21,6 +24,7 @@ let modelHeight: Double = 512
 
 // sd pipeline
 var sdPipeline : StableDiffusionPipeline? = nil
+
 
 
 

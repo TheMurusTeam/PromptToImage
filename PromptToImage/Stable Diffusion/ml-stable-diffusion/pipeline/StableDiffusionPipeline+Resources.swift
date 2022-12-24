@@ -2,7 +2,7 @@
 // Copyright (C) 2022 Apple Inc. All Rights Reserved.
 
 import Foundation
-import CoreML
+import CoreML 
 
 @available(iOS 16.2, macOS 13.1, *)
 public extension StableDiffusionPipeline {

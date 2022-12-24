@@ -12,7 +12,7 @@ import Cocoa
 // MARK: History Item Model
 
 class HistoryItem : NSObject {
-    
+    var modelName = String()
     var date = Date()
     var originalSize = NSSize()
     var upscaledSize : NSSize? = nil
@@ -28,7 +28,8 @@ class HistoryItem : NSObject {
     var upscaled = Bool()
     
     // Init history item
-    convenience init(prompt:String,
+    convenience init(modelName:String,
+                     prompt:String,
                      negativePrompt:String,
                      steps:Int,
                      guidanceScale:Float,
@@ -38,6 +39,7 @@ class HistoryItem : NSObject {
                      upscaledImage:NSImage?,
                      seed:Int) {
         self.init()
+        self.modelName = modelName
         self.date = Date()
         self.prompt = prompt
         self.negativePrompt = negativePrompt

@@ -167,6 +167,8 @@ extension SDMainWindowController {
             self.indicator.isHidden = true
         }
         
+        
+        
         for cgimage in images {
             if cgimage != nil {
                 let nsimage = NSImage(cgImage: cgimage!,size: .zero)
@@ -176,7 +178,7 @@ extension SDMainWindowController {
                             // copy images to save clipboard
                             generatedImages.append(upscaledImage)
                             // add history item
-                            let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
+                            let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
                             DispatchQueue.main.async {
                                 self.historyArrayController.addObject(item)
                             }
@@ -187,7 +189,7 @@ extension SDMainWindowController {
                         // copy images to save clipboard
                         generatedImages.append(nsimage)
                         // add history item
-                        let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
+                        let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
                         DispatchQueue.main.async {
                             self.historyArrayController.addObject(item)
                         }
@@ -236,7 +238,7 @@ extension SDMainWindowController {
                                 // copy images to save clipboard
                                 generatedImages.append(upscaledImage)
                                 // add history item
-                                let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
+                                let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
                                 DispatchQueue.main.async {
                                     self.historyArrayController.addObject(item)
                                     self.imageview.image = upscaledImage
@@ -251,7 +253,7 @@ extension SDMainWindowController {
                     // copy images to save clipboard
                     generatedImages.append(nsimage)
                     // add history item
-                    let item = HistoryItem(prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
+                    let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
                     DispatchQueue.main.async {
                         self.historyArrayController.addObject(item)
                         self.imageview.image = nsimage
@@ -302,3 +304,5 @@ if stepsPreview {
     }
 }
 */
+
+

@@ -7,28 +7,29 @@
 
 import Cocoa
 
-class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate, NSSplitViewDelegate {
+class SDMainWindowController: NSWindowController,
+                              NSSharingServicePickerDelegate,
+                              NSSplitViewDelegate,
+                              NSMenuDelegate {
 
     @IBOutlet weak var splitview: NSSplitView!
     @IBOutlet weak var left: NSView!
     @IBOutlet weak var center: NSView!
     @IBOutlet weak var right: NSView!
     
-    
     @IBOutlet weak var imageview: NSImageView!
     @IBOutlet weak var stepsSlider: NSSlider!
+    @IBOutlet weak var stepsLabel: NSTextField!
     @IBOutlet weak var indicator: NSProgressIndicator!
     @IBOutlet weak var indindicator: NSProgressIndicator!
     @IBOutlet weak var mainBtn: NSButton!
-    //@IBOutlet var promptView: NSTextView!
-    //@IBOutlet var negativePromptView: NSTextView!
     @IBOutlet weak var promptView: NSTextField!
     @IBOutlet weak var negativePromptView: NSTextField!
     @IBOutlet weak var waitWin: NSWindow!
     @IBOutlet weak var waitProgr: NSProgressIndicator!
     @IBOutlet weak var waitLabel: NSTextField!
+    @IBOutlet weak var waitInfoLabel: NSTextField!
     @IBOutlet weak var unitsPopup: NSPopUpButton!
-    //@IBOutlet weak var stepsPreview: NSButton!
     @IBOutlet weak var progrWin: NSWindow!
     @IBOutlet weak var progrLabel: NSTextField!
     @IBOutlet weak var upscaleCheckBox: NSButton!
@@ -37,6 +38,7 @@ class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate
     @IBOutlet weak var guidanceLabel: NSTextField!
     @IBOutlet weak var guidanceSlider: NSSlider!
     // img2img
+    @IBOutlet weak var img2imgView: NSView!
     @IBOutlet weak var strenghtSlider: NSSlider!
     @IBOutlet weak var str_clearBtn: NSButton!
     @IBOutlet weak var str_importBtn: NSButton!
@@ -65,11 +67,9 @@ class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
     
+    // info popover
     var infoPopover : NSPopover? = nil
     @IBOutlet var infoPopoverView: NSView!
-    
-    
-    // info popover
     @IBOutlet weak var info_date: NSTextField!
     @IBOutlet weak var info_prompt: NSTextField!
     @IBOutlet weak var info_negativePrompt: NSTextField!
@@ -78,9 +78,59 @@ class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate
     @IBOutlet weak var info_guidance: NSTextField!
     @IBOutlet weak var info_inputImage: NSImageView!
     @IBOutlet weak var info_strenght: NSTextField!
-    @IBOutlet weak var info_noInputImageLabel: NSTextField!
     @IBOutlet weak var info_size: NSTextField!
     @IBOutlet weak var info_upscaledLabel: NSTextField!
+    @IBOutlet weak var info_model: NSTextField!
+    
+    @IBOutlet weak var info_inputImageView: NSView!
+    @IBOutlet weak var info_btn_copyStrenght: NSButton!
+    @IBOutlet weak var info_btn_copyInputImage: NSButton!
+    
+    // actions
+    @IBAction func infoCopyPrompt(_ sender: Any) {
+        self.promptView.stringValue = info_prompt.stringValue
+    }
+    @IBAction func infoCopyNegativePrompt(_ sender: Any) {
+        self.negativePromptView.stringValue = info_negativePrompt.stringValue
+    }
+    @IBAction func infoCopySeed(_ sender: Any) {
+        self.seedView.stringValue = info_seed.stringValue
+        self.seedBtn.state = .off
+        self.seedView.isSelectable = true
+        self.seedView.isEditable = true
+    }
+    @IBAction func infoCopySteps(_ sender: Any) {
+        self.stepsSlider.integerValue = info_steps.integerValue
+        self.stepsLabel.integerValue = info_steps.integerValue
+    }
+    @IBAction func infoCopyGuidance(_ sender: Any) {
+        self.guidanceSlider.doubleValue = info_guidance.doubleValue * 100
+        self.guidanceLabel.stringValue = String(info_guidance.doubleValue)
+    }
+    @IBAction func infoCopyStrenght(_ sender: Any) {
+        self.strenghtSlider.doubleValue = info_strenght.doubleValue * 100
+        self.strenghtLabel.stringValue = String(info_strenght.doubleValue)
+    }
+    @IBAction func infoCopyInputImage(_ sender: Any) {
+        if let image = self.info_inputImage.image {
+            self.inputImageview.image = image
+        }
+    }
+    
+    
+    
+    // Settings
+    @IBOutlet var settingsWindow: NSWindow!
+    @IBAction func displaySettings(_ sender: Any) {
+        self.setModelsPopup()
+        self.settingsWindow.makeKeyAndOrderFront(nil)
+    }
+    
+    @IBAction func clickRevealModelsInFinder(_ sender: Any) {
+        revealCustomModelsDirInFinder()
+    }
+    
+    @IBOutlet weak var modelsPopupMenu: NSMenu!
     
     
     
@@ -88,12 +138,7 @@ class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate
     
     
     
-    
-    
-    
-    
-    
-    
+    // MARK: Init
     
     convenience init(windowNibName:String, info:[String:AnyObject]?) {
         self.init(windowNibName: windowNibName)
@@ -104,16 +149,25 @@ class SDMainWindowController: NSWindowController, NSSharingServicePickerDelegate
     override func windowDidLoad() {
         super.windowDidLoad()
         self.setUnitsPopup()
+        self.populateModelsPopup()
     }
     
-    func setUnitsPopup() {
-        switch defaultComputeUnits {
-        case .cpuAndNeuralEngine: self.unitsPopup.selectItem(at: 0)
-        case .cpuAndGPU: self.unitsPopup.selectItem(at: 1)
-        default: self.unitsPopup.selectItem(at: 2) // all
+    
+    // MARK: Enable/Disable IMG2IMG
+    
+    func enableImg2Img() {
+        if let pipeline = sdPipeline {
+            self.img2imgView.isHidden = !pipeline.canUseInputImage
+            if pipeline.canUseInputImage {
+                print("Img2Img is available")
+            } else {
+                print("Img2Img is NOT available (VAEEncoder not found)")
+            }
         }
     }
     
+    
+    // MARK: Split View Delegate
     
     func splitView(_ splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {
         return subview == self.left

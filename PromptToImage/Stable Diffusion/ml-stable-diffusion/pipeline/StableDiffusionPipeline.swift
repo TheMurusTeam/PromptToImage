@@ -54,6 +54,11 @@ public struct StableDiffusionPipeline: ResourceManaging {
     public var canSafetyCheck: Bool {
         safetyChecker != nil
     }
+    
+    /// Reports whether this pipeline can perform IMG2IMG (requires VAEEncoder.mlmodelc
+    public var canUseInputImage : Bool {
+        encoder != nil
+    }
 
     /// Option to reduce memory during image generation
     ///
@@ -70,7 +75,6 @@ public struct StableDiffusionPipeline: ResourceManaging {
     ///   - unet: Model for noise prediction on latent samples
     ///   - decoder: Model for decoding latent sample to image
     ///   - safetyChecker: Optional model for checking safety of generated images
-    ///   - guidanceScale: Influence of the text prompt on generation process
     ///   - reduceMemory: Option to enable reduced memory mode
     /// - Returns: Pipeline ready for image generation
     public init(textEncoder: TextEncoder,
@@ -78,15 +82,14 @@ public struct StableDiffusionPipeline: ResourceManaging {
                 decoder: Decoder,
                 encoder: Encoder?,
                 safetyChecker: SafetyChecker? = nil,
-                //guidanceScale: Float = 7.5,
-                reduceMemory: Bool = false) {
+                reduceMemory: Bool = false ) {
         self.textEncoder = textEncoder
         self.unet = unet
         self.decoder = decoder
         self.encoder = encoder
         self.safetyChecker = safetyChecker
-        //self.guidanceScale = guidanceScale
-        self.reduceMemory = reduceMemory
+        self.reduceMemory = systemRAM() <= 8 //reduceMemory
+        print("Reduce Memory: \(self.reduceMemory)")
     }
 
     /// Load required resources for this pipeline

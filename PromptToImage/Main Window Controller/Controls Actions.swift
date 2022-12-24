@@ -122,6 +122,8 @@ extension SDMainWindowController {
     
     
 
+    // MARK: Info Popover
+    
     // display image info popover
     @IBAction func clickPreviewImage(_ sender: NSButton) {
         var i = 0
@@ -154,6 +156,7 @@ extension SDMainWindowController {
     // draw info popover
     func setInfoPopover(item:HistoryItem) {
         self.info_date.stringValue = dateFormatter.string(from: item.date)
+        self.info_model.stringValue = item.modelName 
         self.info_prompt.stringValue = item.prompt
         self.info_negativePrompt.stringValue = item.negativePrompt
         self.info_seed.stringValue = String(item.seed)
@@ -163,11 +166,9 @@ extension SDMainWindowController {
         self.info_inputImage.image = NSImage()
         if let cgimage = item.inputImage {
             self.info_inputImage.image = NSImage(cgImage: cgimage, size: .zero)
-            self.info_noInputImageLabel.isHidden = true
-            self.info_strenght.isHidden = false
+            self.info_inputImageView.isHidden = false
         } else {
-            self.info_noInputImageLabel.isHidden = false
-            self.info_strenght.isHidden = true
+            self.info_inputImageView.isHidden = true
         }
         let size = item.upscaledSize ?? item.originalSize
         self.info_size.stringValue = "\(String(Int(size.width)))x\(String(Int(size.height)))"
@@ -176,18 +177,24 @@ extension SDMainWindowController {
     
     
     
-    // move selected image to input image
+    // move selected image to input image from collection view item
     @IBAction func clickCopyImageToInputImage(_ sender: NSButton) {
-        var i = 0
-        for _ in self.colView.content {
-            if let cvitem = self.colView.item(at: i) {
-                if sender.isDescendant(of: cvitem.view) {
-                    print("clicked item at position \(i)")
-                    self.inputImageview.image = self.history[i].image
+        if let pipeline = sdPipeline {
+            if pipeline.canUseInputImage {
+                var i = 0
+                for _ in self.colView.content {
+                    if let cvitem = self.colView.item(at: i) {
+                        if sender.isDescendant(of: cvitem.view) {
+                            self.inputImageview.image = self.history[i].image
+                        }
+                    }
+                    i = i + 1
                 }
+                return
             }
-            i = i + 1
         }
+        self.displayErrorAlert(txt: "Image to Image is not available with current model: VAEEncoder.mlmodelc not found")
+        
     }
     
     
@@ -195,23 +202,32 @@ extension SDMainWindowController {
     // MARK: Switch Compute Units
     
     @IBAction func switchUnitsPopup(_ sender: NSPopUpButton) {
+        self.settingsWindow.close()
         self.reloadModel()
     }
+    
+    func setUnitsPopup() {
+        switch defaultComputeUnits {
+        case .cpuAndNeuralEngine: self.unitsPopup.selectItem(at: 0)
+        case .cpuAndGPU: self.unitsPopup.selectItem(at: 1)
+        default: self.unitsPopup.selectItem(at: 2) // all
+        }
+    }
+    
     
     // MARK: Switch model
     
     @IBAction func switchModelsPopup(_ sender: NSPopUpButton) {
-        /*
+        self.settingsWindow.close()
         if sender.indexOfSelectedItem == 0 {
-            defaultModel = "Unet-ORIGINAL.mlmodelc"
-            self.unitsPopup.selectItem(at: 1)
-            self.unitsPopup.isEnabled = false
+            modelResourcesURL = defaultModelResourcesURL
         } else {
-            defaultModel = "Unet.mlmodelc"
-            self.unitsPopup.isEnabled = true
+            if let modelurl = sender.selectedItem?.representedObject as? URL {
+                modelResourcesURL = modelurl
+            }
         }
         self.reloadModel()
-        */
+
     }
     
     // Reload MLModel
@@ -223,10 +239,31 @@ extension SDMainWindowController {
         default: units = .cpuAndNeuralEngine
         }
         // update pipeline
-        createStableDiffusionPipeline(computeUnits: units, url:modelResourcesURL)
+        if !createStableDiffusionPipeline(computeUnits: units, url:modelResourcesURL) {
+            // error
+            print("error creating pipeline")
+            DispatchQueue.main.async {
+                self.displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
+                // restore default model and compute units
+                let _ = createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
+                modelResourcesURL = defaultModelResourcesURL
+                // set user defaults
+                UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+            }
+        } else {
+            // set user defaults
+            UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+        }
+            
     }
     
     
+    func displayErrorAlert(txt:String) {
+        let alert = NSAlert()
+        alert.messageText = "Error"
+        alert.informativeText = txt
+        alert.runModal()
+    }
     
     
     
