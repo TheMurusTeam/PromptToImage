@@ -46,6 +46,7 @@
 		3F9C6BBB29535140001D4252 /* VAEDecoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */; };
 		3F9C6BBC29535140001D4252 /* merges.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB629535140001D4252 /* merges.txt */; };
 		3FB0B4F62957AD910084427A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0B4F52957AD910084427A /* Info.plist */; };
+		3FB0B4F82957BD840084427A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0B4F72957BD840084427A /* README.md */; };
 		3FC49524293AAD2A00B2F32D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49523293AAD2A00B2F32D /* AppDelegate.swift */; };
 		3FC49526293AAD2B00B2F32D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FC49525293AAD2B00B2F32D /* Assets.xcassets */; };
 		3FC49529293AAD2B00B2F32D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FC49527293AAD2B00B2F32D /* MainMenu.xib */; };
@@ -97,6 +98,7 @@
 		3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VAEDecoder.mlmodelc; sourceTree = "<group>"; };
 		3F9C6BB629535140001D4252 /* merges.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = merges.txt; sourceTree = "<group>"; };
 		3FB0B4F52957AD910084427A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FB0B4F72957BD840084427A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		3FC49520293AAD2A00B2F32D /* PromptToImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PromptToImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC49523293AAD2A00B2F32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3FC49525293AAD2B00B2F32D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		3FC49522293AAD2A00B2F32D /* PromptToImage */ = {
 			isa = PBXGroup;
 			children = (
+				3FB0B4F72957BD840084427A /* README.md */,
 				3FB0B4F52957AD910084427A /* Info.plist */,
 				3F95137829579C110055D783 /* img */,
 				3F951377295767CB0055D783 /* PromptToImageDebug.entitlements */,
@@ -337,6 +340,7 @@
 				3F9C6BB729535140001D4252 /* TextEncoder.mlmodelc in Resources */,
 				3F9C6BB02952B033001D4252 /* SDPreviewWindowController.xib in Resources */,
 				3F47B2442950C7DB000C33EC /* sd-ship.png in Resources */,
+				3FB0B4F82957BD840084427A /* README.md in Resources */,
 				3F9C6BB829535140001D4252 /* VAEEncoder.mlmodelc in Resources */,
 				3F9C6BBC29535140001D4252 /* merges.txt in Resources */,
 				3F9C6BB929535140001D4252 /* vocab.json in Resources */,
