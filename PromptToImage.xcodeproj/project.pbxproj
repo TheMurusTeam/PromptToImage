@@ -50,7 +50,6 @@
 		3FC49545293AD5AA00B2F32D /* Generate Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49544293AD5AA00B2F32D /* Generate Image.swift */; };
 		3FC49547293AD62700B2F32D /* Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49546293AD62700B2F32D /* Start.swift */; };
 		3FD921C82954F6E4008D797E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD921C72954F6E4008D797E /* Models.swift */; };
-		3FD921CB2954FBC2008D797E /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD921CA2954FBC2008D797E /* ZIPFoundation */; };
 		3FD921CD29552C05008D797E /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD921CC29552C05008D797E /* History.swift */; };
 		3FE7E3E1293BD58000720E18 /* Upscaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE7E3E0293BD58000720E18 /* Upscaler.swift */; };
 /* End PBXBuildFile section */
@@ -111,7 +110,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FD921CB2954FBC2008D797E /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +267,6 @@
 			);
 			name = PromptToImage;
 			packageProductDependencies = (
-				3FD921CA2954FBC2008D797E /* ZIPFoundation */,
 			);
 			productName = PromptToImage;
 			productReference = 3FC49520293AAD2A00B2F32D /* PromptToImage.app */;
@@ -300,7 +297,6 @@
 			);
 			mainGroup = 3FC49517293AAD2A00B2F32D;
 			packageReferences = (
-				3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 3FC49521293AAD2A00B2F32D /* Products */;
 			projectDirPath = "";
@@ -585,25 +581,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.9;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		3FD921CA2954FBC2008D797E /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3FD921C92954FBC2008D797E /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3FC49518293AAD2A00B2F32D /* Project object */;
 }
