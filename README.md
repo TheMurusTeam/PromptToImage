@@ -37,10 +37,10 @@ On Apple Silicon Macs with 24 or more GPU cores the "CPU and GPU" is by far the 
 
 # Benchmarks 
 MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
-| Stable Diffusion 2.1 SPLIT EINSUM, CPU and Neural Engine: | 1.8 step/sec  | 3.5 Watt  |
-| Stable Diffusion 2.1 SPLIT EINSUM, CPU and GPU:           | 1.95 step/sec | 21.5 Watt |
-| Stable Diffusion 2.1 SPLIT EINSUM, All compute units:     | 2.2 step/sec  | 11 Watt   |
-| Stable Diffusion 2.1 ORIGINAL, CPU and GPU:               | 2.7 step/sec  | 28 Watt   |
+- Stable Diffusion 2.1 SPLIT EINSUM, CPU and Neural Engine: | 1.8 step/sec  | 3.5 Watt
+- Stable Diffusion 2.1 SPLIT EINSUM, CPU and GPU:           | 1.95 step/sec | 21.5 Watt
+- Stable Diffusion 2.1 SPLIT EINSUM, All compute units:     | 2.2 step/sec  | 11 Watt
+- Stable Diffusion 2.1 ORIGINAL, CPU and GPU:               | 2.7 step/sec  | 28 Watt
 
 
 # Privacy
