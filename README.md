@@ -52,6 +52,7 @@ To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or
 The Xcode project does not include the default CoreML model and accessory files. You need to add these files to the main project folder within Xcode before building. It's mandatory to use a specific model, as the app expects only this model to be installed in the app bundle. These files list includes:<br>
 Upscaler model file:<br>
 - realesrgan512.mlmodel: under [PromptToImage/Upscale Model](PromptToImage/Upscale%20Model)<br>
+
 CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img model files:<br>
 - merges.txt: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
 - vocab.json: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
