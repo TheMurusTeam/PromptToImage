@@ -8,6 +8,7 @@
 import Cocoa
 
 class SDMainWindowController: NSWindowController,
+                              NSWindowDelegate,
                               NSSharingServicePickerDelegate,
                               NSSplitViewDelegate,
                               NSMenuDelegate {
@@ -149,46 +150,35 @@ class SDMainWindowController: NSWindowController,
         self.window?.appearance = NSAppearance(named: .darkAqua)
     }
     
+    
+    // MARK: Did Load
+    
     override func windowDidLoad() {
         super.windowDidLoad()
         self.setUnitsPopup()
         self.populateModelsPopup()
+        self.readStoredControlsValues() 
+    }
+    
+    
+    
+    // MARK: Will Close
+    
+    func windowWillClose(_ notification: Notification) {
+        storeControlsValues()
     }
     
     
     // MARK: Enable/Disable IMG2IMG
     
+    // display/hide img2img controls view according to pipeline parameter
     func enableImg2Img() {
         if let pipeline = sdPipeline {
             self.img2imgView.isHidden = !pipeline.canUseInputImage
-            if pipeline.canUseInputImage {
-                print("Img2Img is available")
-            } else {
-                print("Img2Img is NOT available (VAEEncoder not found)")
-            }
         }
     }
     
     
-    // MARK: Split View Delegate
-    
-    func splitView(_ splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {
-        return subview == self.left
-    }
-    
-    func splitView(_ splitView: NSSplitView, shouldAdjustSizeOfSubview view: NSView) -> Bool {
-        return view == self.right
-    }
-    
-    func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
-        if dividerIndex == 1 { return 297 + 138 }
-        return 297
-    }
-    
-    func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
-        if dividerIndex == 1 { return 297 + 138 }
-        return 297
-    }
     
     
     

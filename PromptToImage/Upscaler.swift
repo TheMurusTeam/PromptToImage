@@ -32,7 +32,7 @@ class Upscaler : NSObject {
     
     func setupUpscaleModelFromPath(path:String,
                                    computeUnits:MLComputeUnits) {
-        print("setting up CoreML model from path \(path)")
+        //print("setting up CoreML model from path \(path)")
         self.conf.computeUnits = computeUnits
         
         // model

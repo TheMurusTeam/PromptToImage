@@ -9,32 +9,10 @@ import Foundation
 import Cocoa
 import CoreML
 
-func resizeImage(image:NSImage) -> NSImage? {
-    let new_width: CGFloat = modelWidth
-    let new_height : CGFloat = modelHeight
-    let newSize = NSSize(width: new_width, height: new_height)
-    
-    if let bitmapRep = NSBitmapImageRep(
-        bitmapDataPlanes: nil, pixelsWide: Int(newSize.width), pixelsHigh: Int(newSize.height),
-        bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-        colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0
-    ) {
-        bitmapRep.size = newSize
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
-        image.draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height), from: .zero, operation: .copy, fraction: 1.0)
-        NSGraphicsContext.restoreGraphicsState()
-        
-        let resizedImage = NSImage(size: newSize)
-        resizedImage.addRepresentation(bitmapRep)
-        
-        return resizedImage
-    }
-    return nil
-}
 
 
 extension SDMainWindowController {
+    
     
     
     // MARK: Generate Image
@@ -63,19 +41,6 @@ extension SDMainWindowController {
             }
             
         }
-        
-        /*
-        if let startingImage = startingImage {
-            print("original input image size: \(startingImage.width)x\(startingImage.height)")
-        }
-        var inputImage : CGImage? = startingImage
-        if let iimage = inputImage {
-            if (iimage.width != Int(modelWidth)) || (iimage.height != Int(modelHeight)) {
-                inputImage = startingImage?.resize(size: NSSize(width: modelWidth, height: modelHeight))
-                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
-            }
-        }
-        */
         
         self.indicator.doubleValue = 0
         self.indicator.maxValue = startingImage == nil ? Double(stepCount) : Double(Float(stepCount) * strength)
@@ -165,151 +130,6 @@ extension SDMainWindowController {
         }
     }
     
-    
-    
-    // MARK: Display Results
-    
-    func displayResult(images:[CGImage?],
-                       upscale:Bool,
-                       prompt:String,
-                       negativePrompt:String,
-                       startingImage: CGImage?,
-                       strength: Float,
-                       stepCount:Int,
-                       seed:Int,
-                       guidanceScale:Float) {
-        
-        if images.count == 1 {
-            self.displaySingleImage(image: images[0], upscale: upscale, prompt: prompt, negativePrompt: negativePrompt, startingImage: startingImage, strength: strength, stepCount: stepCount, seed: seed, guidanceScale: guidanceScale)
-        } else if images.count > 1 {
-            self.displayMultipleImages(images: images, upscale: upscale, prompt: prompt, negativePrompt: negativePrompt, startingImage: startingImage, strength: strength, stepCount: stepCount, seed: seed, guidanceScale: guidanceScale)
-        }
-    }
-    
-    
-    // display collection view
-    func displayMultipleImages(images:[CGImage?],
-                               upscale:Bool,
-                               prompt:String,
-                               negativePrompt:String,
-                               startingImage: CGImage?,
-                               strength: Float,
-                               stepCount:Int,
-                               seed:Int,
-                               guidanceScale:Float) {
-        
-        DispatchQueue.main.async {
-            self.progrLabel.stringValue = "Upscaling images..."
-            self.indindicator.isHidden = false
-            self.indicator.isHidden = true
-        }
-        
-        
-        
-        for cgimage in images {
-            if cgimage != nil {
-                let nsimage = NSImage(cgImage: cgimage!,size: .zero)
-                if upscale {
-                    if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
-                        DispatchQueue.main.async {
-                            // copy images to save clipboard
-                            generatedImages.append(upscaledImage)
-                            // add history item
-                            let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
-                            DispatchQueue.main.async {
-                                self.historyArrayController.addObject(item)
-                            }
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        // copy images to save clipboard
-                        generatedImages.append(nsimage)
-                        // add history item
-                        let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
-                        DispatchQueue.main.async {
-                            self.historyArrayController.addObject(item)
-                        }
-                    }
-                }
-            }
-        }
-        
-        DispatchQueue.main.async {
-            self.saveBtn.isEnabled = true
-            self.window?.endSheet(self.progrWin)
-            self.imageview.image = generatedImages.first ?? NSImage()
-        }
-    }
-    
-    
-    
-    
-    // display image view
-    func displaySingleImage(image:CGImage??,
-                            upscale:Bool,
-                            prompt:String,
-                            negativePrompt:String,
-                            startingImage: CGImage?,
-                            strength: Float,
-                            stepCount:Int,
-                            seed:Int,
-                            guidanceScale:Float) {
-        
-        if image != nil {
-            let nsimage = NSImage(cgImage: image!!,
-                                  size: .zero)
-            DispatchQueue.main.async {
-                isRunning = false
-                
-                if upscale {
-                    // UPSCALE OUTPUT IMAGE
-                    
-                    self.progrLabel.stringValue = "Upscaling image..."
-                    self.indindicator.isHidden = false
-                    self.indicator.isHidden = true
-                    print("upscaling image...")
-                    DispatchQueue.global().async {
-                        if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
-                            DispatchQueue.main.async {
-                                // copy images to save clipboard
-                                generatedImages.append(upscaledImage)
-                                // add history item
-                                let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
-                                DispatchQueue.main.async {
-                                    self.historyArrayController.addObject(item)
-                                    self.imageview.image = upscaledImage
-                                }
-                                // close wait window
-                                self.window?.endSheet(self.progrWin)
-                                self.saveBtn.isEnabled = true
-                            }
-                        }
-                    }
-                } else {
-                    // copy images to save clipboard
-                    generatedImages.append(nsimage)
-                    // add history item
-                    let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
-                    DispatchQueue.main.async {
-                        self.historyArrayController.addObject(item)
-                        self.imageview.image = nsimage
-                    }
-                    // close wait window
-                    self.window?.endSheet(self.progrWin)
-                    self.saveBtn.isEnabled = true
-                }
-                
-                
-            }
-        } else {
-            print("ERROR image is nil")
-            DispatchQueue.main.async {
-                self.saveBtn.isEnabled = false
-                self.window?.endSheet(self.progrWin)
-            }
-        }
-    }
     
     
 }

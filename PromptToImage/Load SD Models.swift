@@ -69,9 +69,3 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
 
 
 
-func loadUpscalerModel() {
-    // load upscale model
-    print("loading upscale model...")
-    Upscaler.shared.setupUpscaleModelFromPath(path: defaultUpscaleModelPath!,
-                                              computeUnits: .cpuAndGPU)
-}

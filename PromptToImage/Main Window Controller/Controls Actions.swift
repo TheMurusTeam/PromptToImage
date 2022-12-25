@@ -91,7 +91,6 @@ extension SDMainWindowController {
         for _ in self.colView.content {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
-                    print("clicked item at position \(i)")
                     // show image
                     self.imageview.image = self.history[i].upscaledImage ?? self.history[i].image
                 }
@@ -133,7 +132,6 @@ extension SDMainWindowController {
         for _ in self.colView.content {
             if let cvitem = self.colView.item(at: i) {
                 if sender.isDescendant(of: cvitem.view) {
-                    print("clicked item at position \(i)")
                     self.presentPopover(originview: sender as NSView, edge: NSRectEdge.maxX, historyItem: self.history[i])
                 }
             }

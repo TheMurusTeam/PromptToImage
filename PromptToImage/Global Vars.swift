@@ -9,10 +9,11 @@ import Foundation
 import CoreML
 import AppKit
 
-// stable diffusion model resources URL
+// built-in stable diffusion model resources URL/name 
 let defaultModelResourcesURL : URL = Bundle.main.resourceURL!
 let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"
 
+// current model resources URL
 var modelResourcesURL : URL = Bundle.main.resourceURL!
 
 // file format
@@ -25,10 +26,10 @@ var modelHeight: Double = 512
 // sd pipeline
 var sdPipeline : StableDiffusionPipeline? = nil
 
-
-
+// sd compute units
 let defaultComputeUnits : MLComputeUnits = .cpuAndGPU
 var currentComputeUnits : MLComputeUnits = .cpuAndGPU
 
-var defaultGuidanceScale : Float = 7.5
-var defaultUpscaleModelPath = Bundle.main.path(forResource: "realesrgan512", ofType: "mlmodelc")
+// upscaler
+let defaultUpscaleModelPath = Bundle.main.path(forResource: "realesrgan512", ofType: "mlmodelc")
+let defaultUpscalerComputeUnits : MLComputeUnits = .cpuAndGPU

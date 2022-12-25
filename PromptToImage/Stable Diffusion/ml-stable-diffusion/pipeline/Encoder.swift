@@ -66,7 +66,7 @@ public struct Encoder {
             else {
                 throw Error.latentOutputNotValid
             }
-            print("output.shape: \(output.shape)")
+            //print("output.shape: \(output.shape)")
             return MLShapedArray(output)
         }
         

@@ -14,6 +14,11 @@
 		3F444E59293EA4F2007A7D9F /* SDMainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F444E57293EA4F2007A7D9F /* SDMainWindowController.swift */; };
 		3F444E5A293EA4F2007A7D9F /* SDMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F444E58293EA4F2007A7D9F /* SDMainWindowController.xib */; };
 		3F444E5D293EA964007A7D9F /* Global Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F444E5C293EA964007A7D9F /* Global Vars.swift */; };
+		3F4648D12958B88600305CF8 /* Controls Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4648D02958B88600305CF8 /* Controls Values.swift */; };
+		3F4648D32958B94B00305CF8 /* Split View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4648D22958B94B00305CF8 /* Split View Delegate.swift */; };
+		3F4648D52958B99D00305CF8 /* Display Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4648D42958B99D00305CF8 /* Display Result.swift */; };
+		3F4648D72958BA0000305CF8 /* Resize Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4648D62958BA0000305CF8 /* Resize Image.swift */; };
+		3F4648D92958BA4600305CF8 /* Load Upscale Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4648D82958BA4600305CF8 /* Load Upscale Model.swift */; };
 		3F47B21E2950B5DA000C33EC /* DPMSolverMultistepScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F47B20F2950B5DA000C33EC /* DPMSolverMultistepScheduler.swift */; };
 		3F47B21F2950B5DA000C33EC /* TextEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F47B2102950B5DA000C33EC /* TextEncoder.swift */; };
 		3F47B2202950B5DA000C33EC /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F47B2112950B5DA000C33EC /* Random.swift */; };
@@ -65,6 +70,11 @@
 		3F444E57293EA4F2007A7D9F /* SDMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDMainWindowController.swift; sourceTree = "<group>"; };
 		3F444E58293EA4F2007A7D9F /* SDMainWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SDMainWindowController.xib; sourceTree = "<group>"; };
 		3F444E5C293EA964007A7D9F /* Global Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Vars.swift"; sourceTree = "<group>"; };
+		3F4648D02958B88600305CF8 /* Controls Values.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controls Values.swift"; sourceTree = "<group>"; };
+		3F4648D22958B94B00305CF8 /* Split View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Split View Delegate.swift"; sourceTree = "<group>"; };
+		3F4648D42958B99D00305CF8 /* Display Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Display Result.swift"; sourceTree = "<group>"; };
+		3F4648D62958BA0000305CF8 /* Resize Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Resize Image.swift"; sourceTree = "<group>"; };
+		3F4648D82958BA4600305CF8 /* Load Upscale Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Load Upscale Model.swift"; sourceTree = "<group>"; };
 		3F47B20F2950B5DA000C33EC /* DPMSolverMultistepScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPMSolverMultistepScheduler.swift; sourceTree = "<group>"; };
 		3F47B2102950B5DA000C33EC /* TextEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEncoder.swift; sourceTree = "<group>"; };
 		3F47B2112950B5DA000C33EC /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
@@ -128,8 +138,12 @@
 				3F444E58293EA4F2007A7D9F /* SDMainWindowController.xib */,
 				3F444E57293EA4F2007A7D9F /* SDMainWindowController.swift */,
 				3F16986B293E8503008A2BF0 /* Controls Actions.swift */,
+				3F4648D02958B88600305CF8 /* Controls Values.swift */,
 				3FC49544293AD5AA00B2F32D /* Generate Image.swift */,
+				3F4648D42958B99D00305CF8 /* Display Result.swift */,
+				3F4648D62958BA0000305CF8 /* Resize Image.swift */,
 				3F169869293E8467008A2BF0 /* Share.swift */,
+				3F4648D22958B94B00305CF8 /* Split View Delegate.swift */,
 			);
 			path = "Main Window Controller";
 			sourceTree = "<group>";
@@ -235,6 +249,7 @@
 				3FC49523293AAD2A00B2F32D /* AppDelegate.swift */,
 				3FC49546293AD62700B2F32D /* Start.swift */,
 				3F169867293E7F6B008A2BF0 /* Load SD Models.swift */,
+				3F4648D82958BA4600305CF8 /* Load Upscale Model.swift */,
 				3FE7E3E0293BD58000720E18 /* Upscaler.swift */,
 				3F444E5B293EA4FA007A7D9F /* Main Window Controller */,
 				3F9C6BAC2952AFE4001D4252 /* Image Preview */,
@@ -357,7 +372,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F47B2282950B5DA000C33EC /* StableDiffusionPipeline.swift in Sources */,
+				3F4648D92958BA4600305CF8 /* Load Upscale Model.swift in Sources */,
 				3F47B21F2950B5DA000C33EC /* TextEncoder.swift in Sources */,
+				3F4648D32958B94B00305CF8 /* Split View Delegate.swift in Sources */,
 				3F47B21E2950B5DA000C33EC /* DPMSolverMultistepScheduler.swift in Sources */,
 				3FE7E3E1293BD58000720E18 /* Upscaler.swift in Sources */,
 				3FC49547293AD62700B2F32D /* Start.swift in Sources */,
@@ -373,9 +390,12 @@
 				3F47B2222950B5DA000C33EC /* Scheduler.swift in Sources */,
 				3F444E59293EA4F2007A7D9F /* SDMainWindowController.swift in Sources */,
 				3F47B22C2950B5DA000C33EC /* Encoder.swift in Sources */,
+				3F4648D52958B99D00305CF8 /* Display Result.swift in Sources */,
 				3F47B2232950B5DA000C33EC /* SafetyChecker.swift in Sources */,
 				3F47B2292950B5DA000C33EC /* Unet.swift in Sources */,
 				3F16986C293E8503008A2BF0 /* Controls Actions.swift in Sources */,
+				3F4648D72958BA0000305CF8 /* Resize Image.swift in Sources */,
+				3F4648D12958B88600305CF8 /* Controls Values.swift in Sources */,
 				3F47B2252950B5DA000C33EC /* AlphasCumprodCalculation.swift in Sources */,
 				3FC49545293AD5AA00B2F32D /* Generate Image.swift in Sources */,
 				3F444E5D293EA964007A7D9F /* Global Vars.swift in Sources */,
