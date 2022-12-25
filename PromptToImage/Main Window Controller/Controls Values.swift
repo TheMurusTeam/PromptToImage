@@ -26,8 +26,9 @@ extension SDMainWindowController {
         self.stepsSlider.integerValue = Int(UserDefaults.standard.value(forKey: "steps") as? Double ?? 25)
         self.stepsLabel.stringValue = String(self.stepsSlider.integerValue)
         self.upscaleCheckBox.state = (UserDefaults.standard.value(forKey: "upscale") as? Bool ?? true) ? .on : .off
-        self.guidanceLabel.floatValue = UserDefaults.standard.value(forKey: "guidance") as? Float ?? 7.5
-        self.guidanceSlider.integerValue = Int(self.guidanceLabel.floatValue * 100)
+        let guidance = UserDefaults.standard.value(forKey: "guidance") as? Float ?? 7.50
+        self.guidanceSlider.doubleValue = Double(Int(guidance * 100))
+        self.guidanceLabel.stringValue = String(guidance)
     }
     
     
