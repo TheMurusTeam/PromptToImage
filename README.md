@@ -33,11 +33,11 @@ This is a sanboxed app. It is not allowed to access your personal files and data
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.<br>
 The Xcode project does not include CoreML models and accessory files. You need to add these files to the main project folder within Xcode before building. These files list includes at least:<br>
-- realesrgan512.mlmodel
-- merges.txt
-- vocab.json
-- TextEncoder.mlmodelc
-- Unet.mlmodelc
-- VAEDecoder.mlmodelc
-- VAEEncoder.mlmodelc (optional, required for img2img)
+- realesrgan512.mlmodel: under [PromptToImage/Upscale Model](PromptToImage/Upscale Model)
+- merges.txt: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
+- vocab.json: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
+- TextEncoder.mlmodelc: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
+- Unet.mlmodelc: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
+- VAEDecoder.mlmodelc: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
+- VAEEncoder.mlmodelc (optional, required for img2img): under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable Diffusion Resources)
 
