@@ -81,6 +81,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet var historyArrayController: NSArrayController!
     
     // info popover
+    var currentInfoPopoverItem : HistoryItem? = nil
     var infoPopover : NSPopover? = nil
     @IBOutlet var infoPopoverView: NSView!
     @IBOutlet weak var info_date: NSTextField!
@@ -92,11 +93,16 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_inputImage: NSImageView!
     @IBOutlet weak var info_strenght: NSTextField!
     @IBOutlet weak var info_size: NSTextField!
+    @IBOutlet weak var info_upscaledsize: NSTextField!
     @IBOutlet weak var info_upscaledLabel: NSTextField!
     @IBOutlet weak var info_model: NSTextField!
     @IBOutlet weak var info_inputImageView: NSView!
     @IBOutlet weak var info_btn_copyStrenght: NSButton!
     @IBOutlet weak var info_btn_copyInputImage: NSButton!
+    @IBOutlet var info_upscaledView: NSView!
+    @IBOutlet weak var info_upscaleBtn: NSButton!
+    @IBOutlet weak var info_progress: NSProgressIndicator!
+    
     
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
@@ -180,6 +186,8 @@ class SDMainWindowController: NSWindowController,
     @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
         self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
     }
+    
+    
     
     
 }

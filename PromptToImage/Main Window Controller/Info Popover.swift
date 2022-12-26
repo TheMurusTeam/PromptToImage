@@ -30,6 +30,7 @@ extension SDMainWindowController {
     // create info Popover
     func presentPopover(originview:NSView,edge:NSRectEdge?,historyItem:HistoryItem) {
         self.setInfoPopover(item: historyItem)
+        self.currentInfoPopoverItem = historyItem
         infoPopover = NSPopover()
         let popoverCtrl = NSViewController()
         popoverCtrl.view = self.infoPopoverView
@@ -57,12 +58,55 @@ extension SDMainWindowController {
         } else {
             self.info_inputImageView.isHidden = true
         }
-        let size = item.upscaledSize ?? item.originalSize
+        let size = item.originalSize
         self.info_size.stringValue = "\(String(Int(size.width)))x\(String(Int(size.height)))"
-        self.info_upscaledLabel.isHidden = !item.upscaled
+        self.info_upscaledView.isHidden = !item.upscaled
+        self.info_upscaleBtn.isHidden = item.upscaled
+        if let upscaledImage = item.upscaledImage {
+            self.info_upscaledsize.stringValue = "\(String(Int(upscaledImage.width)))x\(String(Int(upscaledImage.height)))"
+        }
     }
     
+    @IBAction func info_removeUpscaledImage(_ sender: Any) {
+        if let item = self.currentInfoPopoverItem {
+            //
+            let currentDisplayedItems = self.history.filter({ $0.upscaledImage == self.imageview.image })
+            if !currentDisplayedItems.isEmpty {
+                self.imageview.image = currentDisplayedItems[0].image
+            }
+            
+            item.upscaledImage = nil
+            item.upscaledSize = nil
+            item.upscaled = false
+            
+            self.setInfoPopover(item: item)
+        }
+    }
     
+    @IBAction func info_upscaleImage(_ sender: Any) {
+        if let item = self.currentInfoPopoverItem {
+            self.info_progress.isHidden = false
+            self.info_progress.startAnimation(nil)
+            DispatchQueue.global().async {
+                let upscaledImage = Upscaler.shared.upscaledImage(image: item.image)
+                DispatchQueue.main.async {
+                    item.upscaledImage = upscaledImage
+                    item.upscaledSize = upscaledImage?.size
+                    item.upscaled = true
+                    
+                    let currentDisplayedItems = self.history.filter({ $0.image == self.imageview.image })
+                    if !currentDisplayedItems.isEmpty {
+                        self.imageview.image = currentDisplayedItems[0].upscaledImage
+                    }
+                    
+                    self.info_progress.stopAnimation(nil)
+                    self.info_progress.isHidden = true
+                    self.setInfoPopover(item: item)
+                }
+                
+            }
+        }
+    }
     
     
     
