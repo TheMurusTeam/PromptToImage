@@ -11,11 +11,32 @@ import AVFoundation
 
 extension SDMainWindowController {
     
-    // MARK: - Share
-
+    // MARK: Click Share in History Item
+    
+    // save from table view item Share btn
+    @IBAction func clickShareInHistoryItem(_ sender: NSButton) {
+        guard let view = sender.superview?.superview else {return}
+        let row = self.historyTableView.row(for: view)
+        print("ROW:\(row)")
+        // save
+        let items : [NSImage] = [(self.history[row].upscaledImage ?? self.history[row].image)]
+        self.currentHistoryItem = self.history[row]
+        let sharingPicker = NSSharingServicePicker(items: items)
+        sharingPicker.delegate = self
+        sharingPicker.show(relativeTo: NSZeroRect,
+                           of: sender,
+                           preferredEdge: .minY)
+        
+    }
+    
+    
+    
+    // MARK: Sharing Picker
+    
     // draw share menu
     func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
         
+        guard let historyItem = self.currentHistoryItem else { return [] }
         let btnimage = NSImage(systemSymbolName: "display.and.arrow.down", accessibilityDescription: nil) // item icon
         var share = proposedServices
         
@@ -23,69 +44,27 @@ extension SDMainWindowController {
             let customService = NSSharingService(title: "Save As...", image: btnimage ?? NSImage(), alternateImage: btnimage, handler: {
                 if currentImages.count == 1 {
                     // write single image to file
-                   // self.displaySavePanel(image:currentImages[0])
-                    self.displaySavePanelEXIF()
-                } else if currentImages.count > 1 {
+                    self.displaySavePanel(item:historyItem)
+                }/* else if currentImages.count > 1 {
                     // write multiple images to folder
                     self.displaySavePanel(images: currentImages)
-                } else {
-                    // error!
-                }
+                } */
             })
             share.insert(customService, at: 0)
         }
         return share
         
         
-        /*
-        if let currentImages = items as? [HistoryItem] {
-            let customService = NSSharingService(title: "Save As...", image: btnimage ?? NSImage(), alternateImage: btnimage, handler: {
-                if currentImages.count == 1 {
-                    // write single image to file
-                    self.displaySavePanel(item:currentImages[0])
-                } else if currentImages.count > 1 {
-                    // write multiple images to folder
-                    //self.displaySavePanel(images: currentImages)
-                } else {
-                    // error!
-                }
-            })
-            share.insert(customService, at: 0)
-        }
-        */
-        
     }
 
 
-
-    // MARK: Save Panel for single image
-    
-    func displaySavePanel(image:NSImage) {
-        print("displaying save panel for single image")
-        let panel = NSSavePanel()
-        // suggested file name
-        panel.allowedContentTypes = [.png]
-        panel.nameFieldStringValue = "\(String(self.promptView.stringValue.prefix(50))).\(self.seedView.stringValue).png"
-        // panel strings
-        panel.title = "Save image"
-        panel.prompt = "Save Image"
-        if panel.runModal().rawValue == 1 {
-            if let path = panel.url?.path {
-                // write to file
-                self.writeImageToFile(path: path,
-                                      image: image,
-                                      format: savefileFormat)
-            }
-        }
-    }
     
     
     // MARK: Save Panel for EXIF single image
 
     // save panel for single image with metadata
-    func displaySavePanelEXIF() {
-        guard let item = self.currentHistoryItem else { return }
-        print("displaying save panel for single image")
+    func displaySavePanel(item:HistoryItem) {
+        print("displaying save panel for single image with metadata")
         let image = item.upscaledImage ?? item.image
         guard let img = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             print("invalid image")
@@ -99,46 +78,105 @@ extension SDMainWindowController {
         // panel strings
         panel.title = "Save image"
         panel.prompt = "Save Image"
-        if panel.runModal().rawValue == 1 {
-            guard let url = panel.url else { return }
-            guard let data = CFDataCreateMutable(nil, 0) else { return }
-            guard let destination = CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil) else { return }
-            let iptc = [
-                kCGImagePropertyIPTCOriginatingProgram: "PromptToImage",
-                kCGImagePropertyIPTCCaptionAbstract: metadata(),
-                kCGImagePropertyIPTCProgramVersion: "\(self.seedView.stringValue)"]
-            let meta = [kCGImagePropertyIPTCDictionary: iptc]
-            CGImageDestinationAddImage(destination, img, meta as CFDictionary)
-            guard CGImageDestinationFinalize(destination) else { return }
-            // save
-            do {
-                try (data as Data).write(to: url)
-            } catch {
-                print("error saving file: \(error)")
+        
+        panel.beginSheetModal(for: self.window!, completionHandler: { response in
+            if response == NSApplication.ModalResponse.OK {
+                guard let url = panel.url else { return }
+                guard let data = CFDataCreateMutable(nil, 0) else { return }
+                guard let destination = CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil) else { return }
+                let iptc = [
+                    kCGImagePropertyIPTCOriginatingProgram: "PromptToImage for macOS",
+                    kCGImagePropertyIPTCCaptionAbstract: self.metadata(item:item),
+                    kCGImagePropertyIPTCProgramVersion: "\(self.seedView.stringValue)"]
+                let meta = [kCGImagePropertyIPTCDictionary: iptc]
+                CGImageDestinationAddImage(destination, img, meta as CFDictionary)
+                guard CGImageDestinationFinalize(destination) else { return }
+                // save
+                do {
+                    try (data as Data).write(to: url)
+                } catch {
+                    print("error saving file: \(error)")
+                }
+            } else {
+                print("cancel")
             }
-        }
+        })
+        
     }
            
-    private func metadata() -> String {
-        return "Prompt: \(self.promptView.stringValue)\nNegative Prompt: \(self.negativePromptView.stringValue)\nSeed: \(self.seedView.stringValue)\nModel name: \(currentModelName())\nSteps: \(self.stepsLabel.stringValue)\nGuidance Scale: \(self.guidanceLabel.stringValue)"
+    
+    // build metadata string for IPTC
+    private func metadata(item:HistoryItem) -> String {
+        return "Prompt: \(item.prompt)\nNegative Prompt: \(item.negativePrompt)\nSeed: \(item.seed)\nModel name: \(item.modelName)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)"
     }
 
     
+    // MARK: Click Save in tableview contextual menu
     
-    
-    
+    @IBAction func saveSelectedImages(_ sender: Any) {
+        guard let items = self.historyArrayController.selectedObjects as? [HistoryItem] else { return }
+        if !items.isEmpty { self.displaySavePanel(historyItems: items)}
+    }
     
     // MARK: Save Panel for multiple images
 
     // open panel for multiple images
-    func displaySavePanel(images:[NSImage]) {
+    func displaySavePanel(historyItems:[HistoryItem]) {
         print("displaying open panel for saving multiple images")
         let panel = NSOpenPanel()
         panel.canCreateDirectories = true
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.message = "Select a folder"
-        panel.prompt = "Save All Images"
+        panel.prompt = "Save Selected Images"
+        
+        
+        panel.beginSheetModal(for: self.window!, completionHandler: { response in
+            if response == NSApplication.ModalResponse.OK {
+                //
+                self.indindicator.isHidden = false
+                self.indindicator.startAnimation(nil)
+                self.progrLabel.stringValue = "Saving \(historyItems.count) images..."
+                self.speedLabel.isHidden = true
+                self.window?.beginSheet(self.progrWin)
+                //
+                guard let path = panel.url?.path(percentEncoded: false) else { return }
+                
+                var i = 1
+                for item in historyItems {
+                    let fullpath = path + "/\(String(item.prompt.prefix(50)))-\(i).\(item.seed).png"
+                    let url = URL(filePath: fullpath)
+                    print("save \(i) at \(url.absoluteString)")
+                    
+                    let nsimg = item.upscaledImage ?? item.image
+                    guard let img = nsimg.cgImage(forProposedRect: nil, context: nil, hints: nil) else {return}
+                    guard let data = CFDataCreateMutable(nil, 0) else { return }
+                    guard let destination = CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil) else { return }
+                    let iptc = [
+                        kCGImagePropertyIPTCOriginatingProgram: "PromptToImage for macOS",
+                        kCGImagePropertyIPTCCaptionAbstract: self.metadata(item:item),
+                        kCGImagePropertyIPTCProgramVersion: "1.0"]
+                    let meta = [kCGImagePropertyIPTCDictionary: iptc]
+                    CGImageDestinationAddImage(destination, img, meta as CFDictionary)
+                    guard CGImageDestinationFinalize(destination) else { return }
+                    // save
+                    do {
+                        try (data as Data).write(to: url)
+                    } catch {
+                        print("error saving file: \(error)")
+                    }
+                    
+                    i = i + 1
+                }
+                self.window?.endSheet(self.progrWin)
+                
+            } else {
+                print("cancel")
+                
+            }
+        })
+        
+        /*
         if panel.runModal().rawValue == 1 {
             //
             self.indindicator.isHidden = false
@@ -146,8 +184,6 @@ extension SDMainWindowController {
             self.progrLabel.stringValue = "Saving \(images.count) images..."
             self.speedLabel.isHidden = true
             self.window?.beginSheet(self.progrWin)
-            //
-            self.saveBtn.isEnabled = false
             
             if let path = panel.url?.path {
                 DispatchQueue.global().async {
@@ -161,16 +197,67 @@ extension SDMainWindowController {
                     }
                     DispatchQueue.main.async {
                         self.window?.endSheet(self.progrWin)
-                        self.saveBtn.isEnabled = true
                     }
                 }
             }
             
         }
+         */
         
     }
 
 
+    
+    // MARK: Click Main Share Button
+     
+    // main view share button
+    @IBAction func clickMainShareButton(_ sender: NSButton) {
+        guard let historyitems = self.historyArrayController.selectedObjects as? [HistoryItem] else { return }
+        let images : [NSImage] = historyitems.map { $0.upscaledImage ?? $0.image }
+        let sharingPicker = NSSharingServicePicker(items: images)
+        sharingPicker.delegate = self
+        sharingPicker.show(relativeTo: NSZeroRect,
+                           of: sender,
+                           preferredEdge: .minY)
+        
+        /*
+        guard let historyitems = self.historyArrayController.selectedObjects as? [HistoryItem] else { return }
+        //let images : [NSImage] = historyitems.map { $0.upscaledImage ?? $0.image }
+        var images = [NSImage]()
+        for hitem in historyitems {
+            images.append(hitem.upscaledImage ?? hitem.image)
+        }
+        print("MAIN SHARE BUTTON items:\(images.count)")
+        let sharingPicker = NSSharingServicePicker(items: images)
+        sharingPicker.delegate = self
+        sharingPicker.show(relativeTo: NSZeroRect,
+                           of: sender,
+                           preferredEdge: .minY)
+         */
+        
+        /*
+        var items = [NSImage]()
+        
+        if generatedImages.count == 1 {
+            // SHARE SINGLE IMAGE
+            print("share single image")
+            items = [generatedImages[0]]
+        } else if generatedImages.count > 1 {
+            // SHARE MULTIPLE IMAGES
+            print("share \(generatedImages.count) images")
+            items = generatedImages
+        }
+        
+        let sharingPicker = NSSharingServicePicker(items: items)
+        sharingPicker.delegate = self
+        sharingPicker.show(relativeTo: NSZeroRect,
+                           of: sender,
+                           preferredEdge: .minY)
+        */
+    }
+    
+    
+    
 
     // MARK: Write To File
 
@@ -185,54 +272,6 @@ extension SDMainWindowController {
         }
     }
 
-    
-    /*
-     func save() {
-         guard let img = image else {
-             NSLog("*** Image was not valid!")
-             return
-         }
-
-         let panel = NSSavePanel()
-         panel.allowedContentTypes = [.png, .jpeg]
-         panel.canCreateDirectories = true
-         panel.isExtensionHidden = false
-         panel.title = "Save Image"
-         panel.message = "Choose a folder and a name to store the image."
-         panel.nameFieldLabel = "Image file name:"
-         panel.nameFieldStringValue = "\(String(prompt.prefix(50))).\(seed).png"
-         let resp = panel.runModal()
-         if resp != .OK {
-             return
-         }
-         
-         guard let url = panel.url else { return }
-         let ext = url.pathExtension.lowercased()
-         guard let data = CFDataCreateMutable(nil, 0) else { return }
-         guard let destination = CGImageDestinationCreateWithData(data, (ext == "png" ? UTType.png.identifier : UTType.jpeg.identifier) as CFString, 1, nil) else { return }
-         let iptc = [
-             kCGImagePropertyIPTCOriginatingProgram: "Mochi Diffusion",
-             kCGImagePropertyIPTCCaptionAbstract: metadata(),
-             kCGImagePropertyIPTCProgramVersion: "\(seed)"]
-         let meta = [kCGImagePropertyIPTCDictionary: iptc]
-         CGImageDestinationAddImage(destination, img, meta as CFDictionary)
-         guard CGImageDestinationFinalize(destination) else { return }
-         do {
-             // Try save image with metadata
-             try (data as Data).write(to: url)
-         } catch {
-             NSLog("*** Error saving image file: \(error)")
-         }
-     }
-
-     private func metadata() -> String {
-         return title() + ", Seed: \(seed), Model: \(model), Scheduler: \(scheduler), Steps: \(steps), Guidance: \(guidanceScale), Index: \(imageIndex)"
-     }
-
-     private func title() -> String {
-         return "Prompt: \(prompt), Negative: \(negativePrompt)"
-     }
-     */
 
 }
 

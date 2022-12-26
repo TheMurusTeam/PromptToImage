@@ -7,12 +7,20 @@
 
 import Cocoa
 
+func displayErrorAlert(txt:String) {
+    let alert = NSAlert()
+    alert.messageText = "Error"
+    alert.informativeText = txt
+    alert.runModal()
+}
+
 class SDMainWindowController: NSWindowController,
                               NSWindowDelegate,
                               NSSharingServicePickerDelegate,
                               NSSplitViewDelegate,
-                              NSMenuDelegate {
-
+                              NSMenuDelegate,
+                              NSTableViewDelegate {
+    
     @IBOutlet weak var splitview: NSSplitView!
     @IBOutlet weak var left: NSView!
     @IBOutlet weak var center: NSView!
@@ -61,10 +69,14 @@ class SDMainWindowController: NSWindowController,
     
     @IBOutlet weak var modelsPopup: NSPopUpButton!
     
+    // table view menu
     
-    // history collection view
-    @IBOutlet weak var colScrollView: NSScrollView!
-    @IBOutlet weak var colView: NSCollectionView!
+    @IBOutlet weak var item_saveAllSelectedImages: NSMenuItem!
+    
+    
+    // history
+    
+    @IBOutlet weak var historyTableView: NSTableView!
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
     
@@ -82,59 +94,13 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_size: NSTextField!
     @IBOutlet weak var info_upscaledLabel: NSTextField!
     @IBOutlet weak var info_model: NSTextField!
-    
     @IBOutlet weak var info_inputImageView: NSView!
     @IBOutlet weak var info_btn_copyStrenght: NSButton!
     @IBOutlet weak var info_btn_copyInputImage: NSButton!
     
-    // actions
-    @IBAction func infoCopyPrompt(_ sender: Any) {
-        self.promptView.stringValue = info_prompt.stringValue
-    }
-    @IBAction func infoCopyNegativePrompt(_ sender: Any) {
-        self.negativePromptView.stringValue = info_negativePrompt.stringValue
-    }
-    @IBAction func infoCopySeed(_ sender: Any) {
-        self.seedView.stringValue = info_seed.stringValue
-        self.seedBtn.state = .off
-        self.seedView.isSelectable = true
-        self.seedView.isEditable = true
-    }
-    @IBAction func infoCopySteps(_ sender: Any) {
-        self.stepsSlider.integerValue = info_steps.integerValue
-        self.stepsLabel.integerValue = info_steps.integerValue
-    }
-    @IBAction func infoCopyGuidance(_ sender: Any) {
-        self.guidanceSlider.doubleValue = info_guidance.doubleValue * 100
-        self.guidanceLabel.stringValue = String(info_guidance.doubleValue)
-    }
-    @IBAction func infoCopyStrenght(_ sender: Any) {
-        self.strenghtSlider.doubleValue = info_strenght.doubleValue * 100
-        self.strenghtLabel.stringValue = String(info_strenght.doubleValue)
-    }
-    @IBAction func infoCopyInputImage(_ sender: Any) {
-        if let image = self.info_inputImage.image {
-            self.inputImageview.image = image
-        }
-    }
-    
-    
-    
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
-    @IBAction func displaySettings(_ sender: Any) {
-        self.setModelsPopup()
-        //self.settingsWindow.makeKeyAndOrderFront(nil)
-        self.window?.beginSheet(self.settingsWindow)
-    }
-    @IBAction func closeSettingsWindow(_ sender: Any) {
-        self.window?.endSheet(self.settingsWindow)
-    }
-    
-   
-    
     @IBOutlet weak var modelsPopupMenu: NSMenu!
-    
     
     var currentHistoryItem : HistoryItem? = nil
     
@@ -157,9 +123,19 @@ class SDMainWindowController: NSWindowController,
         super.windowDidLoad()
         self.setUnitsPopup()
         self.populateModelsPopup()
-        self.readStoredControlsValues() 
+        self.readStoredControlsValues()
+        self.splitview.setPosition(297, ofDividerAt: 0)
+        self.splitview.setPosition(435, ofDividerAt: 1)
+        //self.debugColView()
     }
     
+    func debugColView() {
+        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "tree")!, upscaledImage: nil, seed: 9999))
+        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "sd-ship")!, upscaledImage: nil, seed: 9999))
+        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "testimage")!, upscaledImage: nil, seed: 9999))
+        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "prompttoimage")!, upscaledImage: nil, seed: 9999))
+        
+    }
     
     
     // MARK: Will Close
@@ -180,7 +156,71 @@ class SDMainWindowController: NSWindowController,
     
     
     
+    // MARK: Table View Delegate
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        guard let selectedHistoryItems = self.historyArrayController.selectedObjects as? [HistoryItem] else {return}
+        if selectedHistoryItems.isEmpty {
+            self.imageview.image = nil
+          //  self.saveBtn.isEnabled = false
+        } else {
+            self.imageview.image = selectedHistoryItems[0].upscaledImage ?? selectedHistoryItems[0].image
+          //  self.saveBtn.isEnabled = true
+        }
+    }
     
     
+    func saveDocument() {
+        print("save doc")
+    }
     
+    
+    @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
+        self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
+    }
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class SCUTableView : NSTableView {
+    
+    override func menu(for event: NSEvent) -> NSMenu? {
+        let row = self.row(at: self.convert(event.locationInWindow, from: nil))
+        if row != -1 {
+            // click destro su record reale, decido cosa fare in base al numero di righe selezionate...
+            
+            if self.selectedRowIndexes.count <= 1 {
+                // è attualmente selezionata una riga sola oppure nessuna riga
+                // quindi forzo la selezione della riga sotto al click destro
+                let iset = NSIndexSet(index: row)
+                self.selectRowIndexes(iset as IndexSet, byExtendingSelection: false)
+            } else {
+                // sono attualmente selezionate più righe
+                // non faccio nulla, poppo il menu dovunque sia il puntatore lasciando intatta la selezione
+            }
+            
+        } else {
+            
+            // click destro su spazio vuoto quindi deseleziono tutto
+            let iset = NSIndexSet()
+            self.selectRowIndexes(iset as IndexSet, byExtendingSelection: false)
+        }
+        
+        // in ogni caso poppo il menu bindato alla tableview
+        return self.menu
+        
+    }
 }

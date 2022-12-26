@@ -36,7 +36,7 @@ extension AppDelegate {
             modelResourcesURL = defaultModelResourcesURL
             currentComputeUnits = defaultComputeUnits
         } else {
-            // set model
+            // set model url
             modelResourcesURL = UserDefaults.standard.url(forKey: "modelResourcesURL") ?? defaultModelResourcesURL
             // set compute units
             if let str = UserDefaults.standard.value(forKey: "computeUnits") as? String {
@@ -51,17 +51,15 @@ extension AppDelegate {
         // load upscaler CoreML model
         loadUpscalerModel()
         
+        // load Stable Diffusion CoreML models
         DispatchQueue.global().async {
-            // load latest Stable Diffusion CoreML models
+            // load last used model
             createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
             if sdPipeline == nil {
-                // load factory models
+                // load factory model
                 createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
             }
         }
-        
-        
-        
         
     }
     

@@ -49,10 +49,13 @@ This is a sanboxed app. It is not allowed to access your personal files and data
 
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.<br>
-The Xcode project does not include the default CoreML model and accessory files. You need to add these files to the main project folder within Xcode before building. It's mandatory to use a specific model, as the app expects only this model to be installed in the app bundle. These files list includes:<br>
+The Xcode project does not include the default CoreML models and accessory files. You need to add these files to the main project folder within Xcode before building. It's mandatory to use these specific models, as the app expects only these models to be installed in the app bundle. <br><br>
+1. UPSCALER MODEL<br><br>
+Download default upscaler model here: https://huggingface.co/TheMurusTeam/CoreML-realesrgan512<br>
 Upscaler model file:<br>
-- realesrgan512.mlmodel: under [PromptToImage/Upscale Model](PromptToImage/Upscale%20Model)<br>
-
+- realesrgan512.mlmodel: under [PromptToImage/Upscale Model](PromptToImage/Upscale%20Model)<br><br>
+2. STABLE DIFFUSION MODEL<br><br>
+Download default Stable Diffusion model here: https://huggingface.co/TheMurusTeam/CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img/ <br>
 CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img model files:<br>
 - merges.txt: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
 - vocab.json: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
@@ -60,6 +63,7 @@ CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img model files:<br>
 - Unet.mlmodelc: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
 - VAEDecoder.mlmodelc: under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)
 - VAEEncoder.mlmodelc (optional, required for img2img): under [PromptToImage/Stable Diffusion Resources](PromptToImage/Stable%20Diffusion%20Resources)<br><br>
-You can get both uspcaler and stable diffusion models here: https://huggingface.co/TheMurusTeam
+
+
 
 

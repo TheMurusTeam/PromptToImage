@@ -69,3 +69,28 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
 
 
 
+
+// MARK: Reload Model
+
+func loadSDModel() {
+    DispatchQueue.global().async {
+        createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
+        if sdPipeline == nil {
+            // error
+            print("error creating pipeline")
+            DispatchQueue.main.async {
+                displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
+                // restore default model and compute units
+                createStableDiffusionPipeline(computeUnits: defaultComputeUnits,
+                                              url: defaultModelResourcesURL)
+                modelResourcesURL = defaultModelResourcesURL
+                // set user defaults
+                UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+            }
+        } else {
+            // save to user defaults
+            UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+        }
+    }
+}
+

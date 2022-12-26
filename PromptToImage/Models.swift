@@ -61,9 +61,20 @@ func installedCustomModels() -> [URL] {
 
 extension SDMainWindowController {
     
+    // MARK: Menu Delegate
+    
     func menuWillOpen(_ menu: NSMenu) {
-        self.populateModelsPopup()
+        if menu == self.modelsPopup.menu {
+            self.populateModelsPopup()
+        } else if menu == self.historyTableView.menu {
+            self.item_saveAllSelectedImages.isEnabled = !self.historyArrayController.selectedObjects.isEmpty
+        }
     }
+    
+    
+    
+    
+    // MARK: Populate Models Popup
     
     func populateModelsPopup() {
         // create menu items

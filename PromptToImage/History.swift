@@ -12,10 +12,10 @@ import Cocoa
 // MARK: History Item Model
 
 class HistoryItem : NSObject {
-    var modelName = String()
+    @objc dynamic var modelName = String()
     var date = Date()
     var originalSize = NSSize()
-    var upscaledSize : NSSize? = nil
+    var upscaledSize : NSSize? = nil 
     @objc dynamic var prompt = String()
     @objc dynamic var negativePrompt = String()
     @objc dynamic var steps = Int()

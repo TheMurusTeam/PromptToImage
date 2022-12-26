@@ -21,8 +21,6 @@ extension SDMainWindowController {
     @IBAction func clickGenerateImage(_ sender: NSButton) {
         // clear views
         self.imageview.image = nil
-        //
-        self.saveBtn.isEnabled = false
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed
@@ -48,238 +46,30 @@ extension SDMainWindowController {
     // MARK: Stop generate image
     
     @IBAction func clickStop(_ sender: Any) {
-        self.saveBtn.isEnabled = false
         isRunning = false
         self.window?.endSheet(self.progrWin)
     }
     
     
     
-    // MARK: Click Save in Share Button
-     
-    // main view share button
-    @IBAction func clickSave(_ sender: NSButton) {
-        
-        var items = [NSImage]()
-        
-        if generatedImages.count == 1 {
-            // SHARE SINGLE IMAGE
-            print("share single image")
-            items = [generatedImages[0]]
-        } else if generatedImages.count > 1 {
-            // SHARE MULTIPLE IMAGES
-            print("share \(generatedImages.count) images")
-            items = generatedImages
-        }
-        
-        let sharingPicker = NSSharingServicePicker(items: items)
-        sharingPicker.delegate = self
-        sharingPicker.show(relativeTo: NSZeroRect,
-                           of: sender,
-                           preferredEdge: .minY)
-        
-    }
-    
-    
-    
-    
-    // MARK: Collection View Item Actions
-    
-    
-    @IBAction func selectHistoryItem(_ sender: NSButton) {
-        var i = 0
-        for _ in self.colView.content {
-            if let cvitem = self.colView.item(at: i) {
-                if sender.isDescendant(of: cvitem.view) {
-                    // show image
-                    self.imageview.image = self.history[i].upscaledImage ?? self.history[i].image
-                }
-            }
-            i = i + 1
-        }
-    }
     
 
-    
-    // save from collection view item
-    @IBAction func clickSaveInCollectionViewItem(_ sender: NSButton) {
-        var i = 0
-        for _ in self.colView.content {
-            if let cvitem = self.colView.item(at: i) {
-                if sender.isDescendant(of: cvitem.view) {
-                    // save
-                    let items : [NSImage] = [(self.history[i].upscaledImage ?? self.history[i].image)]
-                    self.currentHistoryItem = self.history[i]
-                    //let items : [HistoryItem] = [self.history[i]]
-                    let sharingPicker = NSSharingServicePicker(items: items)
-                    sharingPicker.delegate = self
-                    sharingPicker.show(relativeTo: NSZeroRect,
-                                       of: sender,
-                                       preferredEdge: .minY)
-                }
-            }
-            i = i + 1
-        }
-    }
-    
-    
-
-    // MARK: Info Popover
-    
-    // display image info popover
-    @IBAction func clickPreviewImage(_ sender: NSButton) {
-        var i = 0
-        for _ in self.colView.content {
-            if let cvitem = self.colView.item(at: i) {
-                if sender.isDescendant(of: cvitem.view) {
-                    self.presentPopover(originview: sender as NSView, edge: NSRectEdge.maxX, historyItem: self.history[i])
-                }
-            }
-            i = i + 1
-        }
-    }
-    
-    
-    
-    // create info Popover
-    func presentPopover(originview:NSView,edge:NSRectEdge?,historyItem:HistoryItem) {
-        self.setInfoPopover(item: historyItem)
-        infoPopover = NSPopover()
-        let popoverCtrl = NSViewController()
-        popoverCtrl.view = self.infoPopoverView
-        infoPopover!.contentViewController = popoverCtrl
-        infoPopover!.behavior = NSPopover.Behavior.transient
-        infoPopover!.animates = true
-        infoPopover!.show(relativeTo: originview.bounds, of: originview, preferredEdge: edge ?? NSRectEdge.minY)
-    }
-    
-    
-    // draw info popover
-    func setInfoPopover(item:HistoryItem) {
-        self.info_date.stringValue = dateFormatter.string(from: item.date)
-        self.info_model.stringValue = item.modelName 
-        self.info_prompt.stringValue = item.prompt
-        self.info_negativePrompt.stringValue = item.negativePrompt
-        self.info_seed.stringValue = String(item.seed)
-        self.info_steps.stringValue = String(item.steps)
-        self.info_guidance.stringValue = String(item.guidanceScale)
-        self.info_strenght.stringValue = String(item.strenght)
-        self.info_inputImage.image = NSImage()
-        if let cgimage = item.inputImage {
-            self.info_inputImage.image = NSImage(cgImage: cgimage, size: .zero)
-            self.info_inputImageView.isHidden = false
-        } else {
-            self.info_inputImageView.isHidden = true
-        }
-        let size = item.upscaledSize ?? item.originalSize
-        self.info_size.stringValue = "\(String(Int(size.width)))x\(String(Int(size.height)))"
-        self.info_upscaledLabel.isHidden = !item.upscaled
-    }
-    
-    
     
     // move selected image to input image from collection view item
     @IBAction func clickCopyImageToInputImage(_ sender: NSButton) {
         if let pipeline = sdPipeline {
             if pipeline.canUseInputImage {
-                var i = 0
-                for _ in self.colView.content {
-                    if let cvitem = self.colView.item(at: i) {
-                        if sender.isDescendant(of: cvitem.view) {
-                            self.inputImageview.image = self.history[i].image
-                        }
-                    }
-                    i = i + 1
-                }
+                guard let view = sender.superview?.superview else {return}
+                let row = self.historyTableView.row(for: view)
+                print("ROW:\(row)")
+                self.inputImageview.image = self.history[row].image
                 return
             }
         }
-        self.displayErrorAlert(txt: "Image to Image is not available with current model: VAEEncoder.mlmodelc not found")
+        displayErrorAlert(txt: "Image to Image is not available with current model: VAEEncoder.mlmodelc not found")
         
     }
     
-    
-    
-    // MARK: Switch Compute Units
-    
-    @IBAction func switchUnitsPopup(_ sender: NSPopUpButton) {
-        //self.settingsWindow.close()
-        self.window?.endSheet(self.settingsWindow)
-        switch sender.indexOfSelectedItem {
-        case 1: currentComputeUnits = .cpuAndGPU
-        case 2: currentComputeUnits = .all
-        default: currentComputeUnits = .cpuAndNeuralEngine
-        }
-        self.reloadModel()
-    }
-    
-    func setUnitsPopup() {
-        switch currentComputeUnits {
-        case .cpuAndNeuralEngine: self.unitsPopup.selectItem(at: 0)
-        case .cpuAndGPU: self.unitsPopup.selectItem(at: 1)
-        default: self.unitsPopup.selectItem(at: 2) // all
-        }
-    }
-    
-    
-    // MARK: Switch model
-    
-    @IBAction func switchModelsPopup(_ sender: NSPopUpButton) {
-        //self.settingsWindow.close()
-        self.window?.endSheet(self.settingsWindow)
-        if sender.indexOfSelectedItem == 0 {
-            modelResourcesURL = defaultModelResourcesURL
-        } else {
-            if let modelurl = sender.selectedItem?.representedObject as? URL {
-                modelResourcesURL = modelurl
-                print("setting modelResourcesURL to \(modelResourcesURL)")
-            }
-        }
-        self.reloadModel()
-
-    }
-    
-    // Reload MLModel
-    func reloadModel() {
-        DispatchQueue.global().async {
-            createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
-            if sdPipeline == nil {
-                // error
-                print("error creating pipeline")
-                DispatchQueue.main.async {
-                    self.displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
-                    // restore default model and compute units
-                    createStableDiffusionPipeline(computeUnits: defaultComputeUnits,
-                                                  url: defaultModelResourcesURL)
-                    modelResourcesURL = defaultModelResourcesURL
-                    // set user defaults
-                    UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
-                }
-            } else {
-                // save to user defaults
-                UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
-            }
-        }
-    }
-    
-    // MARK: Reveal models dir in Finder
-    
-    @IBAction func clickRevealModelsInFinder(_ sender: Any) {
-        self.window?.endSheet(self.settingsWindow)
-        revealCustomModelsDirInFinder()
-    }
-    
-    
-    
-    
-    
-    
-    func displayErrorAlert(txt:String) {
-        let alert = NSAlert()
-        alert.messageText = "Error"
-        alert.informativeText = txt
-        alert.runModal()
-    }
     
     
     
@@ -345,9 +135,7 @@ extension SDMainWindowController {
     }
    
     
-    @IBAction func moveToInputImage(_ sender: NSButton) {
-        self.inputImageview.image = self.imageview.image
-    }
+    
 }
 
 

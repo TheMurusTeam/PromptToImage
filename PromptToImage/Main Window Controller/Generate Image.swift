@@ -27,21 +27,22 @@ extension SDMainWindowController {
                        guidanceScale:Float,
                        stepsPreview:Bool) {
         
-        generatedImages.removeAll() // cleanup save clipboard
-        
+        generatedImages.removeAll() // cleanup
+        // upscale option
         let upscale = self.upscaleCheckBox.state == .on
         
+        // resize input image
         var inputImage : CGImage? = nil
-        // input image
         if let startingImage = startingImage {
             print("original input image size: \(startingImage.width)x\(startingImage.height)")
             if let nsinputimage = resizeImage(image: NSImage(cgImage: startingImage, size: .zero)) {
                 inputImage = nsinputimage.cgImage(forProposedRect: nil, context: nil, hints: nil)
-                print("resized input image size: \(inputImage?.width)x\(inputImage?.height)")
+                print("resized input image size: \(inputImage?.width ?? 0)x\(inputImage?.height ?? 0)")
             }
             
         }
         
+        // set labels and indicators
         self.indicator.doubleValue = 0
         self.indicator.maxValue = startingImage == nil ? Double(stepCount) : Double(Float(stepCount) * strength)
         self.indicator.isHidden = true
@@ -49,9 +50,10 @@ extension SDMainWindowController {
         self.indindicator.startAnimation(nil)
         self.progrLabel.stringValue = "Waiting for pipeline..."
         self.speedLabel.isHidden = true
-        
+        // show wait win
         self.window?.beginSheet(self.progrWin)
         
+        // image loop
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 if let pipeline = sdPipeline {
@@ -73,7 +75,7 @@ extension SDMainWindowController {
                                                              scheduler: startingImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler)
                     { (sdprogress) -> Bool in
                         
-                        // CALCULATE AND DISPLAY SPEED
+                        // calculate and display inference speed
                         sampleTimer.stop()
                         DispatchQueue.main.async {
                             self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
@@ -82,7 +84,7 @@ extension SDMainWindowController {
                             sampleTimer.start()
                         }
                         //print("step \(sdprogress.step) of \(sdprogress.stepCount) (\(Int(Float(stepCount) * strength)))")
-                        // UPDATE PROGRESS INDICATORS
+                        // progress indicators
                         DispatchQueue.main.async {
                             self.indicator.doubleValue = Double(sdprogress.step)
                             if sdprogress.step > 0 {
@@ -98,8 +100,7 @@ extension SDMainWindowController {
                         return isRunning
                     }
                     
-                    // DISPLAY OUTPUT IMAGES
-                    print("images array count: \(images.count)")
+                    // display images
                     print("displaying images...")
                     self.displayResult(images: images,
                                        upscale: upscale,
@@ -115,7 +116,6 @@ extension SDMainWindowController {
                 } else {
                     print("ERROR: cannot create pipeline")
                     DispatchQueue.main.async {
-                        self.saveBtn.isEnabled = false
                         self.window?.endSheet(self.progrWin)
                     }
                 }
@@ -123,7 +123,6 @@ extension SDMainWindowController {
             } catch {
                 print("ERROR \(error)")
                 DispatchQueue.main.async {
-                    self.saveBtn.isEnabled = false
                     self.window?.endSheet(self.progrWin)
                 }
             }
@@ -138,28 +137,5 @@ extension SDMainWindowController {
 
 
 
-
-
-
-
-
-
-/*
-// STEPS PREVIEW
-if stepsPreview {
-    DispatchQueue.global().async {
-        if !sdprogress.currentImages.isEmpty && sdprogress.step.isMultiple(of: 5) {
-            if let image1 = sdprogress.currentImages.last {
-                if let image2 = image1 {
-                    DispatchQueue.main.async {
-                        self.imageview.image = NSImage(cgImage: image2,
-                                                       size: .zero)
-                    }
-                }
-            }
-        }
-    }
-}
-*/
 
 

@@ -84,7 +84,6 @@ extension SDMainWindowController {
         }
         
         DispatchQueue.main.async {
-            self.saveBtn.isEnabled = true
             self.window?.endSheet(self.progrWin)
             self.imageview.image = generatedImages.first ?? NSImage()
         }
@@ -132,7 +131,6 @@ extension SDMainWindowController {
                                 }
                                 // close wait window
                                 self.window?.endSheet(self.progrWin)
-                                self.saveBtn.isEnabled = true
                             }
                         }
                     }
@@ -147,7 +145,6 @@ extension SDMainWindowController {
                     }
                     // close wait window
                     self.window?.endSheet(self.progrWin)
-                    self.saveBtn.isEnabled = true
                 }
                 
                 
@@ -155,7 +152,6 @@ extension SDMainWindowController {
         } else {
             print("ERROR image is nil")
             DispatchQueue.main.async {
-                self.saveBtn.isEnabled = false
                 self.window?.endSheet(self.progrWin)
             }
         }
