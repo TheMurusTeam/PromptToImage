@@ -126,47 +126,51 @@ extension SDMainWindowController {
     // MARK: Save History
     
     func saveHistory() {
-        print("Saving history...")
-        let dict : [String:Any] = ["history": (self.history.map { $0.encode() })]
-        var confdata : Data? = nil
-        do {
-            confdata = try PropertyListSerialization.data(fromPropertyList:dict,
-                                                          format: .xml,
-                                                          options: 0)
-            
-             
-        } catch let error as NSError {
-            NSLog("Error creating history data: " + error.localizedDescription)
-        }
-        // save
-        guard let confdata = confdata else { return }
-        do {
-            try confdata.write(to: URL(fileURLWithPath: historyPath + "/PromptToImage.history"))
-            
-        } catch let error as NSError {
-            NSLog("Error" + error.localizedDescription)
+        if self.settings_keepHistoryBtn.state == .on {
+            print("Saving history...")
+            let limit = self.settings_historyLimitStepper.integerValue
+            let dict : [String:Any] = ["history": (self.history.suffix(limit).map { $0.encode() })]
+            var confdata : Data? = nil
+            do {
+                confdata = try PropertyListSerialization.data(fromPropertyList:dict,
+                                                              format: .xml,
+                                                              options: 0)
+                
+                
+            } catch let error as NSError {
+                NSLog("Error creating history data: " + error.localizedDescription)
+            }
+            // save
+            guard let confdata = confdata else { return }
+            do {
+                try confdata.write(to: URL(fileURLWithPath: historyPath + "/PromptToImage.history"))
+                
+            } catch let error as NSError {
+                NSLog("Error" + error.localizedDescription)
+            }
         }
     }
     
     // MARK: Load History
     
     func loadHistory() {
-        print("loading history...")
-        DispatchQueue.global().async {
-            if let historydict = NSDictionary.init(contentsOfFile: historyPath + "/PromptToImage.history") {
-                if let items = historydict["history"] as? [Data] {
-                    print("importing \(items.count) history items")
-                    for data in items {
-                        if let newitem = HistoryItem(data: data) {
-                            DispatchQueue.main.async {
-                                self.historyArrayController.addObject(newitem)
+        if self.settings_keepHistoryBtn.state == .on {
+            print("loading history...")
+            DispatchQueue.global().async {
+                if let historydict = NSDictionary.init(contentsOfFile: historyPath + "/PromptToImage.history") {
+                    if let items = historydict["history"] as? [Data] {
+                        print("importing \(items.count) history items")
+                        for data in items {
+                            if let newitem = HistoryItem(data: data) {
+                                DispatchQueue.main.async {
+                                    self.historyArrayController.addObject(newitem)
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        
     }
     
     

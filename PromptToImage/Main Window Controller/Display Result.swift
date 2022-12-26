@@ -28,6 +28,7 @@ extension SDMainWindowController {
         } else if images.count > 1 {
             self.displayMultipleImages(images: images, upscale: upscale, prompt: prompt, negativePrompt: negativePrompt, startingImage: startingImage, strength: strength, stepCount: stepCount, seed: seed, guidanceScale: guidanceScale)
         }
+        
     }
     
     
@@ -52,7 +53,7 @@ extension SDMainWindowController {
             self.indicator.isHidden = true
         }
         
-        
+        let historyCount = self.history.count
         
         for cgimage in images {
             if cgimage != nil {
@@ -60,23 +61,27 @@ extension SDMainWindowController {
                 if upscale {
                     if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
                         DispatchQueue.main.async {
-                            // copy images to save clipboard
-                            generatedImages.append(upscaledImage)
                             // add history item
                             let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
                             DispatchQueue.main.async {
                                 self.historyArrayController.addObject(item)
+                                if cgimage == images.last {
+                                    self.historyArrayController.setSelectionIndex(historyCount)
+                                    self.historyTableView.scrollRowToVisible(historyCount + 1)
+                                }
                             }
                         }
                     }
                 } else {
                     DispatchQueue.main.async {
-                        // copy images to save clipboard
-                        generatedImages.append(nsimage)
                         // add history item
                         let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
                         DispatchQueue.main.async {
                             self.historyArrayController.addObject(item)
+                            if cgimage == images.last {
+                                self.historyArrayController.setSelectionIndex(historyCount)
+                                self.historyTableView.scrollRowToVisible(historyCount + 1)
+                            }
                         }
                     }
                 }
@@ -85,7 +90,6 @@ extension SDMainWindowController {
         
         DispatchQueue.main.async {
             self.window?.endSheet(self.progrWin)
-            self.imageview.image = generatedImages.first ?? NSImage()
         }
     }
     
@@ -121,13 +125,12 @@ extension SDMainWindowController {
                     DispatchQueue.global().async {
                         if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
                             DispatchQueue.main.async {
-                                // copy images to save clipboard
-                                generatedImages.append(upscaledImage)
                                 // add history item
                                 let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: upscaledImage, seed: seed)
                                 DispatchQueue.main.async {
                                     self.historyArrayController.addObject(item)
-                                    self.imageview.image = upscaledImage
+                                    self.historyArrayController.setSelectedObjects([item])
+                                    self.historyTableView.scrollToEndOfDocument(nil)
                                 }
                                 // close wait window
                                 self.window?.endSheet(self.progrWin)
@@ -135,13 +138,12 @@ extension SDMainWindowController {
                         }
                     }
                 } else {
-                    // copy images to save clipboard
-                    generatedImages.append(nsimage)
                     // add history item
                     let item = HistoryItem(modelName:currentModelName(), prompt: prompt, negativePrompt: negativePrompt, steps: stepCount, guidanceScale: guidanceScale, inputImage: startingImage, strenght: strength, image: nsimage, upscaledImage: nil, seed: seed)
                     DispatchQueue.main.async {
                         self.historyArrayController.addObject(item)
-                        self.imageview.image = nsimage
+                        self.historyArrayController.setSelectedObjects([item])
+                        self.historyTableView.scrollToEndOfDocument(nil)
                     }
                     // close wait window
                     self.window?.endSheet(self.progrWin)

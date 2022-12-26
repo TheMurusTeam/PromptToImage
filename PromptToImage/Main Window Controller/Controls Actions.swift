@@ -10,8 +10,6 @@ import AppKit
 import CoreML
 import AVFoundation
 
-var generatedImages = [NSImage]()
-
 
 extension SDMainWindowController {
     
@@ -19,8 +17,7 @@ extension SDMainWindowController {
     // MARK: Click Generate Image 
     
     @IBAction func clickGenerateImage(_ sender: NSButton) {
-        // clear views
-        self.imageview.image = nil
+        self.historyArrayController.setSelectedObjects([])
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed
@@ -35,7 +32,7 @@ extension SDMainWindowController {
                            negativePrompt: self.negativePromptView.stringValue,
                            startingImage: self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil),
                            strength: inputImage != nil ? self.strenghtLabel.floatValue : Float(1),
-                           imageCount: self.imageCountStepper.integerValue,
+                           imageCount: self.imageCountSlider.integerValue, //self.imageCountStepper.integerValue,
                            stepCount: self.stepsSlider.integerValue,
                            seed: seed,
                            guidanceScale: self.guidanceLabel.floatValue,

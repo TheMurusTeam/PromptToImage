@@ -57,6 +57,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var inputImageview: NSImageView!
  
     // images count
+    @IBOutlet weak var imageCountSlider: NSSlider!
     @IBOutlet weak var imageCountStepper: NSStepper!
     @IBOutlet weak var imageCountLabel: NSTextField!
     // seed
@@ -79,6 +80,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var historyTableView: NSTableView!
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
+    @IBOutlet weak var settings_keepHistoryBtn: NSButton!
     
     // info popover
     var currentInfoPopoverItem : HistoryItem? = nil
@@ -107,8 +109,14 @@ class SDMainWindowController: NSWindowController,
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
     @IBOutlet weak var modelsPopupMenu: NSMenu!
+    @IBOutlet weak var settings_selectDefaultCU: NSButton!
+    @IBOutlet weak var settings_historyLimitLabel: NSTextField!
+    @IBOutlet weak var settings_historyLimitStepper: NSStepper!
     
-    var currentHistoryItem : HistoryItem? = nil
+    
+    
+    
+    var currentHistoryItem : HistoryItem? = nil // used for sharing a single item from item's share btn
     
     
     
@@ -133,16 +141,10 @@ class SDMainWindowController: NSWindowController,
         self.splitview.setPosition(297, ofDividerAt: 0)
         self.splitview.setPosition(435, ofDividerAt: 1)
         self.loadHistory()
-        //self.debugColView()
-    }
-    
-    func debugColView() {
-        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "tree")!, upscaledImage: nil, seed: 9999))
-        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "sd-ship")!, upscaledImage: nil, seed: 9999))
-        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "testimage")!, upscaledImage: nil, seed: 9999))
-        self.history.append(HistoryItem(modelName: "test", prompt: "test", negativePrompt: "test", steps: 99, guidanceScale: 9, inputImage: nil, strenght: 1, image: NSImage(named: "prompttoimage")!, upscaledImage: nil, seed: 9999))
         
     }
+    
+    
     
     
     // MARK: Will Close
@@ -167,13 +169,10 @@ class SDMainWindowController: NSWindowController,
     // MARK: Table View Delegate
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        guard let selectedHistoryItems = self.historyArrayController.selectedObjects as? [HistoryItem] else {return}
-        if selectedHistoryItems.isEmpty {
+        if self.historyArrayController.selectedObjects.isEmpty {
             self.imageview.image = nil
-          //  self.saveBtn.isEnabled = false
         } else {
-            self.imageview.image = selectedHistoryItems[0].upscaledImage ?? selectedHistoryItems[0].image
-          //  self.saveBtn.isEnabled = true
+            self.imageview.image = (self.historyArrayController.selectedObjects[0] as! HistoryItem).upscaledImage ?? (self.historyArrayController.selectedObjects[0] as! HistoryItem).image
         }
     }
     
@@ -185,6 +184,8 @@ class SDMainWindowController: NSWindowController,
     
     @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
         self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
+        self.imageview.image = nil
+        
     }
     
     

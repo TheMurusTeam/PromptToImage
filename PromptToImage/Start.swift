@@ -26,7 +26,7 @@ extension AppDelegate {
         // set app appearance
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
         
-        // create custom models directory in app sandbox if needed
+        // create custom directories in app sandbox if needed
         createModelsDir()
         createHistoryDir()
         
@@ -49,11 +49,12 @@ extension AppDelegate {
         // show main window
         wins["main"] = SDMainWindowController(windowNibName: "SDMainWindowController", info: nil)
         
-        // load upscaler CoreML model
-        loadUpscalerModel()
-        
-        // load Stable Diffusion CoreML models
+        // load models
         DispatchQueue.global().async {
+            // load upscaler CoreML model
+            loadUpscalerModel()
+            
+            // load Stable Diffusion CoreML models
             // load last used model
             createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
             if sdPipeline == nil {

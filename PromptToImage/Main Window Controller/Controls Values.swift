@@ -18,6 +18,10 @@ extension SDMainWindowController {
         UserDefaults.standard.setValue(self.stepsSlider.doubleValue, forKey: "steps")
         UserDefaults.standard.setValue(self.upscaleCheckBox.state == .on, forKey: "upscale")
         UserDefaults.standard.setValue(self.guidanceLabel.floatValue, forKey: "guidance")
+        UserDefaults.standard.setValue(self.settings_selectDefaultCU.state == .on, forKey: "alwaysSetDefaultCUwhenSwitchingModel")
+        UserDefaults.standard.setValue(self.settings_keepHistoryBtn.state == .on, forKey: "keepHistory")
+        UserDefaults.standard.setValue(self.settings_historyLimitStepper.doubleValue, forKey: "historyLimit")
+        
     }
     
     func readStoredControlsValues() {
@@ -29,6 +33,10 @@ extension SDMainWindowController {
         let guidance = UserDefaults.standard.value(forKey: "guidance") as? Float ?? 7.50
         self.guidanceSlider.doubleValue = Double(Int(guidance * 100))
         self.guidanceLabel.stringValue = String(guidance)
+        self.settings_selectDefaultCU.state = (UserDefaults.standard.value(forKey: "alwaysSetDefaultCUwhenSwitchingModel") as? Bool ?? true) ? .on : .off
+        self.settings_keepHistoryBtn.state = (UserDefaults.standard.value(forKey: "keepHistory") as? Bool ?? true) ? .on : .off
+        self.settings_historyLimitStepper.integerValue = Int(UserDefaults.standard.value(forKey: "historyLimit") as? Double ?? 50)
+        self.settings_historyLimitLabel.stringValue = String(self.settings_historyLimitStepper.integerValue)
     }
     
     

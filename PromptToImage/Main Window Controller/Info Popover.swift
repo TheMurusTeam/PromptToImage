@@ -69,16 +69,14 @@ extension SDMainWindowController {
     
     @IBAction func info_removeUpscaledImage(_ sender: Any) {
         if let item = self.currentInfoPopoverItem {
-            //
-            let currentDisplayedItems = self.history.filter({ $0.upscaledImage == self.imageview.image })
-            if !currentDisplayedItems.isEmpty {
-                self.imageview.image = currentDisplayedItems[0].image
-            }
-            
             item.upscaledImage = nil
             item.upscaledSize = nil
             item.upscaled = false
-            
+            if !self.historyArrayController.selectedObjects.isEmpty {
+                if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
+                    self.imageview.image = firstItem.upscaledImage ?? firstItem.image
+                }
+            }
             self.setInfoPopover(item: item)
         }
     }
@@ -94,9 +92,10 @@ extension SDMainWindowController {
                     item.upscaledSize = upscaledImage?.size
                     item.upscaled = true
                     
-                    let currentDisplayedItems = self.history.filter({ $0.image == self.imageview.image })
-                    if !currentDisplayedItems.isEmpty {
-                        self.imageview.image = currentDisplayedItems[0].upscaledImage
+                    if !self.historyArrayController.selectedObjects.isEmpty {
+                        if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
+                            self.imageview.image = firstItem.upscaledImage ?? firstItem.image
+                        }
                     }
                     
                     self.info_progress.stopAnimation(nil)

@@ -105,9 +105,10 @@ extension SDMainWindowController {
     }
            
     
-    // build metadata string for IPTC
+    // MARK: Build metadata for IPTC
+    
     private func metadata(item:HistoryItem) -> String {
-        return "Prompt: \(item.prompt)\nNegative Prompt: \(item.negativePrompt)\nSeed: \(item.seed)\nModel name: \(item.modelName)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)"
+        return "Prompt: \(item.prompt)\nNegative Prompt: \(item.negativePrompt)\nSeed: \(item.seed)\nModel name: \(item.modelName)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)\n\nMade with PromptToImage for macOS"
     }
 
     
@@ -176,39 +177,25 @@ extension SDMainWindowController {
             }
         })
         
-        /*
-        if panel.runModal().rawValue == 1 {
-            //
-            self.indindicator.isHidden = false
-            self.indindicator.startAnimation(nil)
-            self.progrLabel.stringValue = "Saving \(images.count) images..."
-            self.speedLabel.isHidden = true
-            self.window?.beginSheet(self.progrWin)
-            
-            if let path = panel.url?.path {
-                DispatchQueue.global().async {
-                    var i = 1
-                    for image in images {
-                        let proposedfilename = "image\(i).png"
-                        self.writeImageToFile(path: "\(path)/\(proposedfilename)",
-                                              image: image,
-                                              format: savefileFormat)
-                        i = i + 1
-                    }
-                    DispatchQueue.main.async {
-                        self.window?.endSheet(self.progrWin)
-                    }
-                }
-            }
-            
-        }
-         */
-        
     }
 
 
     
-    // MARK: Click Main Share Button
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // Click Main Share Button
      
     // main view share button
     @IBAction func clickMainShareButton(_ sender: NSButton) {
@@ -235,25 +222,6 @@ extension SDMainWindowController {
                            preferredEdge: .minY)
          */
         
-        /*
-        var items = [NSImage]()
-        
-        if generatedImages.count == 1 {
-            // SHARE SINGLE IMAGE
-            print("share single image")
-            items = [generatedImages[0]]
-        } else if generatedImages.count > 1 {
-            // SHARE MULTIPLE IMAGES
-            print("share \(generatedImages.count) images")
-            items = generatedImages
-        }
-        
-        let sharingPicker = NSSharingServicePicker(items: items)
-        sharingPicker.delegate = self
-        sharingPicker.show(relativeTo: NSZeroRect,
-                           of: sender,
-                           preferredEdge: .minY)
-        */
     }
     
     

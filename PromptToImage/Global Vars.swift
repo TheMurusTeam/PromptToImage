@@ -9,6 +9,12 @@ import Foundation
 import CoreML
 import AppKit
 
+// store
+var wins = [String:NSWindowController]()
+
+// sd status
+var isRunning = false
+
 // built-in stable diffusion model resources URL/name 
 let defaultModelResourcesURL : URL = Bundle.main.resourceURL!
 let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"

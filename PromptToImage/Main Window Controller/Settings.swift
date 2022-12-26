@@ -63,7 +63,9 @@ extension SDMainWindowController {
         }
         
         // restore "CPU and GPU" compute units when switching model
-        currentComputeUnits = defaultComputeUnits
+        if self.settings_selectDefaultCU.state == .on {
+            currentComputeUnits = defaultComputeUnits
+        }
         
         // load sd model
         loadSDModel()

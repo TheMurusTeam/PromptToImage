@@ -27,7 +27,6 @@ extension SDMainWindowController {
                        guidanceScale:Float,
                        stepsPreview:Bool) {
         
-        generatedImages.removeAll() // cleanup
         // upscale option
         let upscale = self.upscaleCheckBox.state == .on
         
