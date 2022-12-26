@@ -86,10 +86,11 @@ class HistoryItem : NSObject {
             self.date = unarchiver.decodeObject(forKey: "date") as? Date ?? Date()
             self.prompt = unarchiver.decodeObject(forKey: "prompt") as? String ?? String()
             self.negativePrompt = unarchiver.decodeObject(forKey: "negativePrompt") as? String ?? String()
-            self.steps = unarchiver.decodeObject(forKey: "steps") as? Int ?? 25
-            self.guidanceScale = unarchiver.decodeObject(forKey: "guidanceScale") as? Float ?? 7.5
-            self.strenght = unarchiver.decodeObject(forKey: "strenght") as? Float ?? 0.8
-            self.seed = unarchiver.decodeObject(forKey: "seed") as? Int ?? 42
+            self.steps = unarchiver.decodeInteger(forKey: "steps")
+            self.guidanceScale = unarchiver.decodeFloat(forKey: "guidanceScale")
+            self.strenght = unarchiver.decodeFloat(forKey: "strenght")
+            self.seed = unarchiver.decodeInteger(forKey: "seed")
+            
             // original image
             if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {
                 if let image = NSImage(data: imageData) {
