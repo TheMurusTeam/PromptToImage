@@ -55,4 +55,118 @@ class HistoryItem : NSObject {
         self.upscaledSize = self.upscaledImage?.size
     }
     
+    
+    // Encode history item
+    func encode() -> Data {
+        let archiver = NSKeyedArchiver(requiringSecureCoding: true)
+        archiver.encode(self.modelName, forKey: "modelName")
+        archiver.encode(self.date, forKey: "date")
+        archiver.encode(self.prompt, forKey: "prompt")
+        archiver.encode(self.negativePrompt, forKey: "negativePrompt")
+        archiver.encode(self.steps, forKey: "steps")
+        archiver.encode(self.guidanceScale, forKey: "guidanceScale")
+        archiver.encode(self.strenght, forKey: "strenght")
+        archiver.encode(self.seed, forKey: "seed")
+        archiver.encode(self.image.tiffRepresentation, forKey: "image")
+        if let inputImage = self.inputImage {
+            archiver.encode(NSImage(cgImage: inputImage, size: .zero).tiffRepresentation, forKey: "inputImage")
+        }
+        return archiver.encodedData
+    }
+    
+    
+    // Decode history item
+    convenience init?(data:Data) {
+        self.init()
+        do {
+            let unarchiver = try NSKeyedUnarchiver.init(forReadingFrom: data)
+            unarchiver.requiresSecureCoding = false
+            defer { unarchiver.finishDecoding() }
+            self.modelName = unarchiver.decodeObject(forKey: "modelName") as? String ?? String()
+            self.date = unarchiver.decodeObject(forKey: "date") as? Date ?? Date()
+            self.prompt = unarchiver.decodeObject(forKey: "prompt") as? String ?? String()
+            self.negativePrompt = unarchiver.decodeObject(forKey: "negativePrompt") as? String ?? String()
+            self.steps = unarchiver.decodeObject(forKey: "steps") as? Int ?? 25
+            self.guidanceScale = unarchiver.decodeObject(forKey: "guidanceScale") as? Float ?? 7.5
+            self.strenght = unarchiver.decodeObject(forKey: "strenght") as? Float ?? 0.8
+            self.seed = unarchiver.decodeObject(forKey: "seed") as? Int ?? 42
+            // original image
+            if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {
+                if let image = NSImage(data: imageData) {
+                    self.image = image
+                }
+            }
+            // input image
+            if let imageData = unarchiver.decodeObject(forKey: "inputImage") as? Data {
+                if let image = NSImage(data: imageData) {
+                    self.inputImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                }
+            }
+            //
+            self.originalSize = self.image.size
+            self.upscaled = false
+            
+            
+        } catch let error as NSError {
+            NSLog("Error decoding history item" + error.localizedDescription)
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+extension SDMainWindowController {
+    
+    // MARK: Save History
+    
+    func saveHistory() {
+        print("Saving history...")
+        let dict : [String:Any] = ["history": (self.history.map { $0.encode() })]
+        var confdata : Data? = nil
+        do {
+            confdata = try PropertyListSerialization.data(fromPropertyList:dict,
+                                                          format: .xml,
+                                                          options: 0)
+            
+             
+        } catch let error as NSError {
+            NSLog("Error creating history data: " + error.localizedDescription)
+        }
+        // save
+        guard let confdata = confdata else { return }
+        do {
+            try confdata.write(to: URL(fileURLWithPath: historyPath + "/PromptToImage.history"))
+            
+        } catch let error as NSError {
+            NSLog("Error" + error.localizedDescription)
+        }
+    }
+    
+    // MARK: Load History
+    
+    func loadHistory() {
+        print("loading history...")
+        DispatchQueue.global().async {
+            if let historydict = NSDictionary.init(contentsOfFile: historyPath + "/PromptToImage.history") {
+                if let items = historydict["history"] as? [Data] {
+                    print("importing \(items.count) history items")
+                    for data in items {
+                        if let newitem = HistoryItem(data: data) {
+                            DispatchQueue.main.async {
+                                self.historyArrayController.addObject(newitem)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
 }

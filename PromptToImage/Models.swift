@@ -9,7 +9,7 @@ import Foundation
 import Cocoa
 
 let customModelsDirectoryPath = "models" // inside app's sandboxed env
-
+let historyPath = "history" // inside app's sandboxed env
 
 
 func currentModelName() -> String {
@@ -28,6 +28,13 @@ func createModelsDir() {
         do {
             try FileManager.default.createDirectory(atPath: customModelsDirectoryPath, withIntermediateDirectories: true)
         } catch { print("error creating custom models directory at \(customModelsDirectoryPath)")}
+    }
+}
+func createHistoryDir() {
+    if !FileManager.default.fileExists(atPath: historyPath) {
+        do {
+            try FileManager.default.createDirectory(atPath: historyPath, withIntermediateDirectories: true)
+        } catch { print("error creating history directory at \(historyPath)")}
     }
 }
 

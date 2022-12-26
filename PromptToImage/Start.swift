@@ -28,6 +28,7 @@ extension AppDelegate {
         
         // create custom models directory in app sandbox if needed
         createModelsDir()
+        createHistoryDir()
         
         // set model and compute units
         if CGEventSource.keyState(CGEventSourceStateID.init(rawValue: 0)!, key: 0x3a) ||

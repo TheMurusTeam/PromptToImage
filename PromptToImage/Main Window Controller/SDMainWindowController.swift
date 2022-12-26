@@ -126,6 +126,7 @@ class SDMainWindowController: NSWindowController,
         self.readStoredControlsValues()
         self.splitview.setPosition(297, ofDividerAt: 0)
         self.splitview.setPosition(435, ofDividerAt: 1)
+        self.loadHistory()
         //self.debugColView()
     }
     
@@ -141,6 +142,7 @@ class SDMainWindowController: NSWindowController,
     // MARK: Will Close
     
     func windowWillClose(_ notification: Notification) {
+        saveHistory()
         storeControlsValues()
     }
     
