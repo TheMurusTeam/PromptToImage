@@ -18,7 +18,7 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 See the "Releases" section of this repository to download the app.<br>
 App bundles available on this repo do not include Stable Diffusion CoreML models. Launch the app and follow instructions in order to install your first model and start using PromptToImage.  
 
-# Install Stable Diffusion models<br><br>
+# Install Stable Diffusion models<br>
 1. Download default Stable Diffusion model here: https://huggingface.co/TheMurusTeam/CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img/ <br>
 2. Run PromptToImage, open Settings clicking the gear button on left top.
 3. Click "Reveal Custom Models Dir in Finder" to show PromptToImage custom models directory.
