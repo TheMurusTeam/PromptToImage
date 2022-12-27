@@ -7,9 +7,19 @@
 
 import Foundation
 import Cocoa
-
+ 
 let customModelsDirectoryPath = "models" // inside app's sandboxed env
 let historyPath = "history" // inside app's sandboxed env
+
+
+
+func builtInModelExists() -> Bool {
+    return FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/merges.txt") &&
+    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/vocab.json") &&
+    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/TextEncoder.mlmodelc") &&
+    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/Unet.mlmodelc") &&
+    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/VAEDecoder.mlmodelc")
+}
 
 
 func currentModelName() -> String {
@@ -59,9 +69,9 @@ func installedCustomModels() -> [URL] {
     var urls = [URL]()
     do {
         let directoryContents = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: customModelsDirectoryPath),includingPropertiesForKeys: nil)
-        urls = directoryContents
+        urls = directoryContents.filter({ $0.isFolder })
     } catch {}
-    return urls //.filter{ $0.isDirectory }
+    return urls
 }
 
 
@@ -80,6 +90,16 @@ extension SDMainWindowController {
     
     
     
+    // MARK: Download models from huggingface
+    
+    @IBAction func clickDownloadModels(_ sender: Any) {
+        let url = "https://huggingface.co/TheMurusTeam"
+        if let url = URL(string: url) {
+            NSWorkspace.shared.open(url)
+        }
+    }
+    
+    
     
     // MARK: Populate Models Popup
     
@@ -87,14 +107,15 @@ extension SDMainWindowController {
         // create menu items
         if let menu = self.modelsPopup.menu {
             menu.removeAllItems()
-            // default model
-            let item1 = NSMenuItem()
-            item1.title = "Stable Diffusion 2.1 SPLIT EINSUM (Default)"
-            item1.representedObject = defaultModelResourcesURL
-            menu.addItem(item1)
-            //
-            let sep = NSMenuItem.separator()
-            menu.addItem(sep)
+            if builtInModelExists() {
+                // default model
+                let item1 = NSMenuItem()
+                item1.title = "Stable Diffusion 2.1 SPLIT EINSUM (Default)"
+                item1.representedObject = defaultModelResourcesURL
+                menu.addItem(item1)
+                let sep = NSMenuItem.separator()
+                menu.addItem(sep)
+            }
             // custom models
             let urls = installedCustomModels()
             for modelurl in urls {

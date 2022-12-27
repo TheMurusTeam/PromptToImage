@@ -15,7 +15,8 @@ var wins = [String:NSWindowController]()
 // sd status
 var isRunning = false
 
-// built-in stable diffusion model resources URL/name 
+// built-in stable diffusion model resources URL/name
+let defaultModelPublicURL = "https://huggingface.co/TheMurusTeam/CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img/blob/main/Stable%20Diffusion%202.1%20SPLIT%20EINSUM.zip"
 let defaultModelResourcesURL : URL = Bundle.main.resourceURL!
 let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"
 

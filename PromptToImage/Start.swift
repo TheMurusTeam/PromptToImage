@@ -50,16 +50,61 @@ extension AppDelegate {
         wins["main"] = SDMainWindowController(windowNibName: "SDMainWindowController", info: nil)
         
         // load models
+        print("Built-in model exists: \(builtInModelExists())")
+        
+        // load upscaler CoreML model
         DispatchQueue.global().async {
-            // load upscaler CoreML model
             loadUpscalerModel()
-            
-            // load Stable Diffusion CoreML models
-            // load last used model
+        }
+        
+        // load Stable Diffusion CoreML models
+        DispatchQueue.global().async {
+           // load last used model
             createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
+            
             if sdPipeline == nil {
-                // load factory model
+                // unable to load last used model, load built-in model if available
+                currentComputeUnits = defaultComputeUnits
+                modelResourcesURL = defaultModelResourcesURL
                 createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:defaultModelResourcesURL)
+            }
+            
+            if sdPipeline == nil {
+                // unable to load built-in model, checking custom models directory...
+                let customModelsURLs = installedCustomModels()
+                for customModelURL in customModelsURLs {
+                    print("Trying custom model \(customModelURL.lastPathComponent)")
+                    modelResourcesURL = customModelURL
+                    createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:modelResourcesURL)
+                    if sdPipeline != nil {
+                        print("Success loading model \(customModelURL.lastPathComponent)")
+                        return
+                    }
+                }
+            }
+            
+            if sdPipeline == nil {
+                // unable to load model, request user interaction
+                print("Unable to load a Stable Diffusion model!")
+                
+                DispatchQueue.main.async {
+                    if let ctrl = wins["main"] as? SDMainWindowController {
+                        ctrl.window?.beginSheet(ctrl.settingsWindow)
+                        let alert = NSAlert()
+                        alert.messageText = "Welcome to PromptToImage"
+                        alert.informativeText = "You need to install a CoreML Stable Diffusion model in custom models directory.\n\nClick 'Download Default Model' to download the default model '\(defaultModelName)' from HuggingFace web site.\n\nTo install a model unzip it and move all files to custom models directory.\nClick 'Reveal Custom Models Dir in Finder' to display custom models directory.\n\nInstalled model will automatically appear in the 'Model' popup button. Select a model to start using PromptToImage."
+                        alert.addButton(withTitle: "Download Default Model")
+                        alert.addButton(withTitle: "Close This Alert")
+                        if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn {
+                            if let url = URL(string: defaultModelPublicURL) {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }
+                        
+                    }
+                }
+                
+                
             }
         }
         

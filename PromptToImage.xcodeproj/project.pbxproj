@@ -43,15 +43,10 @@
 		3F47B2442950C7DB000C33EC /* sd-ship.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F47B2432950C7DB000C33EC /* sd-ship.png */; };
 		3F47B2462950D243000C33EC /* bigsd-ship.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F47B2452950D243000C33EC /* bigsd-ship.png */; };
 		3F4D2D2E29414E960075324F /* realesrgan512.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 3F4D2D2D29414E960075324F /* realesrgan512.mlmodel */; };
+		3F813601295A49EB000C4EC5 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F813600295A49EB000C4EC5 /* Downloader.swift */; };
 		3F95137A29579C1E0055D783 /* prompttoimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F95137929579C1E0055D783 /* prompttoimage.png */; };
 		3F9C6BAF2952B033001D4252 /* SDPreviewWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9C6BAD2952B033001D4252 /* SDPreviewWindowController.swift */; };
 		3F9C6BB02952B033001D4252 /* SDPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BAE2952B033001D4252 /* SDPreviewWindowController.xib */; };
-		3F9C6BB729535140001D4252 /* TextEncoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB129535140001D4252 /* TextEncoder.mlmodelc */; };
-		3F9C6BB829535140001D4252 /* VAEEncoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB229535140001D4252 /* VAEEncoder.mlmodelc */; };
-		3F9C6BB929535140001D4252 /* vocab.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB329535140001D4252 /* vocab.json */; };
-		3F9C6BBA29535140001D4252 /* Unet.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB429535140001D4252 /* Unet.mlmodelc */; };
-		3F9C6BBB29535140001D4252 /* VAEDecoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */; };
-		3F9C6BBC29535140001D4252 /* merges.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BB629535140001D4252 /* merges.txt */; };
 		3FB0B4F82957BD840084427A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0B4F72957BD840084427A /* README.md */; };
 		3FC49524293AAD2A00B2F32D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49523293AAD2A00B2F32D /* AppDelegate.swift */; };
 		3FC49526293AAD2B00B2F32D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FC49525293AAD2B00B2F32D /* Assets.xcassets */; };
@@ -101,16 +96,11 @@
 		3F47B2432950C7DB000C33EC /* sd-ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sd-ship.png"; sourceTree = "<group>"; };
 		3F47B2452950D243000C33EC /* bigsd-ship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bigsd-ship.png"; sourceTree = "<group>"; };
 		3F4D2D2D29414E960075324F /* realesrgan512.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = realesrgan512.mlmodel; sourceTree = "<group>"; };
+		3F813600295A49EB000C4EC5 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		3F951377295767CB0055D783 /* PromptToImageDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PromptToImageDebug.entitlements; sourceTree = "<group>"; };
 		3F95137929579C1E0055D783 /* prompttoimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prompttoimage.png; sourceTree = "<group>"; };
 		3F9C6BAD2952B033001D4252 /* SDPreviewWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDPreviewWindowController.swift; sourceTree = "<group>"; };
 		3F9C6BAE2952B033001D4252 /* SDPreviewWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SDPreviewWindowController.xib; sourceTree = "<group>"; };
-		3F9C6BB129535140001D4252 /* TextEncoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TextEncoder.mlmodelc; sourceTree = "<group>"; };
-		3F9C6BB229535140001D4252 /* VAEEncoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VAEEncoder.mlmodelc; sourceTree = "<group>"; };
-		3F9C6BB329535140001D4252 /* vocab.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = vocab.json; sourceTree = "<group>"; };
-		3F9C6BB429535140001D4252 /* Unet.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Unet.mlmodelc; sourceTree = "<group>"; };
-		3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VAEDecoder.mlmodelc; sourceTree = "<group>"; };
-		3F9C6BB629535140001D4252 /* merges.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = merges.txt; sourceTree = "<group>"; };
 		3FB0B4F72957BD840084427A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		3FC49520293AAD2A00B2F32D /* PromptToImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PromptToImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC49523293AAD2A00B2F32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -262,6 +252,7 @@
 				3FC49525293AAD2B00B2F32D /* Assets.xcassets */,
 				3FC49527293AAD2B00B2F32D /* MainMenu.xib */,
 				3FC4952A293AAD2B00B2F32D /* PromptToImage.entitlements */,
+				3F813600295A49EB000C4EC5 /* Downloader.swift */,
 			);
 			path = PromptToImage;
 			sourceTree = "<group>";
@@ -269,12 +260,6 @@
 		3FC49535293AAEB600B2F32D /* Stable Diffusion Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3F9C6BB629535140001D4252 /* merges.txt */,
-				3F9C6BB129535140001D4252 /* TextEncoder.mlmodelc */,
-				3F9C6BB429535140001D4252 /* Unet.mlmodelc */,
-				3F9C6BB529535140001D4252 /* VAEDecoder.mlmodelc */,
-				3F9C6BB229535140001D4252 /* VAEEncoder.mlmodelc */,
-				3F9C6BB329535140001D4252 /* vocab.json */,
 			);
 			path = "Stable Diffusion Resources";
 			sourceTree = "<group>";
@@ -353,16 +338,10 @@
 				3F47B2422950C6E2000C33EC /* tree.png in Resources */,
 				3F47B2462950D243000C33EC /* bigsd-ship.png in Resources */,
 				3F47B2342950C03D000C33EC /* testimage.png in Resources */,
-				3F9C6BBB29535140001D4252 /* VAEDecoder.mlmodelc in Resources */,
-				3F9C6BBA29535140001D4252 /* Unet.mlmodelc in Resources */,
 				3FC49526293AAD2B00B2F32D /* Assets.xcassets in Resources */,
-				3F9C6BB729535140001D4252 /* TextEncoder.mlmodelc in Resources */,
 				3F9C6BB02952B033001D4252 /* SDPreviewWindowController.xib in Resources */,
 				3F47B2442950C7DB000C33EC /* sd-ship.png in Resources */,
 				3FB0B4F82957BD840084427A /* README.md in Resources */,
-				3F9C6BB829535140001D4252 /* VAEEncoder.mlmodelc in Resources */,
-				3F9C6BBC29535140001D4252 /* merges.txt in Resources */,
-				3F9C6BB929535140001D4252 /* vocab.json in Resources */,
 				3F95137A29579C1E0055D783 /* prompttoimage.png in Resources */,
 				3FC49529293AAD2B00B2F32D /* MainMenu.xib in Resources */,
 			);
@@ -383,6 +362,7 @@
 				3FE7E3E1293BD58000720E18 /* Upscaler.swift in Sources */,
 				3FC49547293AD62700B2F32D /* Start.swift in Sources */,
 				3F47B22B2950B5DA000C33EC /* CGImage+vImage.swift in Sources */,
+				3F813601295A49EB000C4EC5 /* Downloader.swift in Sources */,
 				3F47B2262950B5DA000C33EC /* SampleTimer.swift in Sources */,
 				3F47B2272950B5DA000C33EC /* StableDiffusionPipeline+Resources.swift in Sources */,
 				3F169866293E7E8B008A2BF0 /* Extensions.swift in Sources */,

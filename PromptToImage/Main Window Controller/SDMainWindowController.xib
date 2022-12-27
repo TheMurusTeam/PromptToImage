@@ -52,6 +52,7 @@
                 <outlet property="seedBtn" destination="31Q-Q0-bkP" id="RGe-BW-5Yb"/>
                 <outlet property="seedView" destination="X2i-NY-E2m" id="Brr-3z-4Te"/>
                 <outlet property="settingsWindow" destination="VUn-uX-nwP" id="9wV-6B-D1a"/>
+                <outlet property="settings_downloadBtn" destination="fYf-uj-Ts8" id="8gn-d4-6Lr"/>
                 <outlet property="settings_historyLimitLabel" destination="DgT-pN-cFE" id="b9I-cp-7Vu"/>
                 <outlet property="settings_historyLimitStepper" destination="tki-cD-iHo" id="ZXO-yY-ZRy"/>
                 <outlet property="settings_keepHistoryBtn" destination="4te-IG-eVN" id="jje-hv-gOt"/>
@@ -1269,7 +1270,7 @@ CA
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqu-GE-O9G">
-                                            <rect key="frame" x="12" y="153" width="219" height="32"/>
+                                            <rect key="frame" x="12" y="153" width="204" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Reveal Models Dir in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IuN-Yq-etr">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1307,6 +1308,17 @@ CA
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fYf-uj-Ts8">
+                                            <rect key="frame" x="242" y="149" width="204" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Download Models" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jrH-O6-5Lv">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="clickDownloadModels:" target="-2" id="n32-KW-dIm"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -1316,9 +1328,9 @@ CA
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4te-IG-eVN">
-                                            <rect key="frame" x="15" y="241" width="222" height="18"/>
+                                            <rect key="frame" x="15" y="241" width="102" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Keep history of generate images" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="aBh-Bx-lBX">
+                                            <buttonCell key="cell" type="check" title="Keep history" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="aBh-Bx-lBX">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1333,7 +1345,7 @@ CA
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MhE-Bb-Ppg">
-                                            <rect key="frame" x="37" y="217" width="112" height="16"/>
+                                            <rect key="frame" x="35" y="217" width="112" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Keep only the last" id="paL-cy-qOP">
                                                 <font key="font" metaFont="system"/>
@@ -1353,7 +1365,7 @@ CA
                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tki-cD-iHo">
                                             <rect key="frame" x="177" y="211" width="19" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <stepperCell key="cell" continuous="YES" alignment="left" minValue="10" maxValue="99" doubleValue="50" id="HpF-aJ-9TL"/>
+                                            <stepperCell key="cell" continuous="YES" alignment="left" minValue="10" maxValue="50" doubleValue="50" id="HpF-aJ-9TL"/>
                                             <connections>
                                                 <action selector="takeIntValueFrom:" target="DgT-pN-cFE" id="3mR-dA-snh"/>
                                             </connections>

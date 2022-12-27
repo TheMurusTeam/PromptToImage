@@ -112,6 +112,8 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var settings_selectDefaultCU: NSButton!
     @IBOutlet weak var settings_historyLimitLabel: NSTextField!
     @IBOutlet weak var settings_historyLimitStepper: NSStepper!
+    @IBOutlet weak var settings_downloadBtn: NSButton!
+    
     
     
     

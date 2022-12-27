@@ -53,13 +53,10 @@ extension SDMainWindowController {
     
     @IBAction func switchModelsPopup(_ sender: NSPopUpButton) {
         self.window?.endSheet(self.settingsWindow)
-        if sender.indexOfSelectedItem == 0 {
-            modelResourcesURL = defaultModelResourcesURL
-        } else {
-            if let modelurl = sender.selectedItem?.representedObject as? URL {
-                modelResourcesURL = modelurl
-                print("setting modelResourcesURL to \(modelResourcesURL)")
-            }
+        // change current model url
+        if let modelurl = sender.selectedItem?.representedObject as? URL {
+            modelResourcesURL = modelurl
+            print("setting modelResourcesURL to \(modelResourcesURL)")
         }
         
         // restore "CPU and GPU" compute units when switching model
@@ -77,7 +74,7 @@ extension SDMainWindowController {
     // MARK: Reveal models dir in Finder
     
     @IBAction func clickRevealModelsInFinder(_ sender: Any) {
-        self.window?.endSheet(self.settingsWindow)
+        // self.window?.endSheet(self.settingsWindow)
         revealCustomModelsDirInFinder()
     }
     

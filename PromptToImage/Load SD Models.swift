@@ -62,6 +62,10 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
             modelWidth = 512
             modelHeight = 512
         }
+        
+        if let name = (sdPipeline?.unet.models[0].loadedModel?.modelDescription.metadata[MLModelMetadataKey(rawValue: "MLModelVersionStringKey")]) {
+            print("Created pipeline for model: \(name)")
+        }
     }
     //}
     
