@@ -8,25 +8,22 @@
 import Foundation
 import Cocoa
  
-let customModelsDirectoryPath = "models" // inside app's sandboxed env
-let historyPath = "history" // inside app's sandboxed env
-
 
 
 func builtInModelExists() -> Bool {
-    return FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/merges.txt") &&
-    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/vocab.json") &&
-    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/TextEncoder.mlmodelc") &&
-    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/Unet.mlmodelc") &&
-    FileManager.default.fileExists(atPath: defaultModelResourcesURL.path + "/VAEDecoder.mlmodelc")
+    return FileManager.default.fileExists(atPath: builtInModelResourcesURL.path + "/merges.txt") &&
+    FileManager.default.fileExists(atPath: builtInModelResourcesURL.path + "/vocab.json") &&
+    FileManager.default.fileExists(atPath: builtInModelResourcesURL.path + "/TextEncoder.mlmodelc") &&
+    FileManager.default.fileExists(atPath: builtInModelResourcesURL.path + "/Unet.mlmodelc") &&
+    FileManager.default.fileExists(atPath: builtInModelResourcesURL.path + "/VAEDecoder.mlmodelc")
 }
 
 
 func currentModelName() -> String {
     // model name
     var modelName = defaultModelName
-    if modelResourcesURL.absoluteURL != defaultModelResourcesURL.absoluteURL {
-        modelName = modelResourcesURL.lastPathComponent
+    if currentModelResourcesURL.absoluteURL != builtInModelResourcesURL.absoluteURL {
+        modelName = currentModelResourcesURL.lastPathComponent
     }
     return modelName
 }
@@ -69,9 +66,21 @@ func installedCustomModels() -> [URL] {
     var urls = [URL]()
     do {
         let directoryContents = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: customModelsDirectoryPath),includingPropertiesForKeys: nil)
-        urls = directoryContents.filter({ $0.isFolder })
+        urls = directoryContents.filter({ $0.isFolder && $0.isModelURL })
     } catch {}
     return urls
+}
+
+
+extension URL {
+    var isModelURL: Bool {
+        FileManager.default.fileExists(atPath: self.path + "/merges.txt") &&
+        FileManager.default.fileExists(atPath: self.path + "/vocab.json") &&
+        FileManager.default.fileExists(atPath: self.path + "/TextEncoder.mlmodelc") &&
+        FileManager.default.fileExists(atPath: self.path + "/Unet.mlmodelc") &&
+        FileManager.default.fileExists(atPath: self.path + "/VAEDecoder.mlmodelc")
+    }
+    
 }
 
 
@@ -111,7 +120,7 @@ extension SDMainWindowController {
                 // default model
                 let item1 = NSMenuItem()
                 item1.title = "Stable Diffusion 2.1 SPLIT EINSUM (Default)"
-                item1.representedObject = defaultModelResourcesURL
+                item1.representedObject = builtInModelResourcesURL
                 menu.addItem(item1)
                 let sep = NSMenuItem.separator()
                 menu.addItem(sep)
@@ -135,7 +144,7 @@ extension SDMainWindowController {
         if let menu = self.modelsPopup.menu {
             for mitem in menu.items {
                 if let url = mitem.representedObject as? URL {
-                    if url == modelResourcesURL {
+                    if url == currentModelResourcesURL {
                         self.modelsPopup.select(mitem)
                         print("current model: \(mitem.title)")
                     }

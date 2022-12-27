@@ -17,17 +17,17 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
         // show wait window
         (wins["main"] as! SDMainWindowController).waitProgr.startAnimation(nil)
         (wins["main"] as! SDMainWindowController).waitLabel.stringValue = "Loading Model"
-        (wins["main"] as! SDMainWindowController).waitInfoLabel.stringValue = currentModelName()
+        (wins["main"] as! SDMainWindowController).waitInfoLabel.stringValue = url == builtInModelResourcesURL ? "Built-in model" : url.lastPathComponent
         (wins["main"] as! SDMainWindowController).window?.beginSheet((wins["main"] as! SDMainWindowController).waitWin)
     }
     
-    // DispatchQueue.global().sync {
+    /*
     var url = url
     if !FileManager.default.fileExists(atPath: url.absoluteURL.path(percentEncoded: false) ) {
         print("Error: model directory not found at \(url.absoluteURL.path(percentEncoded: false))")
-        modelResourcesURL = defaultModelResourcesURL
-        url = defaultModelResourcesURL
-    }
+        currentModelResourcesURL = builtInModelResourcesURL
+        url = builtInModelResourcesURL
+    }*/
     
     sdPipeline?.unloadResources()
     sdPipeline = nil
@@ -63,11 +63,11 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
             modelHeight = 512
         }
         
-        if let name = (sdPipeline?.unet.models[0].loadedModel?.modelDescription.metadata[MLModelMetadataKey(rawValue: "MLModelVersionStringKey")]) {
+        if let name = (sdPipeline?.unet.models[0].loadedModel?.modelDescription.metadata[MLModelMetadataKey(rawValue: "MLModelVersionStringKey")]) as? String {
             print("Created pipeline for model: \(name)")
+            currentModelRealName = name
         }
     }
-    //}
     
 }
 
@@ -78,22 +78,22 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
 
 func loadSDModel() {
     DispatchQueue.global().async {
-        createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:modelResourcesURL)
+        createStableDiffusionPipeline(computeUnits: currentComputeUnits, url:currentModelResourcesURL)
         if sdPipeline == nil {
             // error
             print("error creating pipeline")
             DispatchQueue.main.async {
-                displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(modelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
+                displayErrorAlert(txt: "Unable to create Stable Diffusion pipeline using model at url \(currentModelResourcesURL)\n\nClick the button below to dismiss this alert and restore default model")
                 // restore default model and compute units
                 createStableDiffusionPipeline(computeUnits: defaultComputeUnits,
-                                              url: defaultModelResourcesURL)
-                modelResourcesURL = defaultModelResourcesURL
+                                              url: builtInModelResourcesURL)
+                currentModelResourcesURL = builtInModelResourcesURL
                 // set user defaults
-                UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+                UserDefaults.standard.set(currentModelResourcesURL, forKey: "modelResourcesURL")
             }
         } else {
             // save to user defaults
-            UserDefaults.standard.set(modelResourcesURL, forKey: "modelResourcesURL")
+            UserDefaults.standard.set(currentModelResourcesURL, forKey: "modelResourcesURL")
         }
     }
 }

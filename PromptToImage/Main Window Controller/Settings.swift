@@ -55,8 +55,8 @@ extension SDMainWindowController {
         self.window?.endSheet(self.settingsWindow)
         // change current model url
         if let modelurl = sender.selectedItem?.representedObject as? URL {
-            modelResourcesURL = modelurl
-            print("setting modelResourcesURL to \(modelResourcesURL)")
+            currentModelResourcesURL = modelurl
+            print("setting currentModelResourcesURL to \(currentModelResourcesURL)")
         }
         
         // restore "CPU and GPU" compute units when switching model

@@ -114,7 +114,23 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var settings_historyLimitStepper: NSStepper!
     @IBOutlet weak var settings_downloadBtn: NSButton!
     
+    // Download model
+    @IBOutlet var downloadWindow: NSWindow!
+    @IBOutlet weak var downloadProgr: NSProgressIndicator!
+    @IBOutlet weak var progressLabel: NSTextField!
+    @IBOutlet weak var progressValueLabel: NSTextField!
+    @IBOutlet weak var downloadButton: NSButton!
     
+    
+    @IBOutlet weak var modelCardBtn: NSButton!
+    @IBAction func clickModelCardBtn(_ sender: Any) {
+        if let name = currentModelRealName {
+            let url = "https://huggingface.co/\(name)"
+            if let url = URL(string: url) {
+                NSWorkspace.shared.open(url)
+            }
+        }
+    }
     
     
     

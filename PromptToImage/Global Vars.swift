@@ -9,19 +9,34 @@ import Foundation
 import CoreML
 import AppKit
 
-// store
+
+
+
+// default model remote URL
+let defaultModelPublicURL = "https://www.murusfirewall.com/downloads/Stable-Diffusion-2-1-SPLIT-EINSUM.zip"
+
+// dirs for custom models and history file
+// this is a sandboxed app, these dirs are inside app's container in user home dir
+let customModelsDirectoryPath = "models"
+let historyPath = "history"
+
+// win controllers store
 var wins = [String:NSWindowController]()
 
 // sd status
 var isRunning = false
 
-// built-in stable diffusion model resources URL/name
-let defaultModelPublicURL = "https://huggingface.co/TheMurusTeam/CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img/blob/main/Stable%20Diffusion%202.1%20SPLIT%20EINSUM.zip"
-let defaultModelResourcesURL : URL = Bundle.main.resourceURL!
+// built-in stable diffusion model (MacAppStore only)
+let builtInModelResourcesURL : URL = Bundle.main.resourceURL!
 let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"
 
 // current model resources URL
-var modelResourcesURL : URL = Bundle.main.resourceURL!
+var currentModelResourcesURL : URL = Bundle.main.resourceURL!
+var currentModelRealName : String? = nil {
+    didSet {
+        (wins["main"] as! SDMainWindowController).modelCardBtn.isHidden = currentModelRealName == nil
+    }
+}
 
 // file format
 let savefileFormat : NSBitmapImageRep.FileType = .png
@@ -30,13 +45,13 @@ let savefileFormat : NSBitmapImageRep.FileType = .png
 var modelWidth : Double = 512
 var modelHeight: Double = 512
 
-// sd pipeline
-var sdPipeline : StableDiffusionPipeline? = nil
+// Stable Diffusion pipeline
+var sdPipeline : StableDiffusionPipeline? = nil 
 
-// sd compute units
+// pipeline compute units
 let defaultComputeUnits : MLComputeUnits = .cpuAndGPU
 var currentComputeUnits : MLComputeUnits = .cpuAndGPU
 
-// upscaler
+// upscaler model
 let defaultUpscaleModelPath = Bundle.main.path(forResource: "realesrgan512", ofType: "mlmodelc")
 let defaultUpscalerComputeUnits : MLComputeUnits = .cpuAndGPU

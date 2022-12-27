@@ -44,6 +44,7 @@
 		3F47B2462950D243000C33EC /* bigsd-ship.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F47B2452950D243000C33EC /* bigsd-ship.png */; };
 		3F4D2D2E29414E960075324F /* realesrgan512.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 3F4D2D2D29414E960075324F /* realesrgan512.mlmodel */; };
 		3F813601295A49EB000C4EC5 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F813600295A49EB000C4EC5 /* Downloader.swift */; };
+		3F813622295B8BC6000C4EC5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3F813621295B8BC6000C4EC5 /* ZIPFoundation */; };
 		3F95137A29579C1E0055D783 /* prompttoimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F95137929579C1E0055D783 /* prompttoimage.png */; };
 		3F9C6BAF2952B033001D4252 /* SDPreviewWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9C6BAD2952B033001D4252 /* SDPreviewWindowController.swift */; };
 		3F9C6BB02952B033001D4252 /* SDPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3F9C6BAE2952B033001D4252 /* SDPreviewWindowController.xib */; };
@@ -119,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F813622295B8BC6000C4EC5 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +291,7 @@
 			);
 			name = PromptToImage;
 			packageProductDependencies = (
+				3F813621295B8BC6000C4EC5 /* ZIPFoundation */,
 			);
 			productName = PromptToImage;
 			productReference = 3FC49520293AAD2A00B2F32D /* PromptToImage.app */;
@@ -319,6 +322,7 @@
 			);
 			mainGroup = 3FC49517293AAD2A00B2F32D;
 			packageReferences = (
+				3F813620295B8BC6000C4EC5 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 3FC49521293AAD2A00B2F32D /* Products */;
 			projectDirPath = "";
@@ -610,6 +614,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3F813620295B8BC6000C4EC5 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				branch = development;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3F813621295B8BC6000C4EC5 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F813620295B8BC6000C4EC5 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3FC49518293AAD2A00B2F32D /* Project object */;
 }
