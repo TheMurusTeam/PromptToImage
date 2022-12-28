@@ -46,11 +46,17 @@ To drastically reduce power consumption on laptops you should use the default mo
 To monitor compute units energy consumption you can use PowerMetrix, see here: https://github.com/TheMurusTeam/PowerMetrix<br><br>
 
 # Benchmarks 
-MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
+MacBook Pro 14" M1Max, 24core GPU, 32Gb RAM (macOS 13.1):
 - Stable Diffusion 2.1 SPLIT EINSUM, CPU and Neural Engine:  1.8 step/sec,   3.5 Watt
 - Stable Diffusion 2.1 SPLIT EINSUM, CPU and GPU:            1.95 step/sec,  21.5 Watt
 - Stable Diffusion 2.1 SPLIT EINSUM, All compute units:      2.2 step/sec,   11 Watt
 - Stable Diffusion 2.1 ORIGINAL, CPU and GPU:                2.7 step/sec,   28 Watt
+<br>
+MacMini M1, 8core GPU, 16Gb RAM (macOS 13.1):
+- Stable Diffusion 2.1 SPLIT EINSUM, CPU and Neural Engine:  2.0 step/sec,   4.7 Watt
+- Stable Diffusion 2.1 SPLIT EINSUM, CPU and GPU:            0.75 step/sec,  7.5 Watt
+- Stable Diffusion 2.1 ORIGINAL, CPU and GPU:                0.95 step/sec,  8.8 Watt
+
 
 
 # Privacy
