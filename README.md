@@ -42,7 +42,7 @@ model: Stable Diffusion 2.1 SPLIT EINSUM, compute units: CPU and Neural Engine<b
 For best performance on M1Pro, M1Max and M1 Ultra:<br>
 model: Stable Diffusion 2.1 ORIGINAL, compute units: CPU and GPU<br>
 
-On Apple Silicon Macs with 24 or more GPU cores the "CPU and GPU" is by far the fastest, however, due to the high energy consumption of the GPU, if you generate more than 10 images at once, laptop fans will spin and fanless laptops will throttle. To drastically reduce power consumption you should use the default model (or any SPLIT EINSUM model) and "CPU and Neural Engine" compute units.<br>
+To drastically reduce power consumption on laptops you should use the default model (or any SPLIT EINSUM model) and "CPU and Neural Engine" compute units.<br>
 
 # Benchmarks 
 MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
