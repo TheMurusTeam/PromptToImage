@@ -30,13 +30,14 @@ extension SDMainWindowController {
         // generate image
         self.generateImage(prompt: self.promptView.stringValue,
                            negativePrompt: self.negativePromptView.stringValue,
-                           startingImage: self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil),
+                           startingImage: inputImage,
                            strength: inputImage != nil ? self.strenghtLabel.floatValue : Float(1),
                            imageCount: self.imageCountSlider.integerValue, //self.imageCountStepper.integerValue,
                            stepCount: self.stepsSlider.integerValue,
                            seed: seed,
                            guidanceScale: self.guidanceLabel.floatValue,
-                           stepsPreview: false /*self.stepsPreview.state == .on*/)
+                           scheduler: ((schedulerPopup.indexOfSelectedItem == 0) || (inputImage != nil)) ? .pndmScheduler : .dpmSolverMultistepScheduler,
+                           upscale: self.upscaleCheckBox.state == .on)
     }
     
     
@@ -89,6 +90,7 @@ extension SDMainWindowController {
     
     @IBAction func clearInputImage(_ sender: NSButton) {
         self.inputImageview.image = nil
+        self.schedulerPopup.isEnabled = true
     }
     
     
@@ -127,8 +129,9 @@ extension SDMainWindowController {
     
     // NORMALIZE INPUT IMAGE
     func insertNewInputImage(image:NSImage) {
-        self.inputImageview.image = image.copy(size: NSSize(width: modelWidth,
-                                                            height: modelHeight))
+        self.inputImageview.image = image.resize(w: modelWidth, h: modelHeight) //image.copy(size: NSSize(width: modelWidth,height: modelHeight))
+        self.schedulerPopup.selectItem(at: 0)
+        self.schedulerPopup.isEnabled = false
     }
    
     

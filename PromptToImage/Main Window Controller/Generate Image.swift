@@ -15,6 +15,7 @@ extension SDMainWindowController {
     
     
     
+    
     // MARK: Generate Image
     
     func generateImage(prompt:String,
@@ -25,20 +26,11 @@ extension SDMainWindowController {
                        stepCount:Int,
                        seed:Int,
                        guidanceScale:Float,
-                       stepsPreview:Bool) {
-        
-        // upscale option
-        let upscale = self.upscaleCheckBox.state == .on
+                       scheduler:StableDiffusionScheduler,
+                       upscale:Bool) {
         
         // resize input image if needed
-        var inputImage : CGImage? = nil
-        if let startingImage = startingImage {
-            print("original input image size: \(startingImage.width)x\(startingImage.height)")
-            if let nsinputimage = resizeImage(image: NSImage(cgImage: startingImage, size: .zero)) {
-                inputImage = nsinputimage.cgImage(forProposedRect: nil, context: nil, hints: nil)
-                print("resized input image size: \(inputImage?.width ?? 0)x\(inputImage?.height ?? 0)")
-            }
-        }
+        let inputImage = self.resizeInputImage(image: startingImage)
         
         // set labels and indicators
         self.indicator.doubleValue = 0
@@ -59,7 +51,7 @@ extension SDMainWindowController {
                     let sampleTimer = SampleTimer() // used for pipeline performance indicator
                     sampleTimer.start()
                     
-                    // generate image
+                    // generate images
                     let images = try pipeline.generateImages(prompt: prompt,
                                                              negativePrompt: negativePrompt,
                                                              startingImage: inputImage,
@@ -69,15 +61,9 @@ extension SDMainWindowController {
                                                              seed: seed,
                                                              guidanceScale: guidanceScale,
                                                              disableSafety: true,
-                                                             scheduler: startingImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler) {
+                                                             scheduler: scheduler) {
                         progress in
-                        // performance indicator
-                        DispatchQueue.main.async {
-                            sampleTimer.stop()
-                            self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
-                            if progress.stepCount != progress.step { sampleTimer.start() }
-                        }
-                        return self.handleProgress(progress, imageCount: imageCount)
+                        return self.handleProgress(progress, imageCount: imageCount, sampleTimer:sampleTimer)
                     }
                     
                     
@@ -110,7 +96,9 @@ extension SDMainWindowController {
     
     // MARK: Handle Progress
     
-    private func handleProgress(_ progress: StableDiffusionPipeline.Progress, imageCount:Int) -> Bool {
+    private func handleProgress(_ progress: StableDiffusionPipeline.Progress,
+                                imageCount:Int,
+                                sampleTimer:SampleTimer) -> Bool {
         DispatchQueue.main.async {
             // progress indicator
             self.indicator.doubleValue = Double(progress.step)
@@ -120,8 +108,26 @@ extension SDMainWindowController {
                 self.indindicator.isHidden = true
                 self.indicator.isHidden = false
             }
+            // performance indicator
+            //DispatchQueue.main.async {
+                sampleTimer.stop()
+                self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
+                if progress.stepCount != progress.step { sampleTimer.start() }
+            //}
         }
         return isRunning
+    }
+    
+    
+    
+    // FIXME: Resize CGImage
+    func resizeInputImage(image:CGImage?) -> CGImage? {
+        guard let cgimage = image else { return nil }
+        print("original input image size: \(cgimage.width)x\(cgimage.height)")
+        guard let nsimage = resizeImage(image: NSImage(cgImage: cgimage, size: .zero), new_width: modelWidth, new_height: modelHeight) else { return nil }
+        let resizedCGimage = nsimage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+        print("resized input image size: \(resizedCGimage?.width ?? 0)x\(resizedCGimage?.height ?? 0)")
+        return resizedCGimage
     }
     
 }

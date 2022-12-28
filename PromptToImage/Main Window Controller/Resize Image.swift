@@ -9,9 +9,10 @@ import Foundation
 import AppKit
 
 
-func resizeImage(image:NSImage) -> NSImage? {
-    let new_width: CGFloat = modelWidth
-    let new_height : CGFloat = modelHeight
+func resizeImage(image:NSImage,
+                 new_width:Double,
+                 new_height:Double) -> NSImage? {
+    
     let newSize = NSSize(width: new_width, height: new_height)
     
     if let bitmapRep = NSBitmapImageRep(
@@ -34,14 +35,14 @@ func resizeImage(image:NSImage) -> NSImage? {
 }
 
 
-/*
- func resize(w: Int, h: Int) -> NSImage {
-     let destSize = NSMakeSize(CGFloat(w), CGFloat(h))
-     let newImage = NSImage(size: destSize)
-     newImage.lockFocus()
-     self.draw(in: NSMakeRect(0, 0, destSize.width, destSize.height), from: NSMakeRect(0, 0, self.size.width, self.size.height), operation: NSCompositingOperation.sourceOver, fraction: CGFloat(1))
-     newImage.unlockFocus()
-     newImage.size = destSize
-     return NSImage(data: newImage.tiffRepresentation!)!
- }
- */
+extension NSImage {
+    func resize(w: Double, h: Double) -> NSImage {
+        let destSize = NSMakeSize(CGFloat(w), CGFloat(h))
+        let newImage = NSImage(size: destSize)
+        newImage.lockFocus()
+        self.draw(in: NSMakeRect(0, 0, destSize.width, destSize.height), from: NSMakeRect(0, 0, self.size.width, self.size.height), operation: NSCompositingOperation.sourceOver, fraction: CGFloat(1))
+        newImage.unlockFocus()
+        newImage.size = destSize
+        return NSImage(data: newImage.tiffRepresentation!)!
+    }
+}

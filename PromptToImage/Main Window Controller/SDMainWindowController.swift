@@ -56,7 +56,6 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var str_label: NSTextField!
     @IBOutlet weak var strenghtLabel: NSTextField!
     @IBOutlet weak var inputImageview: NSImageView!
- 
     // images count
     @IBOutlet weak var imageCountSlider: NSSlider!
     @IBOutlet weak var imageCountStepper: NSStepper!
@@ -68,16 +67,16 @@ class SDMainWindowController: NSWindowController,
         self.seedView.isSelectable = sender.state == .off
         self.seedView.isEditable = sender.state == .off
     }
-    
+    // scheduler
+    @IBOutlet weak var schedulerPopup: NSPopUpButton!
+    // models
     @IBOutlet weak var modelsPopup: NSPopUpButton!
     
     // table view menu
-    
     @IBOutlet weak var item_saveAllSelectedImages: NSMenuItem!
     
     
     // history
-    
     @IBOutlet weak var historyTableView: NSTableView!
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
@@ -180,6 +179,10 @@ class SDMainWindowController: NSWindowController,
     func enableImg2Img() {
         if let pipeline = sdPipeline {
             self.img2imgView.isHidden = !pipeline.canUseInputImage
+            if !pipeline.canUseInputImage {
+                self.schedulerPopup.isEnabled = true
+                self.inputImageview.image = nil
+            }
         }
     }
     
