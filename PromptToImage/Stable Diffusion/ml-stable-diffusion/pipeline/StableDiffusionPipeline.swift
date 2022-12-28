@@ -90,7 +90,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
         self.safetyChecker = safetyChecker
         self.reduceMemory = systemRAM() <= 8 //reduceMemory
         print("Reduce Memory: \(self.reduceMemory)")
-    }
+    } 
 
     /// Load required resources for this pipeline
     ///

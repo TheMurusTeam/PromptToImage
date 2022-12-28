@@ -39,6 +39,7 @@ public struct Unet: ResourceManaging {
     public func loadResources() throws {
         for model in models {
             try model.loadResources()
+            self.setResolutionAndName()
         }
     }
 
@@ -54,10 +55,30 @@ public struct Unet: ResourceManaging {
         // Override default to pre-warm each model
         for model in models {
             try model.loadResources()
+            self.setResolutionAndName()
             model.unloadResources()
         }
     }
 
+    /// Set resolution and model real name
+    func setResolutionAndName() {
+        // set resolution
+        if let shape = (self.models[0].loadedModel?.modelDescription.inputDescriptionsByName["sample"] as? MLFeatureDescription)?.multiArrayConstraint?.shape {
+            modelWidth = Double(truncating: shape[3]) * 8
+            modelHeight = Double(truncating: shape[2]) * 8
+            print("Current resolution: \(String(Int(modelWidth)))x\(String(Int(modelHeight)))")
+        } else {
+            modelWidth = 512
+            modelHeight = 512
+        }
+        // set model real name
+        if let name = (self.models[0].loadedModel?.modelDescription.metadata[MLModelMetadataKey(rawValue: "MLModelVersionStringKey")]) as? String {
+            print("Created pipeline for model: \(name)")
+            currentModelRealName = name
+        }
+    }
+    
+    
     var latentSampleDescription: MLFeatureDescription {
         try! models.first!.perform { model in
             model.modelDescription.inputDescriptionsByName["sample"]!

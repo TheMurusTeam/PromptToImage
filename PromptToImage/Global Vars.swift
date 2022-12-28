@@ -34,7 +34,9 @@ let defaultModelName = "Stable Diffusion 2.1 SPLIT EINSUM"
 var currentModelResourcesURL : URL = Bundle.main.resourceURL!
 var currentModelRealName : String? = nil {
     didSet {
-        (wins["main"] as! SDMainWindowController).modelCardBtn.isHidden = currentModelRealName == nil
+        DispatchQueue.main.async {
+            (wins["main"] as! SDMainWindowController).modelCardBtn.isHidden = currentModelRealName == nil
+        }
     }
 }
 
