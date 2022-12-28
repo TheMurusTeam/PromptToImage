@@ -54,7 +54,7 @@ MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
 
 
 # Privacy
-This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. Releases available on this repo are always signed with a valid Apple Developer ID and notarized. <br>
+This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. <br>
 
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.
