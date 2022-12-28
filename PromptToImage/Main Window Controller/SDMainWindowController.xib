@@ -587,7 +587,7 @@ DQ
                                         <rect key="frame" x="0.0" y="0.0" width="153" height="759"/>
                                         <clipView key="contentView" id="gNJ-zO-1nK">
                                             <rect key="frame" x="0.0" y="0.0" width="153" height="759"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="135" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" id="wAw-8X-cHJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="153" height="759"/>
