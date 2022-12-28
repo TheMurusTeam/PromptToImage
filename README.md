@@ -12,8 +12,8 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 - History
 - 4x Upscaler 
 - Export image with EXIF metadata
-- Supports models with custom output size
 - Sandboxed app
+- Supports models with custom output size
 - Default model: Stable Diffusion 2.1 SPLIT EINSUM (will be downloaded at application launch)
 
 # Download App 
@@ -57,13 +57,18 @@ MacMini M1, 8core GPU, 16Gb RAM (macOS 13.1):
 - Stable Diffusion 2.1 SPLIT EINSUM, CPU and GPU:            0.75 step/sec,  7.5 Watt
 - Stable Diffusion 2.1 ORIGINAL, CPU and GPU:                0.95 step/sec,  8.8 Watt
 
+# Known issues
+1. Attempting to load an -ORIGINAL model using "CPU and Neural Engine" or "All Compute Units" fails.
+2. The first time you launch the app, loading a -SPLIT_EINSUM model using "CPU and Neural Engine" may take up to 2 minutes.
 
+Keep the OPTION key pressed when launching the app in order to restore default compute units (CPU and GPU)
 
 # Privacy
 This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. <br>
 
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.
+
 
 
 
