@@ -38,6 +38,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var waitProgr: NSProgressIndicator!
     @IBOutlet weak var waitLabel: NSTextField!
     @IBOutlet weak var waitInfoLabel: NSTextField!
+    @IBOutlet weak var waitCULabel: NSTextField!
     @IBOutlet weak var unitsPopup: NSPopUpButton!
     @IBOutlet weak var progrWin: NSWindow!
     @IBOutlet weak var progrLabel: NSTextField!
@@ -133,7 +134,7 @@ class SDMainWindowController: NSWindowController,
     }
     
     
-    
+       
     var currentHistoryItem : HistoryItem? = nil // used for sharing a single item from item's share btn
     
     

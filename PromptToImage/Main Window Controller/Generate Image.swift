@@ -30,7 +30,7 @@ extension SDMainWindowController {
         // upscale option
         let upscale = self.upscaleCheckBox.state == .on
         
-        // resize input image
+        // resize input image if needed
         var inputImage : CGImage? = nil
         if let startingImage = startingImage {
             print("original input image size: \(startingImage.width)x\(startingImage.height)")
@@ -38,7 +38,6 @@ extension SDMainWindowController {
                 inputImage = nsinputimage.cgImage(forProposedRect: nil, context: nil, hints: nil)
                 print("resized input image size: \(inputImage?.width ?? 0)x\(inputImage?.height ?? 0)")
             }
-            
         }
         
         // set labels and indicators
@@ -52,13 +51,12 @@ extension SDMainWindowController {
         // show wait win
         self.window?.beginSheet(self.progrWin)
         
-        // image loop
+        // generate images
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 if let pipeline = sdPipeline {
-                    print("generating \(imageCount) images...")
-                    print("seed:\(seed)")
-                    let sampleTimer = SampleTimer()
+                    // timer for performance indicator
+                    let sampleTimer = SampleTimer() // used for pipeline performance indicator
                     sampleTimer.start()
                     
                     // generate image
@@ -71,36 +69,19 @@ extension SDMainWindowController {
                                                              seed: seed,
                                                              guidanceScale: guidanceScale,
                                                              disableSafety: true,
-                                                             scheduler: startingImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler)
-                    { (sdprogress) -> Bool in
-                        
-                        // calculate and display inference speed
-                        sampleTimer.stop()
+                                                             scheduler: startingImage == nil ? .dpmSolverMultistepScheduler : .pndmScheduler) {
+                        progress in
+                        // performance indicator
                         DispatchQueue.main.async {
+                            sampleTimer.stop()
                             self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
+                            if progress.stepCount != progress.step { sampleTimer.start() }
                         }
-                        if sdprogress.stepCount != sdprogress.step {
-                            sampleTimer.start()
-                        }
-                        //print("step \(sdprogress.step) of \(sdprogress.stepCount) (\(Int(Float(stepCount) * strength)))")
-                        // progress indicators
-                        DispatchQueue.main.async {
-                            self.indicator.doubleValue = Double(sdprogress.step)
-                            if sdprogress.step > 0 {
-                                self.speedLabel.isHidden = false
-                                self.progrLabel.stringValue = imageCount == 1 ? "Generating image..." : "Generating \(imageCount) images..."
-                                self.indindicator.isHidden = true
-                                self.indicator.isHidden = false
-                            }
-                        }
-                        
-                        
-                        if !isRunning { print("stop") }
-                        return isRunning
+                        return self.handleProgress(progress, imageCount: imageCount)
                     }
                     
+                    
                     // display images
-                    print("displaying images...")
                     self.displayResult(images: images,
                                        upscale: upscale,
                                        prompt: prompt,
@@ -114,21 +95,34 @@ extension SDMainWindowController {
                     
                 } else {
                     print("ERROR: cannot create pipeline")
-                    DispatchQueue.main.async {
-                        self.window?.endSheet(self.progrWin)
-                    }
+                    DispatchQueue.main.async { self.window?.endSheet(self.progrWin) }
                 }
                 
             } catch {
                 print("ERROR \(error)")
-                DispatchQueue.main.async {
-                    self.window?.endSheet(self.progrWin)
-                }
+                DispatchQueue.main.async { self.window?.endSheet(self.progrWin) }
             }
         }
     }
     
     
+    
+    
+    // MARK: Handle Progress
+    
+    private func handleProgress(_ progress: StableDiffusionPipeline.Progress, imageCount:Int) -> Bool {
+        DispatchQueue.main.async {
+            // progress indicator
+            self.indicator.doubleValue = Double(progress.step)
+            if progress.step > 0 {
+                self.speedLabel.isHidden = false
+                self.progrLabel.stringValue = imageCount == 1 ? "Generating image..." : "Generating \(imageCount) images..."
+                self.indindicator.isHidden = true
+                self.indicator.isHidden = false
+            }
+        }
+        return isRunning
+    }
     
 }
 

@@ -74,6 +74,7 @@
                 <outlet property="strenghtSlider" destination="YAY-Kv-hT6" id="E7v-8e-Geq"/>
                 <outlet property="unitsPopup" destination="KjR-iA-yOt" id="8Lx-R0-Nvd"/>
                 <outlet property="upscaleCheckBox" destination="B0p-Yp-sNC" id="h1Q-PB-8VM"/>
+                <outlet property="waitCULabel" destination="FRX-TY-DyS" id="IYe-HQ-as2"/>
                 <outlet property="waitInfoLabel" destination="0K2-OY-Jlh" id="7aJ-Rs-ixF"/>
                 <outlet property="waitLabel" destination="U7x-40-aL5" id="aTr-di-70W"/>
                 <outlet property="waitProgr" destination="7yU-gE-M3p" id="cTg-rN-gE0"/>
@@ -212,7 +213,7 @@ DQ
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m17-FH-E1b">
+                                    <button toolTip="Settings" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m17-FH-E1b">
                                         <rect key="frame" x="249" y="690" width="50" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="5U2-sN-nZ6"/>
@@ -227,7 +228,7 @@ DQ
                                             <action selector="displaySettings:" target="-2" id="ErS-0S-mp6"/>
                                         </connections>
                                     </button>
-                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8A3-6S-zeQ">
+                                    <button hidden="YES" toolTip="Display model card" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8A3-6S-zeQ">
                                         <rect key="frame" x="206" y="690" width="50" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="28" id="E0K-Bg-HEM"/>
@@ -393,7 +394,7 @@ DQ
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="emI-Wg-WqY">
+                                            <button toolTip="Import input image from file" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="emI-Wg-WqY">
                                                 <rect key="frame" x="137" y="3" width="75" height="18"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="18" id="CL2-gv-7b2"/>
@@ -421,7 +422,7 @@ DQ
                                                     <action selector="importInputImage:" target="-2" id="Mf4-UR-ve4"/>
                                                 </connections>
                                             </button>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KUQ-ul-P04">
+                                            <button toolTip="Remove input image" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KUQ-ul-P04">
                                                 <rect key="frame" x="220" y="3" width="75" height="18"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="75" id="2X1-Y9-fxI"/>
@@ -490,7 +491,7 @@ DQ
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="31Q-Q0-bkP">
+                                            <button toolTip="Use random seed" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="31Q-Q0-bkP">
                                                 <rect key="frame" x="199" y="9" width="76" height="18"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="cD2-Tt-9R7"/>
@@ -848,14 +849,14 @@ CA
         <window title="Load Model" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="5Xs-p5-gnm" userLabel="wait window">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="206" width="316" height="164"/>
+            <rect key="contentRect" x="196" y="206" width="350" height="179"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" id="7Qp-S8-cQu">
-                <rect key="frame" x="0.0" y="0.0" width="316" height="164"/>
+                <rect key="frame" x="0.0" y="0.0" width="350" height="179"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U7x-40-aL5">
-                        <rect key="frame" x="18" y="55" width="280" height="16"/>
+                        <rect key="frame" x="18" y="76" width="314" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" selectable="YES" alignment="center" title="Multiline Label" id="3QB-A9-LKH">
                             <font key="font" usesAppearanceFont="YES"/>
@@ -864,21 +865,30 @@ CA
                         </textFieldCell>
                     </textField>
                     <progressIndicator fixedFrame="YES" maxValue="100" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="7yU-gE-M3p">
-                        <rect key="frame" x="142" y="98" width="32" height="32"/>
+                        <rect key="frame" x="159" y="112" width="32" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0K2-OY-Jlh">
-                        <rect key="frame" x="6" y="13" width="303" height="34"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0K2-OY-Jlh">
+                        <rect key="frame" x="8" y="51" width="334" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" selectable="YES" alignment="center" title="Stable Diffusion 2.1 SPLIT EINSUM" id="9EU-Cg-mr6">
+                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" alignment="center" title="Stable Diffusion 2.1 SPLIT EINSUM" id="9EU-Cg-mr6">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRX-TY-DyS">
+                        <rect key="frame" x="-2" y="28" width="354" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" allowsUndo="NO" alignment="center" title="CPU and GPU" id="E7G-3V-auy">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="83" y="-413"/>
+            <point key="canvasLocation" x="100" y="-405.5"/>
         </window>
         <arrayController selectsInsertedObjects="NO" avoidsEmptySelection="NO" id="Jhs-WJ-FKv" userLabel="History Array Controller">
             <connections>

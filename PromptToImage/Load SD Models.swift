@@ -18,17 +18,19 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
         (wins["main"] as! SDMainWindowController).waitProgr.startAnimation(nil)
         (wins["main"] as! SDMainWindowController).waitLabel.stringValue = "Loading Model"
         (wins["main"] as! SDMainWindowController).waitInfoLabel.stringValue = url == builtInModelResourcesURL ? "Built-in model" : url.lastPathComponent
+        var custring = String()
+        switch computeUnits {
+        case .cpuAndNeuralEngine: custring = "CPU and Neural Engine"
+        case .cpuAndGPU: custring = "CPU and GPU"
+        case .cpuOnly: custring = "CPU only"
+        default: custring = "All Compute Units"
+        }
+        (wins["main"] as! SDMainWindowController).waitCULabel.stringValue = custring
         (wins["main"] as! SDMainWindowController).window?.beginSheet((wins["main"] as! SDMainWindowController).waitWin)
     }
     
-    /*
-    var url = url
-    if !FileManager.default.fileExists(atPath: url.absoluteURL.path(percentEncoded: false) ) {
-        print("Error: model directory not found at \(url.absoluteURL.path(percentEncoded: false))")
-        currentModelResourcesURL = builtInModelResourcesURL
-        url = builtInModelResourcesURL
-    }*/
     
+    // clear pipeline
     sdPipeline?.unloadResources()
     sdPipeline = nil
     

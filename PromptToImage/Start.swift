@@ -78,14 +78,10 @@ extension AppDelegate {
                     // unable to load last used model, load built-in model if available (MacAppStore only)
                     currentComputeUnits = defaultComputeUnits
                     createStableDiffusionPipeline(computeUnits: defaultComputeUnits, url:builtInModelResourcesURL)
-                } else {
-                    currentModelResourcesURL = builtInModelResourcesURL
-                    // save to user defaults
-                    UserDefaults.standard.set(currentModelResourcesURL, forKey: "modelResourcesURL")
                 }
                 
                 if sdPipeline == nil {
-                    print("unable to load last used model, checking custom models dir...")
+                    print("unable to load built-in model, checking custom models dir...")
                     // unable to load built-in model, checking custom models directory...
                     for customModelURL in installedCustomModels() {
                         print("Attempting to load custom model \(customModelURL.lastPathComponent)")
