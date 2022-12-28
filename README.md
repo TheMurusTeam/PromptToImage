@@ -42,7 +42,8 @@ model: Stable Diffusion 2.1 SPLIT EINSUM, compute units: CPU and Neural Engine<b
 For best performance on M1Pro, M1Max and M1 Ultra:<br>
 model: Stable Diffusion 2.1 ORIGINAL, compute units: CPU and GPU<br>
 
-To drastically reduce power consumption on laptops you should use the default model (or any SPLIT EINSUM model) and "CPU and Neural Engine" compute units.<br>
+To drastically reduce power consumption on laptops you should use the default model (or any SPLIT EINSUM model) and "CPU and Neural Engine" compute units.<br><br>
+To monitor compute units energy consumption you can use PowerMetrix, see here: https://github.com/TheMurusTeam/PowerMetrix<br><br>
 
 # Benchmarks 
 MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
