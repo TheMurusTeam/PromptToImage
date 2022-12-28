@@ -14,18 +14,17 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 - Export image with EXIF metadata
 - Supports models with custom output size
 - Sandboxed app
+- Default model: Stable Diffusion 2.1 SPLIT EINSUM (will be downloaded at application launch)
 
-# Download App from this repository
-See the "Releases" section of this repository to download the app.<br>
-App bundles available on this repo do not include Stable Diffusion CoreML models. Launch the app and follow instructions in order to install your first model and start using PromptToImage.  
+# Download App 
+Beta version available via TestFlight here: https://testflight.apple.com/join/oMxyZ7wO
 
-# Install Stable Diffusion models<br>
-1. Download default Stable Diffusion model here: https://huggingface.co/TheMurusTeam/CoreML-Stable-Diffusion-2.1-SPLIT_EINSUM-img2img/ <br>
-2. Run PromptToImage, open Settings clicking the gear button on left top.
-3. Click "Reveal Custom Models Dir in Finder" to show PromptToImage custom models directory.
+# Install custom Stable Diffusion models<br>
+1. Download a CoreML Stable Diffusion model. You can find some models here: https://huggingface.co/TheMurusTeam/
+2. Run PromptToImage, open Settings clicking the gear button on left top
+3. Click "Reveal Custom Models Dir in Finder" to show PromptToImage custom models directory
 4. unzip model zip archive and move the resulting directory to custom models directory
 5. Click the "Model" popup button in Settings and select a Stable Diffusion model to start using PromptToImage
-6. You can find additional Stable Diffusion CoreML models here: https://huggingface.co/TheMurusTeam/
 
 # System Requirements
 Requires an Apple Silicon Mac running macOS 13.1 Ventura<br>
@@ -54,7 +53,7 @@ MacBook Pro 14" M1Max 32Gb RAM (macOS 13.1):
 
 
 # Privacy
-This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. Releases available on this repo are always signed with a valid Apple Developer ID and notarized.
+This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. Releases available on this repo are always signed with a valid Apple Developer ID and notarized. <br>
 
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.
