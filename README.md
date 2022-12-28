@@ -17,7 +17,7 @@ Swift/AppKit CoreML Stable Diffusion app for macOS
 - Default model: Stable Diffusion 2.1 SPLIT EINSUM (will be downloaded at application launch)
 
 # Download App 
-Beta version available via TestFlight here: https://testflight.apple.com/join/oMxyZ7wO
+coming soon
 
 # Install custom Stable Diffusion models<br>
 1. Download a CoreML Stable Diffusion model. You can find some models here: https://huggingface.co/TheMurusTeam/
