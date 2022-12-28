@@ -1,6 +1,6 @@
 # PromptToImage
 Swift/AppKit CoreML Stable Diffusion app for macOS
-<img width="720" alt="pti" src="https://user-images.githubusercontent.com/27217431/209454286-9f343a69-a32c-49bd-abe8-2425f67ef309.png">
+
 
 # Features
 - Negative Prompt
