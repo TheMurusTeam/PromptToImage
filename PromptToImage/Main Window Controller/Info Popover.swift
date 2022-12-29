@@ -75,7 +75,7 @@ extension SDMainWindowController {
             if !self.historyArrayController.selectedObjects.isEmpty {
                 if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
                     let image = firstItem.upscaledImage ?? firstItem.image
-                    self.imageview.image = image
+                    // self.imageview.image = image
                     self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
                 }
             }
@@ -97,7 +97,7 @@ extension SDMainWindowController {
                     if !self.historyArrayController.selectedObjects.isEmpty {
                         if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
                             let image = firstItem.upscaledImage ?? firstItem.image
-                            self.imageview.image = image
+                            // self.imageview.image = image
                             self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
                         }
                     }
