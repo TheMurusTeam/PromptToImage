@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import Quartz
 
 func displayErrorAlert(txt:String) {
     let alert = NSAlert()
@@ -26,6 +27,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var center: NSView!
     @IBOutlet weak var right: NSView!
     
+    @IBOutlet weak var imageview2: IKImageView!
     @IBOutlet weak var imageview: NSImageView!
     @IBOutlet weak var stepsSlider: NSSlider!
     @IBOutlet weak var stepsLabel: NSTextField!
@@ -193,20 +195,21 @@ class SDMainWindowController: NSWindowController,
     func tableViewSelectionDidChange(_ notification: Notification) {
         if self.historyArrayController.selectedObjects.isEmpty {
             self.imageview.image = nil
+            self.imageview2.isHidden = true
         } else {
-            self.imageview.image = (self.historyArrayController.selectedObjects[0] as! HistoryItem).upscaledImage ?? (self.historyArrayController.selectedObjects[0] as! HistoryItem).image
+            let image = (self.historyArrayController.selectedObjects[0] as! HistoryItem).upscaledImage ?? (self.historyArrayController.selectedObjects[0] as! HistoryItem).image
+            //self.imageview.image = image
+            
+            self.imageview2.isHidden = false
+            self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
         }
-    }
-    
-    
-    func saveDocument() {
-        print("save doc")
     }
     
     
     @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
         self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
         self.imageview.image = nil
+        self.imageview2.isHidden = true
         
     }
     

@@ -74,7 +74,9 @@ extension SDMainWindowController {
             item.upscaled = false
             if !self.historyArrayController.selectedObjects.isEmpty {
                 if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
-                    self.imageview.image = firstItem.upscaledImage ?? firstItem.image
+                    let image = firstItem.upscaledImage ?? firstItem.image
+                    self.imageview.image = image
+                    self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
                 }
             }
             self.setInfoPopover(item: item)
@@ -94,7 +96,9 @@ extension SDMainWindowController {
                     
                     if !self.historyArrayController.selectedObjects.isEmpty {
                         if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
-                            self.imageview.image = firstItem.upscaledImage ?? firstItem.image
+                            let image = firstItem.upscaledImage ?? firstItem.image
+                            self.imageview.image = image
+                            self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
                         }
                     }
                     

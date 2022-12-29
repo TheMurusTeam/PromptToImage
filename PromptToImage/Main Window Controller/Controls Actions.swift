@@ -18,6 +18,7 @@ extension SDMainWindowController {
     
     @IBAction func clickGenerateImage(_ sender: NSButton) {
         self.historyArrayController.setSelectedObjects([])
+        self.imageview2.isHidden = true
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed

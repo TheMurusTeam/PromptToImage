@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.imagekit.ibplugin" version="21507"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,6 +21,7 @@
                 <outlet property="imageCountLabel" destination="HNi-yp-DH6" id="gtb-XD-xEI"/>
                 <outlet property="imageCountSlider" destination="oNN-b6-Cbs" id="Gis-Lq-AF6"/>
                 <outlet property="imageview" destination="6iz-ls-zVj" id="nco-TV-IHS"/>
+                <outlet property="imageview2" destination="QQ2-Rd-Acp" id="iET-fk-M85"/>
                 <outlet property="img2imgView" destination="fGS-d7-NNL" id="Clb-5L-hTz"/>
                 <outlet property="indicator" destination="NUZ-rz-7yU" id="SUz-4s-5IF"/>
                 <outlet property="indindicator" destination="DV1-Dc-d67" id="3wN-Ny-CDe"/>
@@ -737,12 +739,26 @@ CA
                                         <rect key="frame" x="0.0" y="0.0" width="750" height="779"/>
                                         <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyUpOrDown" id="TUW-t0-tlc"/>
                                     </imageView>
+                                    <ikImageView hidden="YES" wantsLayer="YES" editable="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-Rd-Acp">
+                                        <rect key="frame" x="1" y="0.0" width="749" height="779"/>
+                                        <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="12"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </ikImageView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="QQ2-Rd-Acp" secondAttribute="trailing" id="2Rl-9Z-P6I"/>
+                                    <constraint firstAttribute="bottom" secondItem="QQ2-Rd-Acp" secondAttribute="bottom" id="52h-TJ-4cd"/>
                                     <constraint firstAttribute="bottom" secondItem="6iz-ls-zVj" secondAttribute="bottom" id="Hx1-VB-0f5"/>
                                     <constraint firstItem="6iz-ls-zVj" firstAttribute="top" secondItem="K1J-2G-ODS" secondAttribute="top" id="VWp-Yo-JKV"/>
                                     <constraint firstItem="6iz-ls-zVj" firstAttribute="leading" secondItem="K1J-2G-ODS" secondAttribute="leading" id="dwU-Rs-u5L"/>
+                                    <constraint firstItem="QQ2-Rd-Acp" firstAttribute="leading" secondItem="K1J-2G-ODS" secondAttribute="leading" constant="1" id="e8n-Yk-Crb"/>
                                     <constraint firstAttribute="trailing" secondItem="6iz-ls-zVj" secondAttribute="trailing" id="hRg-dB-WKd"/>
+                                    <constraint firstItem="QQ2-Rd-Acp" firstAttribute="top" secondItem="K1J-2G-ODS" secondAttribute="top" id="tnp-No-0Ub"/>
                                 </constraints>
                             </customView>
                         </subviews>
