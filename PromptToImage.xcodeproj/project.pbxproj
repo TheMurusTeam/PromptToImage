@@ -46,6 +46,12 @@
 		3F813601295A49EB000C4EC5 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F813600295A49EB000C4EC5 /* Downloader.swift */; };
 		3F813622295B8BC6000C4EC5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3F813621295B8BC6000C4EC5 /* ZIPFoundation */; };
 		3F95137A29579C1E0055D783 /* prompttoimage.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F95137929579C1E0055D783 /* prompttoimage.png */; };
+		3FB03180295F78690090EFDF /* cpuoff.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317A295F78690090EFDF /* cpuoff.png */; };
+		3FB03181295F78690090EFDF /* cpuon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317B295F78690090EFDF /* cpuon.png */; };
+		3FB03182295F78690090EFDF /* gpuon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317C295F78690090EFDF /* gpuon.png */; };
+		3FB03183295F78690090EFDF /* aneoff.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317D295F78690090EFDF /* aneoff.png */; };
+		3FB03184295F78690090EFDF /* gpuoff.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317E295F78690090EFDF /* gpuoff.png */; };
+		3FB03185295F78690090EFDF /* aneon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0317F295F78690090EFDF /* aneon.png */; };
 		3FB0B4F82957BD840084427A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3FB0B4F72957BD840084427A /* README.md */; };
 		3FC49524293AAD2A00B2F32D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC49523293AAD2A00B2F32D /* AppDelegate.swift */; };
 		3FC49526293AAD2B00B2F32D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FC49525293AAD2B00B2F32D /* Assets.xcassets */; };
@@ -98,6 +104,12 @@
 		3F813600295A49EB000C4EC5 /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		3F951377295767CB0055D783 /* PromptToImageDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PromptToImageDebug.entitlements; sourceTree = "<group>"; };
 		3F95137929579C1E0055D783 /* prompttoimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prompttoimage.png; sourceTree = "<group>"; };
+		3FB0317A295F78690090EFDF /* cpuoff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cpuoff.png; sourceTree = "<group>"; };
+		3FB0317B295F78690090EFDF /* cpuon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cpuon.png; sourceTree = "<group>"; };
+		3FB0317C295F78690090EFDF /* gpuon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpuon.png; sourceTree = "<group>"; };
+		3FB0317D295F78690090EFDF /* aneoff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aneoff.png; sourceTree = "<group>"; };
+		3FB0317E295F78690090EFDF /* gpuoff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpuoff.png; sourceTree = "<group>"; };
+		3FB0317F295F78690090EFDF /* aneon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aneon.png; sourceTree = "<group>"; };
 		3FB0B4F72957BD840084427A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		3FC49520293AAD2A00B2F32D /* PromptToImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PromptToImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FC49523293AAD2A00B2F32D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +204,12 @@
 		3F95137829579C110055D783 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				3FB0317D295F78690090EFDF /* aneoff.png */,
+				3FB0317F295F78690090EFDF /* aneon.png */,
+				3FB0317A295F78690090EFDF /* cpuoff.png */,
+				3FB0317B295F78690090EFDF /* cpuon.png */,
+				3FB0317E295F78690090EFDF /* gpuoff.png */,
+				3FB0317C295F78690090EFDF /* gpuon.png */,
 				3F95137929579C1E0055D783 /* prompttoimage.png */,
 				3F47B2432950C7DB000C33EC /* sd-ship.png */,
 				3F47B2452950D243000C33EC /* bigsd-ship.png */,
@@ -326,12 +344,18 @@
 			files = (
 				3F444E5A293EA4F2007A7D9F /* SDMainWindowController.xib in Resources */,
 				3F47B2422950C6E2000C33EC /* tree.png in Resources */,
+				3FB03185295F78690090EFDF /* aneon.png in Resources */,
+				3FB03184295F78690090EFDF /* gpuoff.png in Resources */,
 				3F47B2462950D243000C33EC /* bigsd-ship.png in Resources */,
 				3F47B2342950C03D000C33EC /* testimage.png in Resources */,
 				3FC49526293AAD2B00B2F32D /* Assets.xcassets in Resources */,
 				3F47B2442950C7DB000C33EC /* sd-ship.png in Resources */,
+				3FB03183295F78690090EFDF /* aneoff.png in Resources */,
 				3FB0B4F82957BD840084427A /* README.md in Resources */,
 				3F95137A29579C1E0055D783 /* prompttoimage.png in Resources */,
+				3FB03180295F78690090EFDF /* cpuoff.png in Resources */,
+				3FB03182295F78690090EFDF /* gpuon.png in Resources */,
+				3FB03181295F78690090EFDF /* cpuon.png in Resources */,
 				3FC49529293AAD2B00B2F32D /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,11 +12,11 @@ extension SDMainWindowController  {
     // MARK: Split View Delegate
     
     func splitView(_ splitView: NSSplitView, canCollapseSubview subview: NSView) -> Bool {
-        return subview == self.left
+        return true //subview == self.left
     }
     
     func splitView(_ splitView: NSSplitView, shouldAdjustSizeOfSubview view: NSView) -> Bool {
-        return view == self.right
+        return true //view == self.right
     }
     
     func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {

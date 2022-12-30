@@ -24,9 +24,6 @@ class SDMainWindowController: NSWindowController,
     
     
     @IBOutlet weak var splitview: NSSplitView!
-    @IBOutlet weak var left: NSView!
-    @IBOutlet weak var center: NSView!
-    @IBOutlet weak var right: NSView!
     
     @IBOutlet weak var imageview: IKImageView!
     @IBOutlet weak var stepsSlider: NSSlider!
@@ -137,6 +134,7 @@ class SDMainWindowController: NSWindowController,
     var viewZoomFactor : CGFloat = 1
     var zoomToFit : Bool = true
     
+    @IBOutlet weak var modelMainLabel: NSTextField!
     
     
     
@@ -161,8 +159,7 @@ class SDMainWindowController: NSWindowController,
         self.setUnitsPopup()
         self.populateModelsPopup()
         self.readStoredControlsValues()
-        self.splitview.setPosition(297, ofDividerAt: 0)
-        self.splitview.setPosition(435, ofDividerAt: 1)
+        //self.splitview.setPosition(297, ofDividerAt: 0)
         self.loadHistory()
         //
         self.imageview.hasVerticalScroller = true
@@ -226,8 +223,40 @@ class SDMainWindowController: NSWindowController,
     }
     
     
+    @IBOutlet weak var led_cpu: NSImageView!
+    @IBOutlet weak var led_gpu: NSImageView!
+    @IBOutlet weak var led_ane: NSImageView!
     
+    func setCUImages() {
+        self.led_cpu.image = NSImage(named:"cpuon")!
+        self.led_cpu.isEnabled = true
+        switch currentComputeUnits {
+        case .cpuAndGPU:
+            self.led_gpu.image = NSImage(named:"gpuon")!
+            self.led_gpu.isEnabled = true
+            self.led_ane.image = NSImage(named:"aneoff")!
+            self.led_ane.isEnabled = false
+        case .cpuAndNeuralEngine:
+            self.led_gpu.image = NSImage(named:"gpuoff")!
+            self.led_gpu.isEnabled = false
+            self.led_ane.image = NSImage(named:"aneon")!
+            self.led_ane.isEnabled = true
+        default:
+            self.led_gpu.image = NSImage(named:"gpuon")!
+            self.led_gpu.isEnabled = true
+            self.led_ane.image = NSImage(named:"aneon")!
+            self.led_ane.isEnabled = true
+        }
+    }
     
+    func clearCUImages() {
+        self.led_cpu.image = NSImage(named:"cpuoff")!
+        self.led_cpu.isEnabled = false
+        self.led_ane.image = NSImage(named:"aneoff")!
+        self.led_ane.isEnabled = false
+        self.led_gpu.image = NSImage(named:"gpuoff")!
+        self.led_gpu.isEnabled = false
+    }
     
     
     
