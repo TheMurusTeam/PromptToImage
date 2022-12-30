@@ -65,7 +65,7 @@ MacMini M1, 8core GPU, 16Gb RAM (macOS 13.1):
 Keep the OPTION key pressed when launching the app in order to restore default compute units (CPU and GPU)
 
 # Privacy
-This is a sanboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. <br>
+This is a sandboxed app. It is not allowed to access your personal files and data. Everything runs locally, nothing is sent to the network. None of your data is collected. <br>
 
 # Build 
 To build this app you need an Apple Silicon Mac running macOS 13 Ventura 13.1 or later, and Xcode 14.2 or later.

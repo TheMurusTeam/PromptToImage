@@ -340,7 +340,7 @@ DQ
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="18" id="NaH-FL-8QI"/>
                                                 </constraints>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Input Image Strenght" id="u9a-xD-O8b">
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Input Image Strength" id="u9a-xD-O8b">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
