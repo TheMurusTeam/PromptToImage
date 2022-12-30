@@ -67,6 +67,9 @@ extension SDMainWindowController {
         }
     }
     
+    
+    // MARK: Delete upscaled image
+    
     @IBAction func info_removeUpscaledImage(_ sender: Any) {
         if let item = self.currentInfoPopoverItem {
             item.upscaledImage = nil
@@ -75,13 +78,22 @@ extension SDMainWindowController {
             if !self.historyArrayController.selectedObjects.isEmpty {
                 if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
                     let image = firstItem.upscaledImage ?? firstItem.image
-                    // self.imageview.image = image
-                    self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+                    self.imageview.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+                    
+                    if self.zoomToFit {
+                        self.imageview.zoomImageToFit(self)
+                    } else {
+                        self.imageview.zoomFactor = viewZoomFactor
+                    }
                 }
             }
             self.setInfoPopover(item: item)
         }
     }
+    
+    
+    
+    // MARK: Upscale image
     
     @IBAction func info_upscaleImage(_ sender: Any) {
         if let item = self.currentInfoPopoverItem {
@@ -97,8 +109,14 @@ extension SDMainWindowController {
                     if !self.historyArrayController.selectedObjects.isEmpty {
                         if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
                             let image = firstItem.upscaledImage ?? firstItem.image
-                            // self.imageview.image = image
-                            self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+                            self.imageview.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+                            
+                            if self.zoomToFit {
+                                self.imageview.zoomImageToFit(self)
+                            } else {
+                                self.imageview.zoomFactor = self.viewZoomFactor
+                            }
+                            
                         }
                     }
                     

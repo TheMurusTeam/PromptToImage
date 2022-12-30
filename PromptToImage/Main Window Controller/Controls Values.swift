@@ -21,8 +21,11 @@ extension SDMainWindowController {
         UserDefaults.standard.setValue(self.settings_selectDefaultCU.state == .on, forKey: "alwaysSetDefaultCUwhenSwitchingModel")
         UserDefaults.standard.setValue(self.settings_keepHistoryBtn.state == .on, forKey: "keepHistory")
         UserDefaults.standard.setValue(self.settings_historyLimitStepper.doubleValue, forKey: "historyLimit")
-        
+        UserDefaults.standard.setValue(self.schedulerPopup.indexOfSelectedItem, forKey: "schedulerPopupItem")
+        UserDefaults.standard.setValue(Float(self.viewZoomFactor), forKey: "viewZoomFactor")
+        UserDefaults.standard.setValue(self.zoomToFit, forKey: "zoomToFit")
     }
+    
     
     func readStoredControlsValues() {
         self.promptView.stringValue = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
@@ -37,6 +40,9 @@ extension SDMainWindowController {
         self.settings_keepHistoryBtn.state = (UserDefaults.standard.value(forKey: "keepHistory") as? Bool ?? true) ? .on : .off
         self.settings_historyLimitStepper.integerValue = Int(UserDefaults.standard.value(forKey: "historyLimit") as? Double ?? 50)
         self.settings_historyLimitLabel.stringValue = String(self.settings_historyLimitStepper.integerValue)
+        self.schedulerPopup.selectItem(at: UserDefaults.standard.value(forKey: "schedulerPopupItem") as? Int ?? 0)
+        self.viewZoomFactor = UserDefaults.standard.value(forKey: "viewZoomFactor") as? CGFloat ?? 1
+        self.zoomToFit = UserDefaults.standard.value(forKey: "zoomToFit") as? Bool ?? true
     }
     
     

@@ -18,7 +18,7 @@ extension SDMainWindowController {
     
     @IBAction func clickGenerateImage(_ sender: NSButton) {
         self.historyArrayController.setSelectedObjects([])
-        self.imageview2.isHidden = true
+        self.imageview.isHidden = true
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed
@@ -37,7 +37,7 @@ extension SDMainWindowController {
                            stepCount: self.stepsSlider.integerValue,
                            seed: seed,
                            guidanceScale: self.guidanceLabel.floatValue,
-                           scheduler: ((schedulerPopup.indexOfSelectedItem == 0) || (inputImage != nil)) ? .pndmScheduler : .dpmSolverMultistepScheduler,
+                           scheduler: schedulerPopup.indexOfSelectedItem == 0 ? .pndmScheduler : .dpmSolverMultistepScheduler,
                            upscale: self.upscaleCheckBox.state == .on)
     }
     
@@ -91,7 +91,6 @@ extension SDMainWindowController {
     
     @IBAction func clearInputImage(_ sender: NSButton) {
         self.inputImageview.image = nil
-        self.schedulerPopup.isEnabled = true
     }
     
     
@@ -131,10 +130,34 @@ extension SDMainWindowController {
     // NORMALIZE INPUT IMAGE
     func insertNewInputImage(image:NSImage) {
         self.inputImageview.image = image.resize(w: modelWidth, h: modelHeight) //image.copy(size: NSSize(width: modelWidth,height: modelHeight))
-        self.schedulerPopup.selectItem(at: 0)
-        self.schedulerPopup.isEnabled = false
     }
    
+    
+    
+    // MARK: ImageKit View Controls
+    
+    @IBAction func clickZoomOut(_ sender: Any) {
+        self.imageview.zoomOut(self)
+        self.zoomToFit = false
+        self.viewZoomFactor = self.imageview.zoomFactor
+    }
+    @IBAction func clickZoomIn(_ sender: Any) {
+        self.imageview.zoomIn(self)
+        self.zoomToFit = false
+        self.viewZoomFactor = self.imageview.zoomFactor
+    }
+    @IBAction func clicZoomToActualSize(_ sender: Any) {
+        self.imageview.zoomImageToActualSize(self)
+        self.zoomToFit = false
+        self.viewZoomFactor = self.imageview.zoomFactor
+    }
+    @IBAction func clickZoomToFit(_ sender: Any) {
+        self.imageview.zoomImageToFit(self)
+        self.zoomToFit = true
+    }
+    
+    
+    
     
     
 }

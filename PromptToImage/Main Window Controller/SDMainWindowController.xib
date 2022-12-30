@@ -20,8 +20,7 @@
                 <outlet property="historyTableView" destination="wAw-8X-cHJ" id="ALy-6y-Yoo"/>
                 <outlet property="imageCountLabel" destination="HNi-yp-DH6" id="gtb-XD-xEI"/>
                 <outlet property="imageCountSlider" destination="oNN-b6-Cbs" id="Gis-Lq-AF6"/>
-                <outlet property="imageview" destination="6iz-ls-zVj" id="nco-TV-IHS"/>
-                <outlet property="imageview2" destination="QQ2-Rd-Acp" id="iET-fk-M85"/>
+                <outlet property="imageview" destination="QQ2-Rd-Acp" id="cla-bb-y4p"/>
                 <outlet property="img2imgView" destination="fGS-d7-NNL" id="Clb-5L-hTz"/>
                 <outlet property="indicator" destination="NUZ-rz-7yU" id="SUz-4s-5IF"/>
                 <outlet property="indindicator" destination="DV1-Dc-d67" id="3wN-Ny-CDe"/>
@@ -621,7 +620,7 @@ DQ
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                    <integer key="value" value="7"/>
+                                                                                    <integer key="value" value="12"/>
                                                                                 </userDefinedRuntimeAttribute>
                                                                             </userDefinedRuntimeAttributes>
                                                                             <connections>
@@ -735,30 +734,108 @@ CA
                                 <rect key="frame" x="466" y="0.0" width="750" height="779"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <imageView focusRingType="none" horizontalHuggingPriority="50" verticalHuggingPriority="50" horizontalCompressionResistancePriority="50" verticalCompressionResistancePriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="6iz-ls-zVj" userLabel="Single Image View">
-                                        <rect key="frame" x="0.0" y="0.0" width="750" height="779"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" focusRingType="none" alignment="left" imageScaling="proportionallyUpOrDown" id="TUW-t0-tlc"/>
-                                    </imageView>
-                                    <ikImageView hidden="YES" wantsLayer="YES" editable="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-Rd-Acp">
-                                        <rect key="frame" x="1" y="0.0" width="749" height="779"/>
-                                        <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qq3-Sd-8d6">
+                                        <rect key="frame" x="-1" y="-1" width="752" height="781"/>
+                                        <clipView key="contentView" id="tgP-dq-hyE">
+                                            <rect key="frame" x="1" y="1" width="750" height="779"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <ikImageView hidden="YES" wantsLayer="YES" fixedFrame="YES" zoomFactor="0.0" autoresizes="NO" supportsDragAndDrop="NO" doubleClickOpensImageEditPanel="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-Rd-Acp">
+                                                    <rect key="frame" x="0.0" y="0.0" width="750" height="779"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="-2" id="CQG-Gq-XV7"/>
+                                                    </connections>
+                                                </ikImageView>
+                                            </subviews>
+                                        </clipView>
+                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="u7A-EM-W1w">
+                                            <rect key="frame" x="1" y="764" width="750" height="16"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Qa5-B1-BYt">
+                                            <rect key="frame" x="735" y="1" width="16" height="779"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                    </scrollView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="ztn-EV-tRY">
+                                        <rect key="frame" x="575" y="20" width="155" height="32"/>
+                                        <subviews>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jCW-oS-nqw">
+                                                <rect key="frame" x="82" y="1.5" width="32.5" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="Tmx-93-tsl">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                    <imageReference key="image" image="rectangle" catalog="system" symbolScale="large"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="clicZoomToActualSize:" target="-2" id="MCp-Cx-oWL"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qNp-I2-TWk">
+                                                <rect key="frame" x="9" y="2.5" width="33.5" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="w1Z-p3-hxa">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                    <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="clickZoomIn:" target="-2" id="PH0-Fx-XvJ"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mEL-9i-NHS">
+                                                <rect key="frame" x="119" y="1.5" width="30" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="N58-FK-iIC">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                    <imageReference key="image" image="arrow.up.left.and.arrow.down.right" catalog="system" symbolScale="large"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="clickZoomToFit:" target="-2" id="Z8j-eQ-0X8"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Cm-b3-1z5">
+                                                <rect key="frame" x="46" y="2.5" width="33.5" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="sYo-DE-TiW">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                    <imageReference key="image" image="minus" catalog="system" symbolScale="large"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="clickZoomOut:" target="-2" id="UKF-aE-CYa"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="jxS-VU-Syh"/>
+                                            <constraint firstAttribute="width" constant="155" id="wxZ-rr-Ff9"/>
+                                        </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <integer key="value" value="12"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                <color key="value" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                    </ikImageView>
+                                    </customView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="QQ2-Rd-Acp" secondAttribute="trailing" id="2Rl-9Z-P6I"/>
-                                    <constraint firstAttribute="bottom" secondItem="QQ2-Rd-Acp" secondAttribute="bottom" id="52h-TJ-4cd"/>
-                                    <constraint firstAttribute="bottom" secondItem="6iz-ls-zVj" secondAttribute="bottom" id="Hx1-VB-0f5"/>
-                                    <constraint firstItem="6iz-ls-zVj" firstAttribute="top" secondItem="K1J-2G-ODS" secondAttribute="top" id="VWp-Yo-JKV"/>
-                                    <constraint firstItem="6iz-ls-zVj" firstAttribute="leading" secondItem="K1J-2G-ODS" secondAttribute="leading" id="dwU-Rs-u5L"/>
-                                    <constraint firstItem="QQ2-Rd-Acp" firstAttribute="leading" secondItem="K1J-2G-ODS" secondAttribute="leading" constant="1" id="e8n-Yk-Crb"/>
-                                    <constraint firstAttribute="trailing" secondItem="6iz-ls-zVj" secondAttribute="trailing" id="hRg-dB-WKd"/>
-                                    <constraint firstItem="QQ2-Rd-Acp" firstAttribute="top" secondItem="K1J-2G-ODS" secondAttribute="top" id="tnp-No-0Ub"/>
+                                    <constraint firstItem="qq3-Sd-8d6" firstAttribute="top" secondItem="K1J-2G-ODS" secondAttribute="top" constant="-1" id="06G-ax-JEY"/>
+                                    <constraint firstAttribute="bottom" secondItem="ztn-EV-tRY" secondAttribute="bottom" constant="20" symbolic="YES" id="2jA-pM-idQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="qq3-Sd-8d6" secondAttribute="trailing" constant="-1" id="ca7-pg-F2m"/>
+                                    <constraint firstAttribute="trailing" secondItem="ztn-EV-tRY" secondAttribute="trailing" constant="20" symbolic="YES" id="clh-Wv-czN"/>
+                                    <constraint firstAttribute="bottom" secondItem="qq3-Sd-8d6" secondAttribute="bottom" constant="-1" id="nBL-Hb-cQI"/>
+                                    <constraint firstItem="qq3-Sd-8d6" firstAttribute="leading" secondItem="K1J-2G-ODS" secondAttribute="leading" constant="-1" id="vR2-Kb-8s0"/>
                                 </constraints>
                             </customView>
                         </subviews>
@@ -1534,10 +1611,14 @@ DQ
     <resources>
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="arrow.backward.circle.fill" catalog="system" width="20" height="20"/>
+        <image name="arrow.up.left.and.arrow.down.right" catalog="system" width="20" height="19"/>
         <image name="gear" catalog="system" width="22" height="22"/>
         <image name="info.circle" catalog="system" width="20" height="20"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="20" height="20"/>
+        <image name="minus" catalog="system" width="18" height="5"/>
+        <image name="plus" catalog="system" width="18" height="17"/>
         <image name="prompttoimage" width="512" height="512"/>
+        <image name="rectangle" catalog="system" width="24" height="18"/>
         <image name="square.and.arrow.up.circle.fill" catalog="system" width="20" height="20"/>
         <image name="tree" width="256" height="256"/>
         <namedColor name="AccentColor">

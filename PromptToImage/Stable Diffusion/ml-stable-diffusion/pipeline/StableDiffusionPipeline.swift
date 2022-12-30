@@ -29,7 +29,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
     
     public enum Error: String, Swift.Error {
         case startingImageProvidedWithoutEncoder
-        case schedulerNotSupportedWithImage2Image
+        //case schedulerNotSupportedWithImage2Image
     }
 
     /// Model to generate embeddings for tokenized input text
@@ -185,12 +185,6 @@ public struct StableDiffusionPipeline: ResourceManaging {
             guard let encoder else {
                 throw Error.startingImageProvidedWithoutEncoder
             }
-            switch schedulerType {
-            case .pndmScheduler:
-                break
-            case .dpmSolverMultistepScheduler:
-                throw Error.schedulerNotSupportedWithImage2Image
-            }
             
             let noiseTuples = generateImage2ImageLatentSamples(imageCount, stdev: 1, seed: seed)
             latents = try noiseTuples.map({
@@ -244,7 +238,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
                 prompt: prompt,
                 negativePromp: negativePrompt,
                 step: step,
-                stepCount: stepCount,
+                stepCount: timeSteps.count,
                 currentLatentSamples: latents,
                 isSafetyEnabled: canSafetyCheck && !disableSafety
             )

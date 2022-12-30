@@ -22,13 +22,13 @@ class SDMainWindowController: NSWindowController,
                               NSMenuDelegate,
                               NSTableViewDelegate {
     
+    
     @IBOutlet weak var splitview: NSSplitView!
     @IBOutlet weak var left: NSView!
     @IBOutlet weak var center: NSView!
     @IBOutlet weak var right: NSView!
     
-    @IBOutlet weak var imageview2: IKImageView!
-    @IBOutlet weak var imageview: NSImageView!
+    @IBOutlet weak var imageview: IKImageView!
     @IBOutlet weak var stepsSlider: NSSlider!
     @IBOutlet weak var stepsLabel: NSTextField!
     @IBOutlet weak var indicator: NSProgressIndicator!
@@ -77,12 +77,12 @@ class SDMainWindowController: NSWindowController,
     // table view menu
     @IBOutlet weak var item_saveAllSelectedImages: NSMenuItem!
     
-    
     // history
     @IBOutlet weak var historyTableView: NSTableView!
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
     @IBOutlet weak var settings_keepHistoryBtn: NSButton!
+    var currentHistoryItem : HistoryItem? = nil // used for sharing a single item from item's share btn
     
     // info popover
     var currentInfoPopoverItem : HistoryItem? = nil
@@ -107,7 +107,6 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_upscaleBtn: NSButton!
     @IBOutlet weak var info_progress: NSProgressIndicator!
     
-    
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
     @IBOutlet weak var modelsPopupMenu: NSMenu!
@@ -123,7 +122,7 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var progressValueLabel: NSTextField!
     @IBOutlet weak var downloadButton: NSButton!
     
-    
+    // main info button (model card)
     @IBOutlet weak var modelCardBtn: NSButton!
     @IBAction func clickModelCardBtn(_ sender: Any) {
         if let name = currentModelRealName {
@@ -134,9 +133,12 @@ class SDMainWindowController: NSWindowController,
         }
     }
     
+    // IKImageView
+    var viewZoomFactor : CGFloat = 1
+    var zoomToFit : Bool = true
     
-       
-    var currentHistoryItem : HistoryItem? = nil // used for sharing a single item from item's share btn
+    
+    
     
     
     
@@ -151,6 +153,7 @@ class SDMainWindowController: NSWindowController,
     }
     
     
+    
     // MARK: Did Load
     
     override func windowDidLoad() {
@@ -161,7 +164,10 @@ class SDMainWindowController: NSWindowController,
         self.splitview.setPosition(297, ofDividerAt: 0)
         self.splitview.setPosition(435, ofDividerAt: 1)
         self.loadHistory()
-        
+        //
+        self.imageview.hasVerticalScroller = true
+        self.imageview.hasHorizontalScroller = true
+        self.imageview.autohidesScrollers = false
     }
     
     
@@ -182,7 +188,6 @@ class SDMainWindowController: NSWindowController,
         if let pipeline = sdPipeline {
             self.img2imgView.isHidden = !pipeline.canUseInputImage
             if !pipeline.canUseInputImage {
-                self.schedulerPopup.isEnabled = true
                 self.inputImageview.image = nil
             }
         }
@@ -192,26 +197,37 @@ class SDMainWindowController: NSWindowController,
     
     // MARK: Table View Delegate
     
+    var imageProperties: NSDictionary = Dictionary<String, String>() as NSDictionary
+    
     func tableViewSelectionDidChange(_ notification: Notification) {
         if self.historyArrayController.selectedObjects.isEmpty {
-            self.imageview.image = nil
-            self.imageview2.isHidden = true
+            self.imageview.isHidden = true
         } else {
             let image = (self.historyArrayController.selectedObjects[0] as! HistoryItem).upscaledImage ?? (self.historyArrayController.selectedObjects[0] as! HistoryItem).image
-            //self.imageview.image = image
-            
-            self.imageview2.isHidden = false
-            self.imageview2.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+            self.imageview.isHidden = false
+            var viewRect = self.imageview.visibleRect as CGRect
+            self.imageview.setImage(image.cgImage(forProposedRect: &viewRect, context: nil, hints: nil), imageProperties: [:])
+           
+            if self.zoomToFit {
+                self.imageview.zoomImageToFit(self)
+            } else {
+                self.imageview.zoomFactor = viewZoomFactor
+            }
         }
     }
     
     
-    @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
-        self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
-        self.imageview.image = nil
-        self.imageview2.isHidden = true
-        
+    
+    
+    // MARK: Window Did Resize
+    
+    func windowDidResize(_ notification: Notification) {
+        if self.zoomToFit { self.imageview.zoomImageToFit(self) }
     }
+    
+    
+    
+    
     
     
     
@@ -220,7 +236,7 @@ class SDMainWindowController: NSWindowController,
 
 
 
-
+var defaultImageViewZoom = 0
 
 
 

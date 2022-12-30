@@ -22,6 +22,7 @@ class HistoryItem : NSObject {
     @objc dynamic var guidanceScale = Float()
     var inputImage : CGImage? = nil
     var strenght = Float()
+    var cgimage : CGImage? = nil
     @objc dynamic var image = NSImage()
     var upscaledImage : NSImage? = nil
     var seed = Int()
@@ -151,6 +152,8 @@ extension SDMainWindowController {
         }
     }
     
+    
+    
     // MARK: Load History
     
     func loadHistory() {
@@ -173,5 +176,14 @@ extension SDMainWindowController {
         }
     }
     
+    
+    
+    
+    // MARK: Delete History Item
+    
+    @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
+        self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
+        self.imageview.isHidden = true
+    }
     
 }
