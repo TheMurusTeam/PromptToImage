@@ -90,7 +90,7 @@ class HistoryItem : NSObject {
             self.steps = unarchiver.decodeInteger(forKey: "steps")
             self.guidanceScale = unarchiver.decodeFloat(forKey: "guidanceScale")
             self.strenght = unarchiver.decodeFloat(forKey: "strenght")
-            self.seed = UInt32(unarchiver.decodeInteger(forKey: "seed"))
+            self.seed = UInt32(truncating: (unarchiver.decodeObject(forKey: "seed") as! NSNumber))
             
             // original image
             if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {
@@ -147,7 +147,7 @@ extension SDMainWindowController {
                 try confdata.write(to: URL(fileURLWithPath: historyPath + "/PromptToImage.history"))
                 
             } catch let error as NSError {
-                NSLog("Error" + error.localizedDescription)
+                NSLog("Error!!!!!!!!!!!!!!!!!!!!" + error.localizedDescription)
             }
         }
     }

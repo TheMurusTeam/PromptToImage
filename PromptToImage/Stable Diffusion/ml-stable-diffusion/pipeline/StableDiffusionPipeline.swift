@@ -176,7 +176,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
 
         // Generate random latent samples from specified seed
         print("* generate random latent samples")
-        var latents: [MLShapedArray<Float32>]
+        var latents: [MLShapedArray<Float32>] = []
         let timestepStrength: Float?
         
         if let startingImage {
@@ -186,7 +186,14 @@ public struct StableDiffusionPipeline: ResourceManaging {
                 throw Error.startingImageProvidedWithoutEncoder
             }
             
-            let noiseTuples = generateImage2ImageLatentSamples(imageCount, stdev: 1, seed: seed)
+            // let noiseTuples = generateImage2ImageLatentSamples(imageCount, stdev: 1, seed: seed)
+            
+            // seed incremented +1 for batch images
+            var noiseTuples : [(diagonal: MLShapedArray<Float32>, latentNoise: MLShapedArray<Float32>)] = []
+            for i in 0..<imageCount {
+                noiseTuples.append(contentsOf: generateImage2ImageLatentSamples(1, stdev: 1, seed: seed + UInt32(i)))
+            }
+            
             latents = try noiseTuples.map({
                 try encoder.encode(
                     image: startingImage,
@@ -198,7 +205,14 @@ public struct StableDiffusionPipeline: ResourceManaging {
             print("* generate txt2img latent samples")
             timestepStrength = nil
             // Generate random latent samples from specified seed
-            latents = generateLatentSamples(imageCount, stdev: stdev, seed: seed)
+            //latents = generateLatentSamples(imageCount, stdev: stdev, seed: seed)
+            
+            // seed incremented +1 for batch images
+            for i in 0..<imageCount {
+                latents.append(contentsOf: generateLatentSamples(1, stdev: stdev, seed: seed + UInt32(i)))
+            }
+            
+            
         }
 
         // De-noising loop
@@ -218,7 +232,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
                 latents: latentUnetInput,
                 timeStep: t,
                 hiddenStates: hiddenStates
-            )
+            ) 
 
             noise = performGuidance(noise, guidanceScale)
 

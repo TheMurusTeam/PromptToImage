@@ -100,6 +100,9 @@ extension SDMainWindowController {
                                 imageCount:Int,
                                 sampleTimer:SampleTimer) -> Bool {
         DispatchQueue.main.async {
+            
+            //self.imageview.isHidden = false
+            //self.imageview.setImage(progress.currentImages.last!, imageProperties: [:])
             // progress indicator
             self.indicator.doubleValue = Double(progress.step)
             if progress.step > 0 {
@@ -109,11 +112,10 @@ extension SDMainWindowController {
                 self.indicator.isHidden = false
             }
             // performance indicator
-            //DispatchQueue.main.async {
-                sampleTimer.stop()
-                self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
-                if progress.stepCount != progress.step { sampleTimer.start() }
-            //}
+            sampleTimer.stop()
+            self.speedLabel.stringValue = "\(String(format: "Speed: %.2f ", (1.0 / sampleTimer.median * Double(imageCount)))) step/sec"
+            if progress.stepCount != progress.step { sampleTimer.start() }
+            
         }
         return isRunning
     }

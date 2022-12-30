@@ -54,35 +54,13 @@ extension SDMainWindowController {
         }
         
         let historyCount = self.history.count
-        
-        for cgimage in images { 
+        var theseed = seed
+        for cgimage in images {
             if cgimage != nil {
                 let nsimage = NSImage(cgImage: cgimage!,size: .zero)
                 if upscale {
                     if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
-                        DispatchQueue.main.async {
-                            // add history item
-                            let item = HistoryItem(modelName: currentModelName(),
-                                                   prompt: prompt,
-                                                   negativePrompt: negativePrompt,
-                                                   steps: stepCount,
-                                                   guidanceScale: guidanceScale,
-                                                   inputImage: startingImage,
-                                                   strenght: strength,
-                                                   image: nsimage,
-                                                   upscaledImage: upscaledImage,
-                                                   seed: seed)
-                            DispatchQueue.main.async {
-                                self.historyArrayController.addObject(item)
-                                if cgimage == images.last {
-                                    self.historyArrayController.setSelectionIndex(historyCount)
-                                    self.historyTableView.scrollRowToVisible(historyCount + 1)
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async {
+                        
                         // add history item
                         let item = HistoryItem(modelName: currentModelName(),
                                                prompt: prompt,
@@ -92,18 +70,41 @@ extension SDMainWindowController {
                                                inputImage: startingImage,
                                                strenght: strength,
                                                image: nsimage,
-                                               upscaledImage: nil,
-                                               seed: seed)
+                                               upscaledImage: upscaledImage,
+                                               seed: theseed)
                         DispatchQueue.main.async {
                             self.historyArrayController.addObject(item)
                             if cgimage == images.last {
                                 self.historyArrayController.setSelectionIndex(historyCount)
                                 self.historyTableView.scrollRowToVisible(historyCount + 1)
                             }
+                            
                         }
+                    }
+                } else {
+                    
+                    // add history item
+                    let item = HistoryItem(modelName: currentModelName(),
+                                           prompt: prompt,
+                                           negativePrompt: negativePrompt,
+                                           steps: stepCount,
+                                           guidanceScale: guidanceScale,
+                                           inputImage: startingImage,
+                                           strenght: strength,
+                                           image: nsimage,
+                                           upscaledImage: nil,
+                                           seed: theseed)
+                    DispatchQueue.main.async {
+                        self.historyArrayController.addObject(item)
+                        if cgimage == images.last {
+                            self.historyArrayController.setSelectionIndex(historyCount)
+                            self.historyTableView.scrollRowToVisible(historyCount + 1)
+                        }
+                        
                     }
                 }
             }
+            theseed = theseed + 1
         }
         
         DispatchQueue.main.async {
@@ -149,27 +150,27 @@ extension SDMainWindowController {
                 print("upscaling image...")
                 DispatchQueue.global().async {
                     if let upscaledImage = Upscaler.shared.upscaledImage(image: nsimage) {
+                        
+                        // add history item
+                        let item = HistoryItem(modelName: currentModelName(),
+                                               prompt: prompt,
+                                               negativePrompt: negativePrompt,
+                                               steps: stepCount,
+                                               guidanceScale: guidanceScale,
+                                               inputImage: startingImage,
+                                               strenght: strength,
+                                               image: nsimage,
+                                               upscaledImage: upscaledImage,
+                                               seed: seed)
+                        
                         DispatchQueue.main.async {
-                            // add history item
-                            let item = HistoryItem(modelName: currentModelName(),
-                                                   prompt: prompt,
-                                                   negativePrompt: negativePrompt,
-                                                   steps: stepCount,
-                                                   guidanceScale: guidanceScale,
-                                                   inputImage: startingImage,
-                                                   strenght: strength,
-                                                   image: nsimage,
-                                                   upscaledImage: upscaledImage,
-                                                   seed: seed)
-                            
-                            DispatchQueue.main.async {
-                                self.historyArrayController.addObject(item)
-                                self.historyArrayController.setSelectedObjects([item])
-                                self.historyTableView.scrollToEndOfDocument(nil)
-                            }
+                            self.historyArrayController.addObject(item)
+                            self.historyArrayController.setSelectedObjects([item])
+                            self.historyTableView.scrollToEndOfDocument(nil)
                             // close wait window
                             self.window?.endSheet(self.progrWin)
                         }
+                        
                     }
                 }
             } else {
