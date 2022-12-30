@@ -21,7 +21,7 @@ class HistoryItem : NSObject {
     @objc dynamic var steps = Int()
     @objc dynamic var guidanceScale = Float()
     var inputImage : CGImage? = nil
-    var strenght = Float()
+    var strength = Float()
     var cgimage : CGImage? = nil
     @objc dynamic var image = NSImage()
     var upscaledImage : NSImage? = nil
@@ -35,7 +35,7 @@ class HistoryItem : NSObject {
                      steps:Int,
                      guidanceScale:Float,
                      inputImage:CGImage?,
-                     strenght:Float,
+                     strength:Float,
                      image:NSImage,
                      upscaledImage:NSImage?,
                      seed:UInt32) {
@@ -47,7 +47,7 @@ class HistoryItem : NSObject {
         self.steps = steps
         self.guidanceScale = guidanceScale
         self.inputImage = inputImage
-        self.strenght = strenght
+        self.strength = strength
         self.image = image
         self.upscaledImage = upscaledImage
         self.seed = seed
@@ -66,7 +66,7 @@ class HistoryItem : NSObject {
         archiver.encode(self.negativePrompt, forKey: "negativePrompt")
         archiver.encode(self.steps, forKey: "steps")
         archiver.encode(self.guidanceScale, forKey: "guidanceScale")
-        archiver.encode(self.strenght, forKey: "strenght")
+        archiver.encode(self.strength, forKey: "strength")
         archiver.encode(self.seed, forKey: "seed")
         archiver.encode(self.image.tiffRepresentation, forKey: "image")
         if let inputImage = self.inputImage {
@@ -89,7 +89,7 @@ class HistoryItem : NSObject {
             self.negativePrompt = unarchiver.decodeObject(forKey: "negativePrompt") as? String ?? String()
             self.steps = unarchiver.decodeInteger(forKey: "steps")
             self.guidanceScale = unarchiver.decodeFloat(forKey: "guidanceScale")
-            self.strenght = unarchiver.decodeFloat(forKey: "strenght")
+            self.strength = unarchiver.decodeFloat(forKey: "strength")
             self.seed = UInt32(truncating: (unarchiver.decodeObject(forKey: "seed") as! NSNumber))
             
             // original image

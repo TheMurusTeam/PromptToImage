@@ -26,7 +26,7 @@
                 <outlet property="indindicator" destination="DV1-Dc-d67" id="3wN-Ny-CDe"/>
                 <outlet property="infoPopoverView" destination="yfF-YB-YPQ" id="CIR-02-HUB"/>
                 <outlet property="info_btn_copyInputImage" destination="Yna-Qo-Bqm" id="iVI-B0-tzV"/>
-                <outlet property="info_btn_copyStrenght" destination="9bb-rc-hIu" id="LFX-9V-ihI"/>
+                <outlet property="info_btn_copyStrength" destination="9bb-rc-hIu" id="M9P-jI-CHP"/>
                 <outlet property="info_date" destination="Ana-nH-AeI" id="0r3-n0-Txm"/>
                 <outlet property="info_guidance" destination="gmT-hq-lU0" id="BYT-qn-ZJe"/>
                 <outlet property="info_inputImage" destination="0VA-wS-Juz" id="3IP-Ek-Z9L"/>
@@ -38,7 +38,7 @@
                 <outlet property="info_seed" destination="lcc-DW-gLv" id="ooO-ty-G1K"/>
                 <outlet property="info_size" destination="6CS-a0-ld6" id="rbL-ix-f2I"/>
                 <outlet property="info_steps" destination="4y5-uL-n1g" id="drl-Rd-WfH"/>
-                <outlet property="info_strenght" destination="YIr-rO-hRb" id="amX-s3-OZJ"/>
+                <outlet property="info_strength" destination="YIr-rO-hRb" id="FAe-59-z3s"/>
                 <outlet property="info_upscaleBtn" destination="dZ8-0p-lTA" id="uIf-5v-6vg"/>
                 <outlet property="info_upscaledView" destination="C9A-cn-KBN" id="gmR-ig-1Ix"/>
                 <outlet property="info_upscaledsize" destination="Ha0-5q-qTm" id="Lky-OI-XAY"/>
@@ -72,8 +72,8 @@
                 <outlet property="str_clearBtn" destination="KUQ-ul-P04" id="tM8-C9-R3c"/>
                 <outlet property="str_importBtn" destination="emI-Wg-WqY" id="Uxj-44-HEH"/>
                 <outlet property="str_label" destination="VUz-Mk-wLc" id="Lka-Db-Xfv"/>
-                <outlet property="strenghtLabel" destination="8CE-LN-HRq" id="WOK-EY-k5U"/>
-                <outlet property="strenghtSlider" destination="YAY-Kv-hT6" id="E7v-8e-Geq"/>
+                <outlet property="strengthLabel" destination="8CE-LN-HRq" id="mwc-p1-srg"/>
+                <outlet property="strengthSlider" destination="YAY-Kv-hT6" id="y7H-Nz-ryp"/>
                 <outlet property="unitsPopup" destination="KjR-iA-yOt" id="8Lx-R0-Nvd"/>
                 <outlet property="upscaleCheckBox" destination="B0p-Yp-sNC" id="h1Q-PB-8VM"/>
                 <outlet property="waitCULabel" destination="FRX-TY-DyS" id="IYe-HQ-as2"/>
@@ -364,7 +364,7 @@ DQ
                                                 </constraints>
                                                 <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="80" tickMarkPosition="above" sliderType="linear" id="zqO-TG-ogi"/>
                                                 <connections>
-                                                    <action selector="setStrenght:" target="-2" id="9c9-fb-hEO"/>
+                                                    <action selector="setStrength:" target="-2" id="hxL-Nj-CSm"/>
                                                 </connections>
                                             </slider>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ctJ-K6-GhM">
@@ -1151,7 +1151,7 @@ CA
                             </buttonCell>
                             <symbolConfiguration key="symbolConfiguration" weight="bold"/>
                             <connections>
-                                <action selector="infoCopyStrenght:" target="-2" id="slD-Ve-L6Q"/>
+                                <action selector="infoCopyStrength:" target="-2" id="c11-Ny-fIC"/>
                             </connections>
                         </button>
                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yna-Qo-Bqm">
@@ -1186,7 +1186,7 @@ CA
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YIr-rO-hRb">
-                            <rect key="frame" x="55" y="119" width="132" height="16"/>
+                            <rect key="frame" x="55" y="119" width="81" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <textFieldCell key="cell" allowsUndo="NO" title="0.8" id="7Ug-bc-eZR">
                                 <font key="font" metaFont="system"/>

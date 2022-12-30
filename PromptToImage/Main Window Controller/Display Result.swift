@@ -68,7 +68,7 @@ extension SDMainWindowController {
                                                steps: stepCount,
                                                guidanceScale: guidanceScale,
                                                inputImage: startingImage,
-                                               strenght: strength,
+                                               strength: strength,
                                                image: nsimage,
                                                upscaledImage: upscaledImage,
                                                seed: theseed)
@@ -90,7 +90,7 @@ extension SDMainWindowController {
                                            steps: stepCount,
                                            guidanceScale: guidanceScale,
                                            inputImage: startingImage,
-                                           strenght: strength,
+                                           strength: strength,
                                            image: nsimage,
                                            upscaledImage: nil,
                                            seed: theseed)
@@ -158,7 +158,7 @@ extension SDMainWindowController {
                                                steps: stepCount,
                                                guidanceScale: guidanceScale,
                                                inputImage: startingImage,
-                                               strenght: strength,
+                                               strength: strength,
                                                image: nsimage,
                                                upscaledImage: upscaledImage,
                                                seed: seed)
@@ -181,7 +181,7 @@ extension SDMainWindowController {
                                        steps: stepCount,
                                        guidanceScale: guidanceScale,
                                        inputImage: startingImage,
-                                       strenght: strength,
+                                       strength: strength,
                                        image: nsimage,
                                        upscaledImage: nil, seed: seed)
                 DispatchQueue.main.async {

@@ -50,7 +50,7 @@ extension SDMainWindowController {
         self.info_seed.stringValue = String(item.seed)
         self.info_steps.stringValue = String(item.steps)
         self.info_guidance.stringValue = String(item.guidanceScale)
-        self.info_strenght.stringValue = String(item.strenght)
+        self.info_strength.stringValue = String(item.strength)
         self.info_inputImage.image = NSImage()
         if let cgimage = item.inputImage {
             self.info_inputImage.image = NSImage(cgImage: cgimage, size: .zero)
@@ -159,10 +159,10 @@ extension SDMainWindowController {
         self.guidanceSlider.doubleValue = info_guidance.doubleValue * 100
         self.guidanceLabel.stringValue = String(info_guidance.doubleValue)
     }
-    // input image strenght
-    @IBAction func infoCopyStrenght(_ sender: Any) {
-        self.strenghtSlider.doubleValue = info_strenght.doubleValue * 100
-        self.strenghtLabel.stringValue = String(info_strenght.doubleValue)
+    // input image strength
+    @IBAction func infoCopyStrength(_ sender: Any) {
+        self.strengthSlider.doubleValue = info_strength.doubleValue * 100
+        self.strengthLabel.stringValue = String(info_strength.doubleValue)
     }
     // input image
     @IBAction func infoCopyInputImage(_ sender: Any) {

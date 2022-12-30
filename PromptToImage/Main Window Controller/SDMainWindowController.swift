@@ -51,12 +51,12 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var guidanceSlider: NSSlider!
     // img2img
     @IBOutlet weak var img2imgView: NSView!
-    @IBOutlet weak var strenghtSlider: NSSlider!
+    @IBOutlet weak var strengthSlider: NSSlider!
     @IBOutlet weak var str_clearBtn: NSButton!
     @IBOutlet weak var str_importBtn: NSButton!
     @IBOutlet weak var str_resizePopup: NSPopUpButton!
     @IBOutlet weak var str_label: NSTextField!
-    @IBOutlet weak var strenghtLabel: NSTextField!
+    @IBOutlet weak var strengthLabel: NSTextField!
     @IBOutlet weak var inputImageview: NSImageView!
     // images count
     @IBOutlet weak var imageCountSlider: NSSlider!
@@ -95,13 +95,13 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_steps: NSTextField!
     @IBOutlet weak var info_guidance: NSTextField!
     @IBOutlet weak var info_inputImage: NSImageView!
-    @IBOutlet weak var info_strenght: NSTextField!
+    @IBOutlet weak var info_strength: NSTextField!
     @IBOutlet weak var info_size: NSTextField!
     @IBOutlet weak var info_upscaledsize: NSTextField!
     @IBOutlet weak var info_upscaledLabel: NSTextField!
     @IBOutlet weak var info_model: NSTextField!
     @IBOutlet weak var info_inputImageView: NSView!
-    @IBOutlet weak var info_btn_copyStrenght: NSButton!
+    @IBOutlet weak var info_btn_copyStrength: NSButton!
     @IBOutlet weak var info_btn_copyInputImage: NSButton!
     @IBOutlet var info_upscaledView: NSView!
     @IBOutlet weak var info_upscaleBtn: NSButton!

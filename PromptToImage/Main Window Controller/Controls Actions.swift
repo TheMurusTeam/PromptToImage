@@ -32,7 +32,7 @@ extension SDMainWindowController {
         self.generateImage(prompt: self.promptView.stringValue,
                            negativePrompt: self.negativePromptView.stringValue,
                            startingImage: inputImage,
-                           strength: inputImage != nil ? self.strenghtLabel.floatValue : Float(1),
+                           strength: inputImage != nil ? self.strengthLabel.floatValue : Float(1),
                            imageCount: self.imageCountSlider.integerValue, //self.imageCountStepper.integerValue,
                            stepCount: self.stepsSlider.integerValue,
                            seed: seed,
@@ -85,8 +85,8 @@ extension SDMainWindowController {
     
     // MARK: IMG2IMG Input Image Controls
     
-    @IBAction func setStrenght(_ sender: NSSlider) {
-        self.strenghtLabel.stringValue = "\(Double(sender.integerValue) / 100)"
+    @IBAction func setStrength(_ sender: NSSlider) {
+        self.strengthLabel.stringValue = "\(Double(sender.integerValue) / 100)"
     }
     
     @IBAction func clearInputImage(_ sender: NSButton) {
