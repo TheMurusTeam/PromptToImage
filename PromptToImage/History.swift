@@ -83,6 +83,7 @@ class HistoryItem : NSObject {
             let unarchiver = try NSKeyedUnarchiver.init(forReadingFrom: data)
             unarchiver.requiresSecureCoding = false
             defer { unarchiver.finishDecoding() }
+            //unarchiver.decode
             self.modelName = unarchiver.decodeObject(forKey: "modelName") as? String ?? String()
             self.date = unarchiver.decodeObject(forKey: "date") as? Date ?? Date()
             self.prompt = unarchiver.decodeObject(forKey: "prompt") as? String ?? String()
@@ -90,7 +91,9 @@ class HistoryItem : NSObject {
             self.steps = unarchiver.decodeInteger(forKey: "steps")
             self.guidanceScale = unarchiver.decodeFloat(forKey: "guidanceScale")
             self.strength = unarchiver.decodeFloat(forKey: "strength")
-            self.seed = UInt32(truncating: (unarchiver.decodeObject(forKey: "seed") as! NSNumber))
+            let storedSeed = (unarchiver.decodeObject(forKey: "seed") as? NSNumber) ?? (unarchiver.decodeInteger(forKey: "seed")) as NSNumber
+            self.seed = UInt32(truncating: storedSeed)
+            //self.seed = UInt32(truncating: (unarchiver.decodeObject(forKey: "seed") as! NSNumber))
             
             // original image
             if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {
