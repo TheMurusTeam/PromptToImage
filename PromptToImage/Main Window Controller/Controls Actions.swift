@@ -22,9 +22,9 @@ extension SDMainWindowController {
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed
-        var seed : Int = Int.random(in: 0..<Int(UInt32.max))
+        var seed : UInt32 = UInt32(Int.random(in: 0..<Int(UInt32.max)))
         if self.seedBtn.state == .off && (self.seedView.integerValue < Int(UInt32.max)) && (self.seedView.integerValue > 0) {
-            seed = self.seedView.integerValue
+            seed = UInt32(self.seedView.integerValue)
         }
         self.seedView.stringValue = String(seed)
         

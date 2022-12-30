@@ -142,7 +142,7 @@ public struct StableDiffusionPipeline: ResourceManaging {
         strength: Float = 1.0,
         imageCount: Int = 1,
         stepCount: Int = 50,
-        seed: Int = 0,
+        seed: UInt32 = 0,
         guidanceScale: Float = 7.5,
         disableSafety: Bool = false,
         scheduler schedulerType: StableDiffusionScheduler = .pndmScheduler,
@@ -257,11 +257,11 @@ public struct StableDiffusionPipeline: ResourceManaging {
         return try decodeToImages(latents, disableSafety: disableSafety)
     }
 
-    func generateLatentSamples(_ count: Int, stdev: Float, seed: Int) -> [MLShapedArray<Float32>] {
+    func generateLatentSamples(_ count: Int, stdev: Float, seed: UInt32) -> [MLShapedArray<Float32>] {
         var sampleShape = unet.latentSampleShape
         sampleShape[0] = 1
 
-        var random = NumPyRandomSource(seed: UInt32(truncatingIfNeeded: seed))
+        var random = NumPyRandomSource(seed: seed)
         let samples = (0..<count).map { _ in
             MLShapedArray<Float32>(
                 converting: random.normalShapedArray(sampleShape, mean: 0.0, stdev: Double(stdev)))
@@ -278,11 +278,11 @@ public struct StableDiffusionPipeline: ResourceManaging {
     ///   - diagonalAndLatentNoiseIsSame: Diffusions library does not seem to use the same noise for the `DiagonalGaussianDistribution` operation,
     ///     but I have seen implementations of pipelines where it is the same.
     /// - Returns: An array of tuples of noise values with length of batch size.
-    func generateImage2ImageLatentSamples(_ count: Int, stdev: Float, seed: Int, diagonalAndLatentNoiseIsSame: Bool = false) -> [(diagonal: MLShapedArray<Float32>, latentNoise: MLShapedArray<Float32>)] {
+    func generateImage2ImageLatentSamples(_ count: Int, stdev: Float, seed: UInt32, diagonalAndLatentNoiseIsSame: Bool = false) -> [(diagonal: MLShapedArray<Float32>, latentNoise: MLShapedArray<Float32>)] {
         var sampleShape = unet.latentSampleShape
         sampleShape[0] = 1
 
-        var random = NumPyRandomSource(seed: UInt32(truncatingIfNeeded: seed))
+        var random = NumPyRandomSource(seed: seed)
         let samples = (0..<count).map { _ in
             if diagonalAndLatentNoiseIsSame {
                 let noise = MLShapedArray<Float32>(

@@ -25,7 +25,7 @@ class HistoryItem : NSObject {
     var cgimage : CGImage? = nil
     @objc dynamic var image = NSImage()
     var upscaledImage : NSImage? = nil
-    var seed = Int()
+    var seed = UInt32()
     var upscaled = Bool()
     
     // Init history item
@@ -38,7 +38,7 @@ class HistoryItem : NSObject {
                      strenght:Float,
                      image:NSImage,
                      upscaledImage:NSImage?,
-                     seed:Int) {
+                     seed:UInt32) {
         self.init()
         self.modelName = modelName
         self.date = Date()
@@ -90,7 +90,7 @@ class HistoryItem : NSObject {
             self.steps = unarchiver.decodeInteger(forKey: "steps")
             self.guidanceScale = unarchiver.decodeFloat(forKey: "guidanceScale")
             self.strenght = unarchiver.decodeFloat(forKey: "strenght")
-            self.seed = unarchiver.decodeInteger(forKey: "seed")
+            self.seed = UInt32(unarchiver.decodeInteger(forKey: "seed"))
             
             // original image
             if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {

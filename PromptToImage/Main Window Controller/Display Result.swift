@@ -20,7 +20,7 @@ extension SDMainWindowController {
                        startingImage: CGImage?,
                        strength: Float,
                        stepCount:Int,
-                       seed:Int,
+                       seed:UInt32,
                        guidanceScale:Float) {
         
         if images.count == 1 {
@@ -44,7 +44,7 @@ extension SDMainWindowController {
                                startingImage: CGImage?,
                                strength: Float,
                                stepCount:Int,
-                               seed:Int,
+                               seed:UInt32,
                                guidanceScale:Float) {
         
         DispatchQueue.main.async {
@@ -124,7 +124,7 @@ extension SDMainWindowController {
                             startingImage: CGImage?,
                             strength: Float,
                             stepCount:Int,
-                            seed:Int,
+                            seed:UInt32,
                             guidanceScale:Float) {
         
         // if image != nil {

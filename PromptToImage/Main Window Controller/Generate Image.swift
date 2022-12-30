@@ -24,7 +24,7 @@ extension SDMainWindowController {
                        strength: Float = 1,
                        imageCount: Int = 1,
                        stepCount:Int,
-                       seed:Int,
+                       seed:UInt32,
                        guidanceScale:Float,
                        scheduler:StableDiffusionScheduler,
                        upscale:Bool) {
