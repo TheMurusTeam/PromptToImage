@@ -60,7 +60,7 @@ MacMini M1, 8core GPU, 16Gb RAM (macOS 13.1):
 # Known issues
 1. Attempting to load an -ORIGINAL model using "CPU and Neural Engine" or "All Compute Units" fails.
 2. The first time you launch the app, loading a -SPLIT_EINSUM model using "CPU and Neural Engine" may take up to 2 minutes.
-3. Info popover of batch images display the wrong seed for all generated images excluding the firts one.
+3. Info popover of batch images display the wrong seed for all generated images excluding the first one.
 
 Keep the OPTION key pressed when launching the app in order to restore default compute units (CPU and GPU)
 
