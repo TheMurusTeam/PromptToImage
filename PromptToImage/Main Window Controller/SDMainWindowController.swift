@@ -9,11 +9,14 @@ import Cocoa
 import Quartz
 
 func displayErrorAlert(txt:String) {
-    let alert = NSAlert()
-    alert.messageText = "Error"
-    alert.informativeText = txt
-    alert.runModal()
+    DispatchQueue.main.async {
+        let alert = NSAlert()
+        alert.messageText = "Error"
+        alert.informativeText = txt
+        alert.runModal()
+    }
 }
+
 
 class SDMainWindowController: NSWindowController,
                               NSWindowDelegate,
@@ -23,9 +26,9 @@ class SDMainWindowController: NSWindowController,
                               NSTableViewDelegate {
     
     
-    @IBOutlet weak var splitview: NSSplitView!
-    
+    @IBOutlet weak var imagescrollview: NSScrollView!
     @IBOutlet weak var imageview: IKImageView!
+    @IBOutlet weak var imageControlsView: NSView!
     @IBOutlet weak var stepsSlider: NSSlider!
     @IBOutlet weak var stepsLabel: NSTextField!
     @IBOutlet weak var indicator: NSProgressIndicator!
@@ -42,7 +45,6 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var progrWin: NSWindow!
     @IBOutlet weak var progrLabel: NSTextField!
     @IBOutlet weak var upscaleCheckBox: NSButton!
-    @IBOutlet weak var saveBtn: NSButton!
     @IBOutlet weak var speedLabel: NSTextField!
     @IBOutlet weak var guidanceLabel: NSTextField!
     @IBOutlet weak var guidanceSlider: NSSlider!
@@ -51,13 +53,11 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var strengthSlider: NSSlider!
     @IBOutlet weak var str_clearBtn: NSButton!
     @IBOutlet weak var str_importBtn: NSButton!
-    @IBOutlet weak var str_resizePopup: NSPopUpButton!
     @IBOutlet weak var str_label: NSTextField!
     @IBOutlet weak var strengthLabel: NSTextField!
     @IBOutlet weak var inputImageview: NSImageView!
     // images count
     @IBOutlet weak var imageCountSlider: NSSlider!
-    @IBOutlet weak var imageCountStepper: NSStepper!
     @IBOutlet weak var imageCountLabel: NSTextField!
     // seed
     @IBOutlet weak var seedView: NSTextField!
@@ -70,19 +70,16 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var schedulerPopup: NSPopUpButton!
     // models
     @IBOutlet weak var modelsPopup: NSPopUpButton!
-    
-    // table view menu
+    // table view menu items
     @IBOutlet weak var item_saveAllSelectedImages: NSMenuItem!
-    
     // history
     @IBOutlet weak var historyTableView: NSTableView!
     @objc dynamic var history = [HistoryItem]()
     @IBOutlet var historyArrayController: NSArrayController!
     @IBOutlet weak var settings_keepHistoryBtn: NSButton!
-    var currentHistoryItem : HistoryItem? = nil // used for sharing a single item from item's share btn
-    
+    var currentHistoryItemForSharePicker : HistoryItem? = nil // used for sharing a single item from item's share btn
     // info popover
-    var currentInfoPopoverItem : HistoryItem? = nil
+    var currentHistoryItemForInfoPopover : HistoryItem? = nil
     var infoPopover : NSPopover? = nil
     @IBOutlet var infoPopoverView: NSView!
     @IBOutlet weak var info_date: NSTextField!
@@ -95,15 +92,12 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_strength: NSTextField!
     @IBOutlet weak var info_size: NSTextField!
     @IBOutlet weak var info_upscaledsize: NSTextField!
-    @IBOutlet weak var info_upscaledLabel: NSTextField!
     @IBOutlet weak var info_model: NSTextField!
+    @IBOutlet weak var info_sampler: NSTextField!
     @IBOutlet weak var info_inputImageView: NSView!
     @IBOutlet weak var info_btn_copyStrength: NSButton!
     @IBOutlet weak var info_btn_copyInputImage: NSButton!
     @IBOutlet var info_upscaledView: NSView!
-    @IBOutlet weak var info_upscaleBtn: NSButton!
-    @IBOutlet weak var info_progress: NSProgressIndicator!
-    
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
     @IBOutlet weak var modelsPopupMenu: NSMenu!
@@ -111,32 +105,47 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var settings_historyLimitLabel: NSTextField!
     @IBOutlet weak var settings_historyLimitStepper: NSStepper!
     @IBOutlet weak var settings_downloadBtn: NSButton!
-    
-    // Download model
+    // Download default model
     @IBOutlet var downloadWindow: NSWindow!
     @IBOutlet weak var downloadProgr: NSProgressIndicator!
     @IBOutlet weak var progressLabel: NSTextField!
     @IBOutlet weak var progressValueLabel: NSTextField!
     @IBOutlet weak var downloadButton: NSButton!
-    
-    // main info button (model card)
+    // model info button (show model card on Huggingface)
     @IBOutlet weak var modelCardBtn: NSButton!
     @IBAction func clickModelCardBtn(_ sender: Any) {
-        if let name = currentModelRealName {
+        if let name = currentModelRealName { // real name taken from Unet model
             let url = "https://huggingface.co/\(name)"
-            if let url = URL(string: url) {
-                NSWorkspace.shared.open(url)
-            }
+            if let url = URL(string: url) { NSWorkspace.shared.open(url) }
         }
     }
-    
-    // IKImageView
+    // IKImageView status
     var viewZoomFactor : CGFloat = 1
     var zoomToFit : Bool = true
+    // IKImageView image popup
+    @IBOutlet weak var upscalePopup: NSPopUpButton!
+    @IBOutlet weak var imageItem_upscale: NSMenuItem!
+    // model alert accessory view
+    @IBOutlet var modelAlertView: NSView!
+    @IBOutlet weak var modelAlertCUPopup: NSPopUpButton!
+    // original/upscaled switch
+    @IBOutlet weak var originalUpscaledSwitch: NSSegmentedControl!
+    // compute units images
+    @IBOutlet weak var led_cpu: NSImageView!
+    @IBOutlet weak var led_gpu: NSImageView!
+    @IBOutlet weak var led_ane: NSImageView!
     
-    @IBOutlet weak var modelMainLabel: NSTextField!
-    
-    
+    // models popup accessory view
+    @IBOutlet var modelsPopupAccView: NSView!
+    // open huggingface repo in browser
+    @IBAction func openModelsRepo(_ sender: Any) {
+        let url = "https://huggingface.co/TheMurusTeam"
+        if let url = URL(string: url) { NSWorkspace.shared.open(url) }
+    }
+    @IBAction func openAppleRepo(_ sender: Any) {
+        let url = "https://github.com/apple/ml-stable-diffusion"
+        if let url = URL(string: url) { NSWorkspace.shared.open(url) }
+    }
     
     
     
@@ -147,7 +156,8 @@ class SDMainWindowController: NSWindowController,
         self.init(windowNibName: windowNibName)
         NSApplication.shared.activate(ignoringOtherApps: true)
         self.window?.makeKeyAndOrderFront(nil)
-        self.window?.appearance = NSAppearance(named: .darkAqua)
+        //self.window?.appearance = NSAppearance(named: .darkAqua)
+        
     }
     
     
@@ -159,9 +169,8 @@ class SDMainWindowController: NSWindowController,
         self.setUnitsPopup()
         self.populateModelsPopup()
         self.readStoredControlsValues()
-        //self.splitview.setPosition(297, ofDividerAt: 0)
         self.loadHistory()
-        //
+        // main IKImageView
         self.imageview.hasVerticalScroller = true
         self.imageview.hasHorizontalScroller = true
         self.imageview.autohidesScrollers = false
@@ -178,6 +187,36 @@ class SDMainWindowController: NSWindowController,
     }
     
     
+    
+    // MARK: Menu Delegate
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        if menu == self.modelsPopup.menu {
+            // Models popup
+            self.populateModelsPopup()
+        } else if menu == self.unitsPopup.menu {
+            // Compute Units popup
+            self.setUnitsPopup()
+        } else if menu == self.upscalePopup.menu {
+            // Upscale popup
+            self.populateUpscalePopup()
+            /*
+            guard !self.historyArrayController.selectedObjects.isEmpty else { return }
+            let displayedHistoryItem = self.historyArrayController.selectedObjects[0] as! HistoryItem
+            self.imageItem_upscale.isEnabled = displayedHistoryItem.upscaledImage == nil
+            */
+            
+        } else if menu == self.historyTableView.menu {
+            // history tableview contextual menu
+            self.item_saveAllSelectedImages.isEnabled = !self.historyArrayController.selectedObjects.isEmpty
+        }
+    }
+    
+    //
+    
+    
+    
+    
     // MARK: Enable/Disable IMG2IMG
     
     // display/hide img2img controls view according to pipeline parameter
@@ -192,19 +231,23 @@ class SDMainWindowController: NSWindowController,
     
     
     
-    // MARK: Table View Delegate
     
-    var imageProperties: NSDictionary = Dictionary<String, String>() as NSDictionary
+    // MARK: TableView Selection Did Change
     
     func tableViewSelectionDidChange(_ notification: Notification) {
         if self.historyArrayController.selectedObjects.isEmpty {
             self.imageview.isHidden = true
+            self.imageControlsView.isHidden = true
         } else {
-            let image = (self.historyArrayController.selectedObjects[0] as! HistoryItem).upscaledImage ?? (self.historyArrayController.selectedObjects[0] as! HistoryItem).image
+            let displayedHistoryItem = self.historyArrayController.selectedObjects[0] as! HistoryItem
+            let image = displayedHistoryItem.upscaledImage ?? displayedHistoryItem.image
+            self.originalUpscaledSwitch.isHidden = displayedHistoryItem.upscaledImage == nil
+            self.originalUpscaledSwitch.selectSegment(withTag: displayedHistoryItem.upscaledImage == nil ? 0 : 1)
             self.imageview.isHidden = false
+            self.imageControlsView.isHidden = false
             var viewRect = self.imageview.visibleRect as CGRect
             self.imageview.setImage(image.cgImage(forProposedRect: &viewRect, context: nil, hints: nil), imageProperties: [:])
-           
+            // zoom
             if self.zoomToFit {
                 self.imageview.zoomImageToFit(self)
             } else {
@@ -223,40 +266,8 @@ class SDMainWindowController: NSWindowController,
     }
     
     
-    @IBOutlet weak var led_cpu: NSImageView!
-    @IBOutlet weak var led_gpu: NSImageView!
-    @IBOutlet weak var led_ane: NSImageView!
     
-    func setCUImages() {
-        self.led_cpu.image = NSImage(named:"cpuon")!
-        self.led_cpu.isEnabled = true
-        switch currentComputeUnits {
-        case .cpuAndGPU:
-            self.led_gpu.image = NSImage(named:"gpuon")!
-            self.led_gpu.isEnabled = true
-            self.led_ane.image = NSImage(named:"aneoff")!
-            self.led_ane.isEnabled = false
-        case .cpuAndNeuralEngine:
-            self.led_gpu.image = NSImage(named:"gpuoff")!
-            self.led_gpu.isEnabled = false
-            self.led_ane.image = NSImage(named:"aneon")!
-            self.led_ane.isEnabled = true
-        default:
-            self.led_gpu.image = NSImage(named:"gpuon")!
-            self.led_gpu.isEnabled = true
-            self.led_ane.image = NSImage(named:"aneon")!
-            self.led_ane.isEnabled = true
-        }
-    }
     
-    func clearCUImages() {
-        self.led_cpu.image = NSImage(named:"cpuoff")!
-        self.led_cpu.isEnabled = false
-        self.led_ane.image = NSImage(named:"aneoff")!
-        self.led_ane.isEnabled = false
-        self.led_gpu.image = NSImage(named:"gpuoff")!
-        self.led_gpu.isEnabled = false
-    }
     
     
     
@@ -265,7 +276,6 @@ class SDMainWindowController: NSWindowController,
 
 
 
-var defaultImageViewZoom = 0
 
 
 
@@ -276,32 +286,4 @@ var defaultImageViewZoom = 0
 
 
 
-class SCUTableView : NSTableView {
-    
-    override func menu(for event: NSEvent) -> NSMenu? {
-        let row = self.row(at: self.convert(event.locationInWindow, from: nil))
-        if row != -1 {
-            // click destro su record reale, decido cosa fare in base al numero di righe selezionate...
-            
-            if self.selectedRowIndexes.count <= 1 {
-                // è attualmente selezionata una riga sola oppure nessuna riga
-                // quindi forzo la selezione della riga sotto al click destro
-                let iset = NSIndexSet(index: row)
-                self.selectRowIndexes(iset as IndexSet, byExtendingSelection: false)
-            } else {
-                // sono attualmente selezionate più righe
-                // non faccio nulla, poppo il menu dovunque sia il puntatore lasciando intatta la selezione
-            }
-            
-        } else {
-            
-            // click destro su spazio vuoto quindi deseleziono tutto
-            let iset = NSIndexSet()
-            self.selectRowIndexes(iset as IndexSet, byExtendingSelection: false)
-        }
-        
-        // in ogni caso poppo il menu bindato alla tableview
-        return self.menu
-        
-    }
-}
+

@@ -7,7 +7,8 @@
 
 import Foundation
 import Cocoa
- 
+import UniformTypeIdentifiers
+import CoreML
 
 
 func builtInModelExists() -> Bool {
@@ -29,12 +30,19 @@ func currentModelName() -> String {
 }
 
 
-
+// MARK: Create dirs
 func createModelsDir() {
     if !FileManager.default.fileExists(atPath: customModelsDirectoryPath) {
         do {
             try FileManager.default.createDirectory(atPath: customModelsDirectoryPath, withIntermediateDirectories: true)
-        } catch { print("error creating custom models directory at \(customModelsDirectoryPath)")}
+        } catch { print("error creating custom stable diffusion models directory at \(customModelsDirectoryPath)")}
+    }
+}
+func createUpscalersDir() {
+    if !FileManager.default.fileExists(atPath: customUpscalersDirectoryPath) {
+        do {
+            try FileManager.default.createDirectory(atPath: customUpscalersDirectoryPath, withIntermediateDirectories: true)
+        } catch { print("error creating custom upscale models directory at \(customUpscalersDirectoryPath)")}
     }
 }
 func createHistoryDir() {
@@ -45,22 +53,14 @@ func createHistoryDir() {
     }
 }
 
+
+
 func revealCustomModelsDirInFinder() {
     NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: customModelsDirectoryPath).absoluteURL])
 }
 
-func createNewCustomModelDirectory(name:String) -> Bool {
-    let path = "\(customModelsDirectoryPath)/\(name)"
-    if FileManager.default.fileExists(atPath: path) { return false }
-    do {
-        try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true)
-    } catch {
-        print("error creating custom model directory at \(path)")
-        return false
-    }
-    return true
-}
 
+// MARK: Get Custom SD Models List
 
 func installedCustomModels() -> [URL] {
     var urls = [URL]()
@@ -72,6 +72,8 @@ func installedCustomModels() -> [URL] {
 }
 
 
+
+// check if model directory contains all needed files
 extension URL {
     var isModelURL: Bool {
         FileManager.default.fileExists(atPath: self.path + "/merges.txt") &&
@@ -81,81 +83,161 @@ extension URL {
         FileManager.default.fileExists(atPath: self.path + "/VAEDecoder.mlmodelc")
     }
     
+} 
+
+
+// MARK: Get custom upscale models list
+
+func installedCustomUpscalers() -> [URL] {
+    var urls = [URL]()
+    do {
+        let directoryContents = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: customUpscalersDirectoryPath),includingPropertiesForKeys: nil)
+        urls = directoryContents.filter({ $0.isCompiledCoreMLModel })
+    } catch {}
+    return urls
 }
 
 
 
+
+
 extension SDMainWindowController {
-    
-    // MARK: Menu Delegate
-    
-    func menuWillOpen(_ menu: NSMenu) {
-        if menu == self.modelsPopup.menu {
-            self.populateModelsPopup()
-        } else if menu == self.historyTableView.menu {
-            self.item_saveAllSelectedImages.isEnabled = !self.historyArrayController.selectedObjects.isEmpty
-        }
-    }
+
     
     
+    // MARK: Import custom SD model
     
-    // MARK: Download models from huggingface
-    
-    @IBAction func clickDownloadModels(_ sender: Any) {
-        let url = "https://huggingface.co/TheMurusTeam"
-        if let url = URL(string: url) {
-            NSWorkspace.shared.open(url)
-        }
-    }
-    
-    
-    
-    // MARK: Populate Models Popup
-    
-    func populateModelsPopup() {
-        // create menu items
-        if let menu = self.modelsPopup.menu {
-            menu.removeAllItems()
-            if builtInModelExists() {
-                // default model
-                let item1 = NSMenuItem()
-                item1.title = "Stable Diffusion 2.1 SPLIT EINSUM (Default)"
-                item1.representedObject = builtInModelResourcesURL
-                menu.addItem(item1)
-                let sep = NSMenuItem.separator()
-                menu.addItem(sep)
+    func importModel() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.nameFieldLabel = "Model folder"
+        panel.prompt = "Import Model"
+        panel.message = "Select a CoreML Stable Diffusion model directory"
+        let destinationPath = URL(fileURLWithPath: customModelsDirectoryPath).absoluteURL.path
+        
+        panel.beginSheetModal(for: self.window!, completionHandler: { response in
+            guard response == NSApplication.ModalResponse.OK else { return }
+            guard let modelUrl = panel.url else { return }
+            let modelDirName = modelUrl.lastPathComponent
+            guard modelUrl.isModelURL else {
+                // invalid model url, missing files?
+                displayErrorAlert(txt: "Invalid model\n\nA CoreML Stable Diffusion model directory must include these files at least:\n- merges.txt, vocab.json, TextEncoder.mlmodelc, Unet.mlmodelc, VAEDecoder.mlmodelc")
+                return
             }
-            // custom models
-            let urls = installedCustomModels()
-            for modelurl in urls {
-                if modelurl.isFolder {
-                    let item = NSMenuItem()
-                    item.title = modelurl.lastPathComponent
-                    item.representedObject = modelurl
-                    menu.addItem(item)
-                }
+            print("Valid <<\(modelDirName)>> model directory at path: \(modelUrl.path)")
+            
+            let toPath = destinationPath + "/" + modelDirName
+            if FileManager.default.fileExists(atPath: toPath) {
+                print("model already exists at \(toPath)")
+                displayErrorAlert(txt: "Model already installed")
+                return
             }
-        }
-    }
-    
-    
-    func setModelsPopup() {
-        // set selected item
-        if let menu = self.modelsPopup.menu {
-            for mitem in menu.items {
-                if let url = mitem.representedObject as? URL {
-                    if url == currentModelResourcesURL {
-                        self.modelsPopup.select(mitem)
-                        print("current model: \(mitem.title)")
+            panel.endSheet(self.window!)
+            
+            DispatchQueue.global().async {
+                DispatchQueue.main.async {
+                    self.waitLabel.stringValue = "Installing model"
+                    self.waitInfoLabel.stringValue = modelDirName
+                    self.waitCULabel.stringValue = ""
+                    self.window?.beginSheet(self.waitWin)
+                    
+                    // copy model to app's custom models dir
+                    print("copying model directory \(modelUrl.path) to PromptToImage custom models directory at \(toPath)")
+                    DispatchQueue.global().async {
+                        do {
+                            try FileManager.default.copyItem(atPath: modelUrl.path, toPath: customModelsDirectoryPath + "/" + modelDirName)
+                        } catch { self.presentError(error) }
+                        
+                        DispatchQueue.main.async {
+                            self.window?.endSheet(self.waitWin)
+                            
+                            // load model
+                            self.loadModelFromURL(modelName: modelDirName, modelUrl: URL(fileURLWithPath: toPath))
+                        }
                     }
                 }
             }
-        }
+        })
     }
     
     
     
+    // MARK: Import custom upscale model
     
+    func importUpscaleModel() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.allowedFileTypes = ["com.apple.coreml.model"]
+        panel.nameFieldLabel = "Model folder"
+        panel.prompt = "Import Upscale Model"
+        panel.message = "Select a CoreML upscale model file"
+        let destinationPath = URL(fileURLWithPath: customUpscalersDirectoryPath).absoluteURL.path
+        
+        panel.beginSheetModal(for: self.window!, completionHandler: { response in
+            guard response == NSApplication.ModalResponse.OK else { return }
+            guard let modelUrl = panel.url else { return }
+            let modelName = modelUrl.lastPathComponent
+            let compiledModelName = modelUrl.lastPathComponent + "c"
+            let toPath = destinationPath + "/" + compiledModelName
+            panel.endSheet(self.window!)
+            
+            DispatchQueue.global().async {
+                DispatchQueue.main.async {
+                    self.waitLabel.stringValue = "Installing upscale model"
+                    self.waitInfoLabel.stringValue = modelName
+                    self.waitCULabel.stringValue = ""
+                    self.window?.beginSheet(self.waitWin)
+                    
+                    // compile CoreML model
+                    DispatchQueue.global().async {
+                        var temporaryModelURL : URL? = nil
+                        do {
+                            print("compiling model...")
+                            temporaryModelURL = try MLModel.compileModel(at: modelUrl)
+                        } catch {
+                            // error compiling model
+                            displayErrorAlert(txt: "Unable to compile CoreML model")
+                            return
+                        }
+                        
+                        // copy model to app's custom models dir
+                        guard let compiledModelUrl = temporaryModelURL else {
+                            displayErrorAlert(txt: "Invalid CoreML model")
+                            return
+                        }
+                        
+                        // copy file
+                        print("copying model directory \(compiledModelUrl.path) to PromptToImage custom models directory at \(toPath)")
+                        
+                        do {
+                            try FileManager.default.copyItem(atPath: compiledModelUrl.path, toPath: toPath)
+                        } catch {
+                            DispatchQueue.main.async {
+                                self.window?.endSheet(self.waitWin)
+                                self.presentError(error)
+                            }
+                            return
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.window?.endSheet(self.waitWin)
+                            let alert = NSAlert()
+                            alert.messageText = "Done"
+                            alert.informativeText = "Upscale model \(compiledModelName) installed"
+                            alert.runModal()
+                        }
+                        
+                    }
+                    
+                }
+            }
+        })
+        
+    }
     
     
     

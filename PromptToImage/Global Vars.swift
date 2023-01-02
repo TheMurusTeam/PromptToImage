@@ -18,6 +18,7 @@ let defaultModelPublicURL = "https://www.murusfirewall.com/downloads/Stable-Diff
 // dirs for custom models and history file
 // this is a sandboxed app, these dirs are inside app's container in user home dir
 let customModelsDirectoryPath = "models"
+let customUpscalersDirectoryPath = "upscale"
 let historyPath = "history"
 
 // win controllers store

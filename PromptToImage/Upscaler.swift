@@ -11,9 +11,9 @@ import Cocoa
 import Vision
 import Accelerate
 
+var currentUpscalerName : String = String()
 
-
-// default model: realesrgan512
+// default model: realesrgan512 
 
 class Upscaler : NSObject {
     
@@ -32,7 +32,7 @@ class Upscaler : NSObject {
     
     func setupUpscaleModelFromPath(path:String,
                                    computeUnits:MLComputeUnits) {
-        //print("setting up CoreML model from path \(path)")
+        print("setting up CoreML upscale model from path \(path)")
         self.conf.computeUnits = computeUnits
         
         // model
@@ -42,7 +42,9 @@ class Upscaler : NSObject {
             self.request = VNCoreMLRequest(model: visionModel)
             self.request?.imageCropAndScaleOption = .scaleFill
             self.request?.usesCPUOnly = false
+            currentUpscalerName = URL(string: NSURL(fileURLWithPath: path).lastPathComponent ?? String())?.deletingPathExtension().path ?? String()
         } else {
+            currentUpscalerName = String()
             fatalError()
         }
     }

@@ -12,7 +12,7 @@ import AppKit
 // COREML STABLE DIFFUSION
 
 @main
-class AppDelegate: NSObject, NSApplicationDelegate, NSSharingServicePickerDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { return true }
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool { return true }
     func applicationDidFinishLaunching(_ aNotification: Notification) { self.startPromptToImage() }
@@ -20,3 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSSharingServicePickerDelega
 }
 
 
+extension AppDelegate {
+    @IBAction func openSettingsWindow(_ sender: Any) {
+        guard let ctrl = wins["main"] as? SDMainWindowController else { return }
+        ctrl.window?.beginSheet(ctrl.settingsWindow)
+    }
+}

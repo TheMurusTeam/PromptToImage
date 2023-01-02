@@ -19,7 +19,7 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
         (wins["main"] as! SDMainWindowController).waitLabel.stringValue = "Loading Model"
         (wins["main"] as! SDMainWindowController).waitInfoLabel.stringValue = url == builtInModelResourcesURL ? "Built-in model" : url.lastPathComponent
         (wins["main"] as! SDMainWindowController).clearCUImages()
-        (wins["main"] as! SDMainWindowController).modelMainLabel.stringValue = "Loading model..."
+        (wins["main"] as! SDMainWindowController).modelsPopup.isHidden = true
         var custring = String()
         switch computeUnits {
         case .cpuAndNeuralEngine: custring = "CPU and Neural Engine"
@@ -48,13 +48,14 @@ func createStableDiffusionPipeline(computeUnits:MLComputeUnits, url:URL) {
                                                  configuration:config)
         try sdPipeline?.loadResources()
         DispatchQueue.main.async {
-            (wins["main"] as! SDMainWindowController).modelMainLabel.stringValue = url.lastPathComponent
+            (wins["main"] as! SDMainWindowController).modelsPopup.isHidden = false
+            (wins["main"] as! SDMainWindowController).populateModelsPopup()
         }
     } catch {
         print("Unable to create Stable Diffusion pipeline")
         sdPipeline = nil
         DispatchQueue.main.async {
-            (wins["main"] as! SDMainWindowController).modelMainLabel.stringValue = "No model selected"
+            (wins["main"] as! SDMainWindowController).modelsPopup.isHidden = true
         }
     }
     

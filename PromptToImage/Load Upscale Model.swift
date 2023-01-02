@@ -11,3 +11,7 @@ import Foundation
 func loadUpscalerModel() {
     Upscaler.shared.setupUpscaleModelFromPath(path: defaultUpscaleModelPath!, computeUnits: defaultUpscalerComputeUnits)
 }
+
+func loadUpscalerModel(from path:String) {
+    Upscaler.shared.setupUpscaleModelFromPath(path: path, computeUnits: defaultUpscalerComputeUnits)
+}

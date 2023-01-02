@@ -26,6 +26,7 @@ extension AppDelegate {
         // create custom directories in app sandbox if needed
         createModelsDir()
         createHistoryDir()
+        createUpscalersDir()
         
         // set model and compute units
         if CGEventSource.keyState(CGEventSourceStateID.init(rawValue: 0)!, key: 0x3a) ||
@@ -49,7 +50,7 @@ extension AppDelegate {
         // load models
         print("Built-in model exists: \(builtInModelExists())")
         
-        // load upscaler CoreML model
+        // load default upscaler CoreML model (realesrgan512.mlmodelc)
         DispatchQueue.global().async {
             loadUpscalerModel()
         }

@@ -28,9 +28,11 @@ extension SDMainWindowController {
     // MARK: Draw Info Popover
     
     // create info Popover
-    func presentPopover(originview:NSView,edge:NSRectEdge?,historyItem:HistoryItem) {
+    func presentPopover(originview:NSView,
+                        edge:NSRectEdge?,
+                        historyItem:HistoryItem) {
         self.setInfoPopover(item: historyItem)
-        self.currentInfoPopoverItem = historyItem
+        self.currentHistoryItemForInfoPopover = historyItem
         infoPopover = NSPopover()
         let popoverCtrl = NSViewController()
         popoverCtrl.view = self.infoPopoverView
@@ -46,6 +48,7 @@ extension SDMainWindowController {
         self.info_date.stringValue = dateFormatter.string(from: item.date)
         self.info_model.stringValue = item.modelName
         self.info_prompt.stringValue = item.prompt
+        self.info_sampler.stringValue = item.sampler
         self.info_negativePrompt.stringValue = item.negativePrompt
         self.info_seed.stringValue = String(item.seed)
         self.info_steps.stringValue = String(item.steps)
@@ -61,17 +64,17 @@ extension SDMainWindowController {
         let size = item.originalSize
         self.info_size.stringValue = "\(String(Int(size.width)))x\(String(Int(size.height)))"
         self.info_upscaledView.isHidden = !item.upscaled
-        self.info_upscaleBtn.isHidden = item.upscaled
+        // self.info_upscaleBtn.isHidden = item.upscaled
         if let upscaledImage = item.upscaledImage {
             self.info_upscaledsize.stringValue = "\(String(Int(upscaledImage.width)))x\(String(Int(upscaledImage.height)))"
         }
     }
     
     
-    // MARK: Delete upscaled image
+    // MARK: Delete upscaled image from Info Popover
     
     @IBAction func info_removeUpscaledImage(_ sender: Any) {
-        if let item = self.currentInfoPopoverItem {
+        if let item = self.currentHistoryItemForInfoPopover {
             item.upscaledImage = nil
             item.upscaledSize = nil
             item.upscaled = false
@@ -93,10 +96,10 @@ extension SDMainWindowController {
     
     
     
-    // MARK: Upscale image
+    /* Upscale image from Info Popover
     
     @IBAction func info_upscaleImage(_ sender: Any) {
-        if let item = self.currentInfoPopoverItem {
+        if let item = self.currentHistoryItemForInfoPopover {
             self.info_progress.isHidden = false
             self.info_progress.startAnimation(nil)
             DispatchQueue.global().async {
@@ -110,13 +113,8 @@ extension SDMainWindowController {
                         if let firstItem = self.historyArrayController.selectedObjects[0] as? HistoryItem {
                             let image = firstItem.upscaledImage ?? firstItem.image
                             self.imageview.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
-                            
-                            if self.zoomToFit {
-                                self.imageview.zoomImageToFit(self)
-                            } else {
-                                self.imageview.zoomFactor = self.viewZoomFactor
-                            }
-                            
+                            self.imageview.zoomImageToFit(self)
+                            self.zoomToFit = true
                         }
                     }
                     
@@ -128,7 +126,7 @@ extension SDMainWindowController {
             }
         }
     }
-    
+    */
     
     
     

@@ -72,6 +72,7 @@ extension URL {
     var isJPEG: Bool { typeIdentifier == "public.jpeg" }
     var isFolder: Bool { typeIdentifier == "public.folder" }
     var isDirectory: Bool { typeIdentifier == "public.directory" }
+    var isCompiledCoreMLModel: Bool { self.pathExtension == "mlmodelc" }
     var localizedName: String? { (try? resourceValues(forKeys: [.localizedNameKey]))?.localizedName }
     var hasHiddenExtension: Bool {
         get { (try? resourceValues(forKeys: [.hasHiddenExtensionKey]))?.hasHiddenExtension == true }

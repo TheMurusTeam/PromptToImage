@@ -19,6 +19,7 @@ extension SDMainWindowController {
     @IBAction func clickGenerateImage(_ sender: NSButton) {
         self.historyArrayController.setSelectedObjects([])
         self.imageview.isHidden = true
+        self.imageControlsView.isHidden = true
         isRunning = true
         let inputImage = self.inputImageview.image?.cgImage(forProposedRect: nil, context: nil, hints: nil)
         // seed
@@ -136,28 +137,124 @@ extension SDMainWindowController {
     
     // MARK: ImageKit View Controls
     
-    @IBAction func clickZoomOut(_ sender: Any) {
-        self.imageview.zoomOut(self)
-        self.zoomToFit = false
-        self.viewZoomFactor = self.imageview.zoomFactor
-    }
-    @IBAction func clickZoomIn(_ sender: Any) {
-        self.imageview.zoomIn(self)
-        self.zoomToFit = false
-        self.viewZoomFactor = self.imageview.zoomFactor
-    }
-    @IBAction func clicZoomToActualSize(_ sender: Any) {
-        self.imageview.zoomImageToActualSize(self)
-        self.zoomToFit = false
-        self.viewZoomFactor = self.imageview.zoomFactor
-    }
-    @IBAction func clickZoomToFit(_ sender: Any) {
-        self.imageview.zoomImageToFit(self)
-        self.zoomToFit = true
+    @IBAction func clickControlsSegmentedCtrl(_ sender: NSSegmentedControl) {
+        switch sender.indexOfSelectedItem {
+        case 0:
+            self.imageview.zoomIn(self)
+            self.zoomToFit = false
+            self.viewZoomFactor = self.imageview.zoomFactor
+        case 1:
+            self.imageview.zoomOut(self)
+            self.zoomToFit = false
+            self.viewZoomFactor = self.imageview.zoomFactor
+        case 2:
+            self.imageview.zoomImageToActualSize(self)
+            self.zoomToFit = false
+            self.viewZoomFactor = self.imageview.zoomFactor
+        default:
+            self.imageview.zoomImageToFit(self)
+            self.zoomToFit = true
+        }
     }
     
     
     
+    // MARK: Upscale image from imageview
+    
+    @IBAction func clickUpscale(_ sender: NSPopUpButton) {
+        guard let upscalerUrl = sender.selectedItem?.representedObject as? URL else {
+            print("import compiled CoreML upscale model from file")
+            self.importUpscaleModel()
+            return
+        }
+        
+        guard !self.historyArrayController.selectedObjects.isEmpty else { return }
+        let displayedHistoryItem = self.historyArrayController.selectedObjects[0] as! HistoryItem
+        
+        self.waitLabel.stringValue = "Upscaling image..."
+        self.waitInfoLabel.stringValue = "Model: \(URL(string: NSURL(fileURLWithPath: upscalerUrl.path).lastPathComponent ?? String())?.deletingPathExtension().path ?? String())"
+        self.waitCULabel.stringValue = ""
+        self.window?.beginSheet(self.waitWin)
+        
+        DispatchQueue.global().async {
+            
+            Upscaler.shared.setupUpscaleModelFromPath(path: upscalerUrl.path, computeUnits: defaultUpscalerComputeUnits)
+            
+            guard let upscaledImage = Upscaler.shared.upscaledImage(image: displayedHistoryItem.image) else { return }
+            displayedHistoryItem.upscaledImage = upscaledImage
+            displayedHistoryItem.upscaledSize = upscaledImage.size
+            displayedHistoryItem.upscaled = true
+            DispatchQueue.main.async {
+                self.imageview.setImage(upscaledImage.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+                self.imageview.zoomImageToFit(self)
+                self.zoomToFit = true
+                self.originalUpscaledSwitch.isHidden = displayedHistoryItem.upscaledImage == nil
+                self.originalUpscaledSwitch.selectSegment(withTag: displayedHistoryItem.upscaledImage == nil ? 0 : 1)
+                self.window?.endSheet(self.waitWin)
+            }
+        }
+    }
+    
+    
+    // MARK: Switch Original/Upscaled
+    
+    @IBAction func clickOriginalUpscaledSwitch(_ sender: NSSegmentedControl) {
+        guard !self.historyArrayController.selectsInsertedObjects.description.isEmpty else { return }
+        let displayedHistoryitem = self.historyArrayController.selectedObjects[0] as! HistoryItem
+        switch sender.indexOfSelectedItem {
+        case 0: // original
+            self.imageview.setImage(displayedHistoryitem.image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+            // zoom
+            if self.zoomToFit {
+                self.imageview.zoomImageToFit(self)
+            } else {
+                self.imageview.zoomFactor = viewZoomFactor
+            }
+        default: // upscaled
+            guard let image = displayedHistoryitem.upscaledImage else { break }
+            self.imageview.setImage(image.cgImage(forProposedRect: nil, context: nil, hints: nil), imageProperties: [:])
+            // zoom
+            self.imageview.zoomImageToFit(self)
+            self.zoomToFit = true
+        }
+    }
+    
+    
+    
+    // MARK: Compute Units Images
+    
+   
+    
+    func setCUImages() {
+        self.led_cpu.image = NSImage(named:"cpuon")!
+        self.led_cpu.isEnabled = true
+        switch currentComputeUnits {
+        case .cpuAndGPU:
+            self.led_gpu.image = NSImage(named:"gpuon")!
+            self.led_gpu.isEnabled = true
+            self.led_ane.image = NSImage(named:"aneoff")!
+            self.led_ane.isEnabled = false
+        case .cpuAndNeuralEngine:
+            self.led_gpu.image = NSImage(named:"gpuoff")!
+            self.led_gpu.isEnabled = false
+            self.led_ane.image = NSImage(named:"aneon")!
+            self.led_ane.isEnabled = true
+        default:
+            self.led_gpu.image = NSImage(named:"gpuon")!
+            self.led_gpu.isEnabled = true
+            self.led_ane.image = NSImage(named:"aneon")!
+            self.led_ane.isEnabled = true
+        }
+    }
+    
+    func clearCUImages() {
+        self.led_cpu.image = NSImage(named:"cpuoff")!
+        self.led_cpu.isEnabled = false
+        self.led_ane.image = NSImage(named:"aneoff")!
+        self.led_ane.isEnabled = false
+        self.led_gpu.image = NSImage(named:"gpuoff")!
+        self.led_gpu.isEnabled = false
+    }
     
     
 }
@@ -173,3 +270,56 @@ let dateFormatter: DateFormatter = {
     formatter.doesRelativeDateFormatting = true
     return formatter
 }()
+
+
+
+
+
+
+
+
+
+
+
+
+@IBDesignable class FlatButton: NSButton {
+    @IBInspectable var cornerRadius: CGFloat = 5
+    
+    @IBInspectable var dxPadding: CGFloat = 0
+    @IBInspectable var dyPadding: CGFloat = 0
+
+    @IBInspectable var backgroundColor: NSColor = .controlAccentColor
+    
+    @IBInspectable var imageName: String = "NSActionTemplate"
+    
+    override func draw(_ dirtyRect: NSRect) {
+        // Set corner radius
+        self.wantsLayer = true
+        self.layer?.cornerRadius = cornerRadius
+        
+        // Darken background color when highlighted
+        if isHighlighted {
+            layer?.backgroundColor =  backgroundColor.blended(
+                withFraction: 0.2, of: .black
+            )?.cgColor
+        } else {
+            layer?.backgroundColor = backgroundColor.cgColor
+        }
+        
+        // Set Image
+        imagePosition = .imageLeading
+        //image = NSImage(named: imageName)
+
+        // Reset the bounds after drawing is complete
+        let originalBounds = self.bounds
+        defer { self.bounds = originalBounds }
+
+        // Inset bounds by padding
+        self.bounds = originalBounds.insetBy(
+            dx: dxPadding, dy: dyPadding
+        )
+        
+        // Super
+        super.draw(dirtyRect)
+    }
+}

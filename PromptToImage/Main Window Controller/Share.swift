@@ -20,7 +20,7 @@ extension SDMainWindowController {
         print("ROW:\(row)")
         // save
         let items : [NSImage] = [(self.history[row].upscaledImage ?? self.history[row].image)]
-        self.currentHistoryItem = self.history[row]
+        self.currentHistoryItemForSharePicker = self.history[row]
         let sharingPicker = NSSharingServicePicker(items: items)
         sharingPicker.delegate = self
         sharingPicker.show(relativeTo: NSZeroRect,
@@ -36,7 +36,7 @@ extension SDMainWindowController {
     // draw share menu
     func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
         
-        guard let historyItem = self.currentHistoryItem else { return [] }
+        guard let historyItem = self.currentHistoryItemForSharePicker else { return [] }
         let btnimage = NSImage(systemSymbolName: "display.and.arrow.down", accessibilityDescription: nil) // item icon
         var share = proposedServices
         

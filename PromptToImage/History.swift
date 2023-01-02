@@ -22,7 +22,7 @@ class HistoryItem : NSObject {
     @objc dynamic var guidanceScale = Float()
     var inputImage : CGImage? = nil
     var strength = Float()
-    var cgimage : CGImage? = nil
+    var sampler = String()
     @objc dynamic var image = NSImage()
     var upscaledImage : NSImage? = nil
     var seed = UInt32()
@@ -38,7 +38,8 @@ class HistoryItem : NSObject {
                      strength:Float,
                      image:NSImage,
                      upscaledImage:NSImage?,
-                     seed:UInt32) {
+                     seed:UInt32,
+                     sampler:String) {
         self.init()
         self.modelName = modelName
         self.date = Date()
@@ -54,6 +55,7 @@ class HistoryItem : NSObject {
         self.upscaled = self.upscaledImage != nil
         self.originalSize = self.image.size
         self.upscaledSize = self.upscaledImage?.size
+        self.sampler = sampler
     }
     
     
@@ -68,6 +70,7 @@ class HistoryItem : NSObject {
         archiver.encode(self.guidanceScale, forKey: "guidanceScale")
         archiver.encode(self.strength, forKey: "strength")
         archiver.encode(self.seed, forKey: "seed")
+        archiver.encode(self.sampler, forKey: "sampler")
         archiver.encode(self.image.tiffRepresentation, forKey: "image")
         if let inputImage = self.inputImage {
             archiver.encode(NSImage(cgImage: inputImage, size: .zero).tiffRepresentation, forKey: "inputImage")
@@ -85,6 +88,7 @@ class HistoryItem : NSObject {
             defer { unarchiver.finishDecoding() }
             //unarchiver.decode
             self.modelName = unarchiver.decodeObject(forKey: "modelName") as? String ?? String()
+            self.sampler = unarchiver.decodeObject(forKey: "sampler") as? String ?? String()
             self.date = unarchiver.decodeObject(forKey: "date") as? Date ?? Date()
             self.prompt = unarchiver.decodeObject(forKey: "prompt") as? String ?? String()
             self.negativePrompt = unarchiver.decodeObject(forKey: "negativePrompt") as? String ?? String()
@@ -93,7 +97,6 @@ class HistoryItem : NSObject {
             self.strength = unarchiver.decodeFloat(forKey: "strength")
             let storedSeed = (unarchiver.decodeObject(forKey: "seed") as? NSNumber) ?? (unarchiver.decodeInteger(forKey: "seed")) as NSNumber
             self.seed = UInt32(truncating: storedSeed)
-            //self.seed = UInt32(truncating: (unarchiver.decodeObject(forKey: "seed") as! NSNumber))
             
             // original image
             if let imageData = unarchiver.decodeObject(forKey: "image") as? Data {
@@ -187,6 +190,7 @@ extension SDMainWindowController {
     @IBAction func deleteSelectedHistoryItems(_ sender: Any) {
         self.historyArrayController.remove(contentsOf: self.historyArrayController.selectedObjects)
         self.imageview.isHidden = true
+        self.imageControlsView.isHidden = true
     }
     
 }
