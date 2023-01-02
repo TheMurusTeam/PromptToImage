@@ -26,13 +26,17 @@ extension SDMainWindowController {
     
     
     
-    // MARK: Reveal models dir in Finder
+    // MARK: Reveal SD models dir in Finder
     
     @IBAction func clickRevealModelsInFinder(_ sender: Any) {
         revealCustomModelsDirInFinder()
     }
     
+    // MARK: Reveal upscale models dir in Finder
     
+    @IBAction func clickRevealUpscaleModelsInFinder(_ sender: Any) {
+        NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: customUpscalersDirectoryPath).absoluteURL])
+    }
     
     
     // MARK: Compute Units Popup

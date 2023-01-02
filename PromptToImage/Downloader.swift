@@ -27,6 +27,10 @@ extension SDMainWindowController {
     }
     
     
+    
+    
+    
+    
     func gotNewModel(url:URL) {
         DispatchQueue.main.async {
             self.window?.endSheet(self.downloadWindow)

@@ -105,12 +105,18 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var settings_historyLimitLabel: NSTextField!
     @IBOutlet weak var settings_historyLimitStepper: NSStepper!
     @IBOutlet weak var settings_downloadBtn: NSButton!
-    // Download default model
+    // Welcome window
     @IBOutlet var downloadWindow: NSWindow!
     @IBOutlet weak var downloadProgr: NSProgressIndicator!
     @IBOutlet weak var progressLabel: NSTextField!
     @IBOutlet weak var progressValueLabel: NSTextField!
     @IBOutlet weak var downloadButton: NSButton!
+    
+    @IBAction func quitWelcome(_ sender: Any) {
+        self.window?.endSheet(self.downloadWindow)
+        NSApplication.shared.terminate(nil)
+    }
+    
     // model info button (show model card on Huggingface)
     @IBOutlet weak var modelCardBtn: NSButton!
     @IBAction func clickModelCardBtn(_ sender: Any) {
@@ -147,7 +153,10 @@ class SDMainWindowController: NSWindowController,
         if let url = URL(string: url) { NSWorkspace.shared.open(url) }
     }
     
-    
+    // export popup
+    @IBOutlet weak var exportPopup: NSPopUpButton!
+    @IBOutlet weak var item_exportUpscaled: NSMenuItem!
+    @IBOutlet weak var item_exportOriginal: NSMenuItem!
     
     
     // MARK: Init
@@ -157,7 +166,6 @@ class SDMainWindowController: NSWindowController,
         NSApplication.shared.activate(ignoringOtherApps: true)
         self.window?.makeKeyAndOrderFront(nil)
         //self.window?.appearance = NSAppearance(named: .darkAqua)
-        
     }
     
     
@@ -200,15 +208,14 @@ class SDMainWindowController: NSWindowController,
         } else if menu == self.upscalePopup.menu {
             // Upscale popup
             self.populateUpscalePopup()
-            /*
-            guard !self.historyArrayController.selectedObjects.isEmpty else { return }
-            let displayedHistoryItem = self.historyArrayController.selectedObjects[0] as! HistoryItem
-            self.imageItem_upscale.isEnabled = displayedHistoryItem.upscaledImage == nil
-            */
-            
         } else if menu == self.historyTableView.menu {
             // history tableview contextual menu
             self.item_saveAllSelectedImages.isEnabled = !self.historyArrayController.selectedObjects.isEmpty
+        } else if menu == self.exportPopup.menu {
+            // export menu
+            guard !self.historyArrayController.selectedObjects.isEmpty else { return }
+            guard let displayedHistoryItem = self.historyArrayController.selectedObjects[0] as? HistoryItem else { return }
+            self.item_exportUpscaled.isEnabled = displayedHistoryItem.upscaledImage != nil
         }
     }
     

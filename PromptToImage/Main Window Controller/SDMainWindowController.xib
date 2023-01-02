@@ -13,6 +13,7 @@
                 <outlet property="downloadButton" destination="Mrn-tm-9zE" id="D56-Gu-90X"/>
                 <outlet property="downloadProgr" destination="jF4-1Q-hrf" id="jqh-AJ-WsJ"/>
                 <outlet property="downloadWindow" destination="dyh-JB-Mr4" id="DLC-Lp-eNS"/>
+                <outlet property="exportPopup" destination="0oD-pJ-xdk" id="8td-Qs-KZ9"/>
                 <outlet property="guidanceLabel" destination="OVe-KX-NJY" id="gK9-w7-CIs"/>
                 <outlet property="guidanceSlider" destination="vWh-zt-BKp" id="1aH-ty-qVq"/>
                 <outlet property="historyArrayController" destination="Jhs-WJ-FKv" id="wQt-DW-ACJ"/>
@@ -43,6 +44,8 @@
                 <outlet property="info_upscaledView" destination="C9A-cn-KBN" id="gmR-ig-1Ix"/>
                 <outlet property="info_upscaledsize" destination="Ha0-5q-qTm" id="Lky-OI-XAY"/>
                 <outlet property="inputImageview" destination="jD6-Iv-tUv" id="k41-pY-M2F"/>
+                <outlet property="item_exportOriginal" destination="MLI-P3-VaI" id="037-X5-pkH"/>
+                <outlet property="item_exportUpscaled" destination="z4l-He-iaD" id="5Nh-Li-Ojn"/>
                 <outlet property="item_saveAllSelectedImages" destination="pvF-Ux-cgR" id="y6N-eX-8jN"/>
                 <outlet property="led_ane" destination="ffx-As-Xas" id="eRB-PL-qzl"/>
                 <outlet property="led_cpu" destination="gnC-TH-igx" id="EIw-MY-AgE"/>
@@ -465,7 +468,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button toolTip="Use random seed" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="31Q-Q0-bkP">
-                                <rect key="frame" x="203" y="9" width="76" height="18"/>
+                                <rect key="frame" x="203" y="8" width="76" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Random" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="28V-6K-2yo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -476,7 +479,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jke-yz-54I">
-                                <rect key="frame" x="107" y="36" width="172" height="25"/>
+                                <rect key="frame" x="95" y="36" width="184" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="PNDM" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1Yq-J5-Xvq" id="BV4-li-Nhe">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -505,7 +508,7 @@
                         </userDefinedRuntimeAttributes>
                     </customView>
                     <scrollView focusRingType="none" borderType="none" horizontalLineScroll="135" horizontalPageScroll="10" verticalLineScroll="135" verticalPageScroll="10" hasHorizontalScroller="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="vqd-kZ-QfX" userLabel="history scrollview">
-                        <rect key="frame" x="316" y="10" width="148" height="727"/>
+                        <rect key="frame" x="317" y="10" width="148" height="727"/>
                         <clipView key="contentView" id="gNJ-zO-1nK">
                             <rect key="frame" x="0.0" y="0.0" width="148" height="727"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -549,16 +552,16 @@
                                                             </connections>
                                                         </imageView>
                                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t0n-yM-dfh">
-                                                            <rect key="frame" x="27" y="3" width="79" height="25"/>
+                                                            <rect key="frame" x="31" y="3" width="71" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kue-Lb-oKs">
-                                                                    <rect key="frame" x="9" y="2" width="20" height="20"/>
+                                                                    <rect key="frame" x="5" y="2" width="20" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Eim-pW-pw8">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
-                                                                        <imageReference key="image" image="magnifyingglass.circle.fill" catalog="system" symbolScale="large" renderingMode="template"/>
+                                                                        <imageReference key="image" image="magnifyingglass.circle.fill" catalog="system" symbolScale="large" renderingMode="original"/>
                                                                     </buttonCell>
                                                                     <symbolConfiguration key="symbolConfiguration" weight="bold"/>
                                                                     <connections>
@@ -566,12 +569,12 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yYH-7x-oBN">
-                                                                    <rect key="frame" x="30" y="2" width="20" height="20"/>
+                                                                    <rect key="frame" x="26" y="2" width="20" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JR5-Zv-vK0">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
-                                                                        <imageReference key="image" image="arrow.backward.circle.fill" catalog="system" symbolScale="large" renderingMode="template"/>
+                                                                        <imageReference key="image" image="arrow.backward.circle.fill" catalog="system" symbolScale="large" renderingMode="original"/>
                                                                     </buttonCell>
                                                                     <symbolConfiguration key="symbolConfiguration" weight="bold"/>
                                                                     <connections>
@@ -579,12 +582,12 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="olx-1y-u47">
-                                                                    <rect key="frame" x="51" y="2.5" width="20" height="20"/>
+                                                                    <rect key="frame" x="47" y="2.5" width="20" height="20"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="MPs-A5-t1l">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
-                                                                        <imageReference key="image" image="square.and.arrow.up.circle.fill" catalog="system" symbolScale="large" renderingMode="template"/>
+                                                                        <imageReference key="image" image="square.and.arrow.up.circle.fill" catalog="system" symbolScale="large" renderingMode="original"/>
                                                                     </buttonCell>
                                                                     <symbolConfiguration key="symbolConfiguration" weight="bold"/>
                                                                     <connections>
@@ -594,7 +597,7 @@
                                                             </subviews>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                    <color key="value" name="underPageBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="value" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </userDefinedRuntimeAttribute>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                     <integer key="value" value="9"/>
@@ -650,38 +653,6 @@ CA
                                 <integer key="value" value="12"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </scrollView>
-                    <scrollView verticalHuggingPriority="25" verticalCompressionResistancePriority="75" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qq3-Sd-8d6" userLabel="IKImage scrollview">
-                        <rect key="frame" x="484" y="10" width="723" height="727"/>
-                        <clipView key="contentView" drawsBackground="NO" id="tgP-dq-hyE">
-                            <rect key="frame" x="0.0" y="0.0" width="723" height="727"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <ikImageView hidden="YES" wantsLayer="YES" fixedFrame="YES" zoomFactor="0.0" autoresizes="NO" supportsDragAndDrop="NO" doubleClickOpensImageEditPanel="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-Rd-Acp">
-                                    <rect key="frame" x="0.0" y="-52" width="750" height="779"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="-2" id="CQG-Gq-XV7"/>
-                                    </connections>
-                                </ikImageView>
-                            </subviews>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </clipView>
-                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="u7A-EM-W1w">
-                            <rect key="frame" x="0.0" y="711" width="723" height="16"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Qa5-B1-BYt">
-                            <rect key="frame" x="707" y="0.0" width="16" height="727"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <integer key="value" value="12"/>
-                            </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </scrollView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B0p-Yp-sNC">
@@ -808,10 +779,9 @@ CA
                         </userDefinedRuntimeAttributes>
                     </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyu-bR-zRu">
-                        <rect key="frame" x="89" y="746" width="211" height="24"/>
+                        <rect key="frame" x="89" y="746" width="126" height="24"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="207" id="1Va-gV-Wm0"/>
-                            <constraint firstAttribute="height" constant="24" id="aOR-P7-n2o"/>
+                            <constraint firstAttribute="height" constant="24" id="JPG-PQ-0ey"/>
                         </constraints>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Prompt To Image" id="HMb-n4-p0D">
                             <font key="font" metaFont="systemSemibold" size="15"/>
@@ -838,10 +808,10 @@ DQ
                         </connections>
                     </button>
                     <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ztn-EV-tRY">
-                        <rect key="frame" x="922" y="743" width="285" height="35"/>
+                        <rect key="frame" x="915" y="743" width="295" height="35"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NLp-PF-oMA">
-                                <rect key="frame" x="106" y="-3" width="43" height="40"/>
+                                <rect key="frame" x="76" y="-3" width="43" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="ErD-zX-lmp">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -862,13 +832,13 @@ DQ
                                 </connections>
                             </popUpButton>
                             <segmentedControl hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TuR-ld-I5a">
-                                <rect key="frame" x="31" y="-3" width="81" height="40"/>
+                                <rect key="frame" x="1" y="-3" width="81" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="10W-Pj-qap">
                                     <font key="font" metaFont="system"/>
                                     <segments>
-                                        <segment toolTip="Display original image" image="square.and.arrow.down.on.square" catalog="system" width="23"/>
-                                        <segment toolTip="Display upscaled image" image="square.and.arrow.up.on.square" catalog="system" width="23" selected="YES" tag="1"/>
+                                        <segment toolTip="Display original image" image="square.grid.3x2" catalog="system" width="23"/>
+                                        <segment toolTip="Display upscaled image" image="square.grid.4x3.fill" catalog="system" width="23" selected="YES" tag="1"/>
                                     </segments>
                                 </segmentedCell>
                                 <connections>
@@ -876,7 +846,7 @@ DQ
                                 </connections>
                             </segmentedControl>
                             <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ac-50-xdv">
-                                <rect key="frame" x="143" y="-3" width="147" height="40"/>
+                                <rect key="frame" x="113" y="-3" width="147" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <segmentedCell key="cell" controlSize="large" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="Jri-J2-8p8">
                                     <font key="font" metaFont="system"/>
@@ -895,39 +865,116 @@ DQ
                                     <action selector="clickControlsSegmentedCtrl:" target="-2" id="lbq-wY-iqJ"/>
                                 </connections>
                             </segmentedControl>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0oD-pJ-xdk">
+                                <rect key="frame" x="254" y="-3" width="43" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="large" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="1cr-Uq-fus">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" autoenablesItems="NO" id="sjg-IQ-1L3">
+                                        <items>
+                                            <menuItem image="NSShareTemplate" hidden="YES" id="4qO-Kf-jYa"/>
+                                            <menuItem title="Export original image..." id="MLI-P3-VaI">
+                                                <connections>
+                                                    <action selector="exportOriginalImage:" target="-2" id="2zY-Pm-CSF"/>
+                                                </connections>
+                                            </menuItem>
+                                            <menuItem title="Export upscaled image..." id="z4l-He-iaD">
+                                                <connections>
+                                                    <action selector="exportUpscaledImage:" target="-2" id="Eir-dp-Nq4"/>
+                                                </connections>
+                                            </menuItem>
+                                        </items>
+                                        <connections>
+                                            <outlet property="delegate" destination="-2" id="6ZR-Qa-jjd"/>
+                                        </connections>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="height" constant="35" id="6gR-5P-azE"/>
-                            <constraint firstAttribute="width" constant="285" id="uAO-4l-rVg"/>
+                            <constraint firstAttribute="width" constant="295" id="uAO-4l-rVg"/>
                         </constraints>
+                    </customView>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="0HE-df-5kW" userLabel="Image Container view">
+                        <rect key="frame" x="484" y="10" width="723" height="727"/>
+                        <subviews>
+                            <scrollView verticalHuggingPriority="25" verticalCompressionResistancePriority="75" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qq3-Sd-8d6" userLabel="IKImage scrollview">
+                                <rect key="frame" x="0.0" y="0.0" width="723" height="727"/>
+                                <clipView key="contentView" focusRingType="none" drawsBackground="NO" id="tgP-dq-hyE">
+                                    <rect key="frame" x="0.0" y="0.0" width="723" height="727"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <ikImageView hidden="YES" wantsLayer="YES" focusRingType="none" fixedFrame="YES" zoomFactor="0.0" autoresizes="NO" supportsDragAndDrop="NO" doubleClickOpensImageEditPanel="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QQ2-Rd-Acp">
+                                            <rect key="frame" x="0.0" y="-52" width="750" height="779"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <color key="backgroundColor" red="0.11764705882352941" green="0.11764705882352941" blue="0.11764705882352941" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-2" id="CQG-Gq-XV7"/>
+                                            </connections>
+                                        </ikImageView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="u7A-EM-W1w">
+                                    <rect key="frame" x="0.0" y="711" width="723" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Qa5-B1-BYt">
+                                    <rect key="frame" x="707" y="0.0" width="16" height="727"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="qq3-Sd-8d6" secondAttribute="trailing" id="GW1-bu-ZdN"/>
+                            <constraint firstAttribute="bottom" secondItem="qq3-Sd-8d6" secondAttribute="bottom" id="Hr5-Ra-IPL"/>
+                            <constraint firstItem="qq3-Sd-8d6" firstAttribute="top" secondItem="0HE-df-5kW" secondAttribute="top" id="OT6-Fr-v9A"/>
+                            <constraint firstItem="qq3-Sd-8d6" firstAttribute="leading" secondItem="0HE-df-5kW" secondAttribute="leading" id="Yun-6b-8KF"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="wantsLayer" value="YES"/>
+                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                <color key="value" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </customView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="0HE-df-5kW" firstAttribute="leading" secondItem="vqd-kZ-QfX" secondAttribute="trailing" constant="19" id="06w-59-eNy"/>
                     <constraint firstItem="jX1-fi-hn6" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="49" id="0rp-iZ-AL8"/>
                     <constraint firstItem="jX1-fi-hn6" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="11" id="1fR-ek-6Tz"/>
-                    <constraint firstItem="vqd-kZ-QfX" firstAttribute="leading" secondItem="a14-pf-POd" secondAttribute="trailing" constant="18" id="6u0-XA-8ah"/>
-                    <constraint firstAttribute="trailing" secondItem="qq3-Sd-8d6" secondAttribute="trailing" constant="9" id="7nP-Gp-BTY"/>
+                    <constraint firstItem="oyu-bR-zRu" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="91" id="5hu-RE-ZOy"/>
+                    <constraint firstItem="vqd-kZ-QfX" firstAttribute="leading" secondItem="a14-pf-POd" secondAttribute="trailing" constant="19" id="6u0-XA-8ah"/>
                     <constraint firstItem="yVp-0m-7xj" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="10" id="92U-53-1nK"/>
                     <constraint firstItem="B0p-Yp-sNC" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="11" id="9s9-Fh-x8y"/>
                     <constraint firstItem="fGS-d7-NNL" firstAttribute="top" secondItem="My5-l4-eOL" secondAttribute="bottom" id="BHe-Ai-wDf"/>
-                    <constraint firstAttribute="trailing" secondItem="ztn-EV-tRY" secondAttribute="trailing" constant="9" id="Cc9-3K-Nf3"/>
-                    <constraint firstItem="qq3-Sd-8d6" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="49" id="Cdf-2f-mLQ"/>
+                    <constraint firstAttribute="trailing" secondItem="ztn-EV-tRY" secondAttribute="trailing" constant="6" id="Cc9-3K-Nf3"/>
+                    <constraint firstAttribute="bottom" secondItem="0HE-df-5kW" secondAttribute="bottom" constant="10" id="Ehn-Sl-XoY"/>
                     <constraint firstAttribute="bottom" secondItem="vqd-kZ-QfX" secondAttribute="bottom" constant="10" id="G0p-J1-hZa"/>
-                    <constraint firstItem="oyu-bR-zRu" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="16" id="HCy-gn-44t"/>
                     <constraint firstItem="xoV-YF-QWG" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="11" id="JQN-QX-2e4"/>
+                    <constraint firstAttribute="trailing" secondItem="0HE-df-5kW" secondAttribute="trailing" constant="9" id="LGa-Ig-Xxo"/>
                     <constraint firstItem="fGS-d7-NNL" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" id="MdW-iI-2cV"/>
-                    <constraint firstAttribute="bottom" secondItem="qq3-Sd-8d6" secondAttribute="bottom" constant="10" id="NGH-y9-z7G"/>
                     <constraint firstAttribute="bottom" secondItem="jX1-fi-hn6" secondAttribute="bottom" constant="592" id="P85-yX-Aw9"/>
+                    <constraint firstItem="oyu-bR-zRu" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="16" id="QFQ-wj-Vg4"/>
                     <constraint firstAttribute="bottom" secondItem="xoV-YF-QWG" secondAttribute="bottom" constant="10" id="RwW-hr-v2e"/>
                     <constraint firstItem="yVp-0m-7xj" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="484" id="TgZ-9i-ZNx"/>
                     <constraint firstItem="cN9-fa-Tf1" firstAttribute="leading" secondItem="yVp-0m-7xj" secondAttribute="trailing" constant="8" id="WJJ-Dj-UPl"/>
-                    <constraint firstItem="oyu-bR-zRu" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" constant="91" id="cCT-af-IDb"/>
-                    <constraint firstItem="qq3-Sd-8d6" firstAttribute="leading" secondItem="vqd-kZ-QfX" secondAttribute="trailing" constant="20" id="cNM-iF-5dJ"/>
                     <constraint firstItem="cN9-fa-Tf1" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="10" id="iKt-dA-2Xb"/>
                     <constraint firstItem="My5-l4-eOL" firstAttribute="top" secondItem="B0p-Yp-sNC" secondAttribute="bottom" constant="17" id="ie1-Q7-HwV"/>
+                    <constraint firstItem="0HE-df-5kW" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="49" id="jhy-wr-lY2"/>
                     <constraint firstItem="My5-l4-eOL" firstAttribute="leading" secondItem="lxJ-M2-vqY" secondAttribute="leading" id="rLI-EG-sYj"/>
                     <constraint firstItem="ztn-EV-tRY" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="8" id="waI-T7-1gO"/>
-                    <constraint firstItem="vqd-kZ-QfX" firstAttribute="leading" secondItem="My5-l4-eOL" secondAttribute="trailing" constant="7" id="wg1-d3-dKo"/>
+                    <constraint firstItem="vqd-kZ-QfX" firstAttribute="leading" secondItem="My5-l4-eOL" secondAttribute="trailing" constant="8" id="wg1-d3-dKo"/>
                     <constraint firstItem="xoV-YF-QWG" firstAttribute="top" secondItem="fGS-d7-NNL" secondAttribute="bottom" constant="11" id="xCH-bk-YRc"/>
                     <constraint firstItem="vqd-kZ-QfX" firstAttribute="top" secondItem="lxJ-M2-vqY" secondAttribute="top" constant="49" id="y6C-0X-zd6"/>
                     <constraint firstItem="My5-l4-eOL" firstAttribute="top" secondItem="a14-pf-POd" secondAttribute="bottom" constant="8" id="z0n-Dt-Lnu"/>
@@ -1416,26 +1463,6 @@ DQ
                                     <rect key="frame" x="10" y="33" width="459" height="156"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQi-96-kru">
-                                            <rect key="frame" x="15" y="59" width="429" height="36"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" selectable="YES" title="To manually install a custom model create a new folder in Models Directory and copy all model files." id="6gD-m0-yFM">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqu-GE-O9G">
-                                            <rect key="frame" x="11" y="103" width="233" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Reveal Models Dir in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IuN-Yq-etr">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="clickRevealModelsInFinder:" target="-2" id="7aL-vx-a38"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S9g-BZ-ijr">
                                             <rect key="frame" x="15" y="22" width="382" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1443,6 +1470,54 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QQi-96-kru">
+                                            <rect key="frame" x="15" y="55" width="429" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" selectable="YES" title="To manually install a custom Stable Diffusion model create a new folder in custom models directory and copy all model files." id="6gD-m0-yFM">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqu-GE-O9G">
+                                            <rect key="frame" x="11" y="99" width="437" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Reveal Custom Stable Diffusion Models Directory in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IuN-Yq-etr">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="clickRevealModelsInFinder:" target="-2" id="7aL-vx-a38"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Upscale" identifier="" id="Uua-11-Zzn">
+                                <view key="view" id="BWc-uK-t2z">
+                                    <rect key="frame" x="10" y="33" width="459" height="156"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1SB-IY-8Hm">
+                                            <rect key="frame" x="15" y="55" width="429" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" selectable="YES" title="To manually install a custom upscale model copy a compiled CoreML model (.mlmodelc) to custom upscale models directory" id="sUY-Qg-Hme">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVv-Iq-D7w">
+                                            <rect key="frame" x="11" y="99" width="437" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Reveal Custom Upscale Models Directory in Finder" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="G1U-Nu-Wor">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="clickRevealUpscaleModelsInFinder:" target="-2" id="4FU-At-vez"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -1542,11 +1617,11 @@ DQ
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="jF4-1Q-hrf">
-                        <rect key="frame" x="20" y="81" width="438" height="20"/>
+                        <rect key="frame" x="20" y="91" width="438" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
                     <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hTh-Tv-o2n">
-                        <rect key="frame" x="18" y="101" width="309" height="16"/>
+                        <rect key="frame" x="18" y="111" width="309" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Progress Label" id="kuv-od-znz">
                             <font key="font" usesAppearanceFont="YES"/>
@@ -1555,7 +1630,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fQt-P1-bMa">
-                        <rect key="frame" x="372" y="101" width="88" height="16"/>
+                        <rect key="frame" x="372" y="111" width="88" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="0" id="vAF-0t-p94">
                             <font key="font" metaFont="systemBold" size="14"/>
@@ -1592,20 +1667,34 @@ DQ
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mrn-tm-9zE">
-                        <rect key="frame" x="65" y="14" width="351" height="40"/>
+                        <rect key="frame" x="113" y="14" width="351" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Download Stable Diffusion 2.1 CoreML Model" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="65P-K3-fZj">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
                         </buttonCell>
                         <color key="contentTintColor" name="AccentColor"/>
                         <connections>
                             <action selector="clickDownloadButton:" target="-2" id="lh9-Mg-2m7"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JAY-8q-rmo">
+                        <rect key="frame" x="14" y="14" width="86" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Quit" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o5M-uW-g52">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="quitWelcome:" target="-2" id="gxF-dE-sZo"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-10" y="-321"/>
+            <point key="canvasLocation" x="-10" y="-321.5"/>
         </window>
         <customView id="Z4Y-W3-UUz" userLabel="Models alert accessoryView">
             <rect key="frame" x="0.0" y="0.0" width="229" height="79"/>
@@ -1722,6 +1811,7 @@ DQ
     <resources>
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="NSEnterFullScreenTemplate" width="20" height="19"/>
+        <image name="NSShareTemplate" width="19" height="22"/>
         <image name="aneoff" width="64" height="64"/>
         <image name="arrow.backward.circle.fill" catalog="system" width="20" height="20"/>
         <image name="arrow.up" catalog="system" width="17" height="19"/>
@@ -1733,9 +1823,9 @@ DQ
         <image name="plus" catalog="system" width="14" height="13"/>
         <image name="prompttoimage" width="512" height="512"/>
         <image name="rectangle" catalog="system" width="18" height="14"/>
-        <image name="square.and.arrow.down.on.square" catalog="system" width="18" height="19"/>
         <image name="square.and.arrow.up.circle.fill" catalog="system" width="20" height="20"/>
-        <image name="square.and.arrow.up.on.square" catalog="system" width="18" height="20"/>
+        <image name="square.grid.3x2" catalog="system" width="22" height="14"/>
+        <image name="square.grid.4x3.fill" catalog="system" width="17" height="12"/>
         <image name="tree" width="256" height="256"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

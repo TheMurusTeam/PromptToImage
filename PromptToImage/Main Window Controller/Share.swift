@@ -74,7 +74,7 @@ extension SDMainWindowController {
         panel.nameFieldLabel = "Image file name:"
         panel.allowedContentTypes = [.png]
         // suggested file name
-        panel.nameFieldStringValue = "\(String(self.promptView.stringValue.prefix(50))).\(self.seedView.stringValue).png"
+        panel.nameFieldStringValue = "\(String(item.prompt.prefix(50))).\(item.seed).png"
         // panel strings
         panel.title = "Save image"
         panel.prompt = "Save Image"
@@ -87,7 +87,7 @@ extension SDMainWindowController {
                 let iptc = [
                     kCGImagePropertyIPTCOriginatingProgram: "PromptToImage for macOS",
                     kCGImagePropertyIPTCCaptionAbstract: self.metadata(item:item),
-                    kCGImagePropertyIPTCProgramVersion: "\(self.seedView.stringValue)"]
+                    kCGImagePropertyIPTCProgramVersion: "1.0"]
                 let meta = [kCGImagePropertyIPTCDictionary: iptc]
                 CGImageDestinationAddImage(destination, img, meta as CFDictionary)
                 guard CGImageDestinationFinalize(destination) else { return }
@@ -101,14 +101,13 @@ extension SDMainWindowController {
                 print("cancel")
             }
         })
-        
     }
            
     
     // MARK: Build metadata for IPTC
     
     private func metadata(item:HistoryItem) -> String {
-        return "Prompt: \(item.prompt)\nNegative Prompt: \(item.negativePrompt)\nSeed: \(item.seed)\nModel name: \(item.modelName)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)\n\nMade with PromptToImage for macOS"
+        return "Prompt:\n\(item.prompt)\n\nNegative Prompt:\n\(item.negativePrompt)\n\nModel:\n\(item.modelName)\n\nSeed: \(item.seed)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)\nScheduler: \(item.sampler)\nimg2img: \(item.upscaledImage != nil)\n\nMade with PromptToImage for macOS"
     }
 
     
@@ -241,6 +240,63 @@ extension SDMainWindowController {
     }
 
 
+    
+    
+    
+    // MARK: - Image Popup Actions
+    
+    @IBAction func exportOriginalImage(_ sender: Any) {
+        self.exportDisplayedImage(upscaled: false)
+    }
+    @IBAction func exportUpscaledImage(_ sender: Any) {
+        self.exportDisplayedImage(upscaled: true)
+    }
+    
+    func exportDisplayedImage(upscaled:Bool) {
+        guard !self.historyArrayController.selectedObjects.isEmpty else { return }
+        guard let item = self.historyArrayController.selectedObjects[0] as? HistoryItem else { return }
+        
+        
+        print("displaying save panel for single image with metadata")
+        guard let image = upscaled ? item.upscaledImage : item.image else { return }
+        guard let img = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+            displayErrorAlert(txt: "Unable to create CGImage")
+            return
+        }
+                
+        let panel = NSSavePanel()
+        panel.nameFieldLabel = "Image file name:"
+        panel.allowedContentTypes = [.png]
+        // suggested file name
+        panel.nameFieldStringValue = "\(String(item.prompt.prefix(50))).\(item.seed).png"
+        // panel strings
+        panel.title = "Save image"
+        panel.prompt = "Save Image"
+        
+        panel.beginSheetModal(for: self.window!, completionHandler: { response in
+            if response == NSApplication.ModalResponse.OK {
+                guard let url = panel.url else { return }
+                guard let data = CFDataCreateMutable(nil, 0) else { return }
+                guard let destination = CGImageDestinationCreateWithData(data, UTType.png.identifier as CFString, 1, nil) else { return }
+                let iptc = [
+                    kCGImagePropertyIPTCOriginatingProgram: "PromptToImage for macOS",
+                    kCGImagePropertyIPTCCaptionAbstract: self.metadata(item:item),
+                    kCGImagePropertyIPTCProgramVersion: "1.0"]
+                let meta = [kCGImagePropertyIPTCDictionary: iptc]
+                CGImageDestinationAddImage(destination, img, meta as CFDictionary)
+                guard CGImageDestinationFinalize(destination) else { return }
+                
+                // write to file
+                do {
+                    try (data as Data).write(to: url)
+                } catch {
+                    print("error saving file: \(error)")
+                }
+            } else {
+                print("cancel")
+            }
+        })
+    }
 }
 
 
