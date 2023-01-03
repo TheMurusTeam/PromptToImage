@@ -1,5 +1,6 @@
 # PromptToImage
 Swift/AppKit CoreML Stable Diffusion app for macOS
+<img width="1411" alt="pti6" src="https://user-images.githubusercontent.com/27217431/210432228-fda479a3-f4f7-4ba9-aef6-8890437f32a0.png">
 
 
 # Features
