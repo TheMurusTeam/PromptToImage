@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import CoreML
 
 
 // MARK: History Item Model
@@ -23,6 +24,7 @@ class HistoryItem : NSObject {
     var inputImage : CGImage? = nil
     var strength = Float()
     var sampler = String()
+    var computeUnits = String()
     @objc dynamic var image = NSImage()
     var upscaledImage : NSImage? = nil
     var seed = UInt32()
@@ -56,6 +58,7 @@ class HistoryItem : NSObject {
         self.originalSize = self.image.size
         self.upscaledSize = self.upscaledImage?.size
         self.sampler = sampler
+        self.computeUnits = cu2hrstr(cu: currentComputeUnits)
     }
     
     
@@ -71,6 +74,7 @@ class HistoryItem : NSObject {
         archiver.encode(self.strength, forKey: "strength")
         archiver.encode(self.seed, forKey: "seed")
         archiver.encode(self.sampler, forKey: "sampler")
+        archiver.encode(self.computeUnits, forKey: "computeUnits")
         archiver.encode(self.image.tiffRepresentation, forKey: "image")
         if let inputImage = self.inputImage {
             archiver.encode(NSImage(cgImage: inputImage, size: .zero).tiffRepresentation, forKey: "inputImage")
@@ -88,7 +92,8 @@ class HistoryItem : NSObject {
             defer { unarchiver.finishDecoding() }
             //unarchiver.decode
             self.modelName = unarchiver.decodeObject(forKey: "modelName") as? String ?? String()
-            self.sampler = unarchiver.decodeObject(forKey: "sampler") as? String ?? String()
+            self.sampler = unarchiver.decodeObject(forKey: "sampler") as? String ?? "-"
+            self.computeUnits = unarchiver.decodeObject(forKey: "computeUnits") as? String ?? "-"
             self.date = unarchiver.decodeObject(forKey: "date") as? Date ?? Date()
             self.prompt = unarchiver.decodeObject(forKey: "prompt") as? String ?? String()
             self.negativePrompt = unarchiver.decodeObject(forKey: "negativePrompt") as? String ?? String()

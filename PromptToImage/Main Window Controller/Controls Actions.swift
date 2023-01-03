@@ -17,6 +17,8 @@ extension SDMainWindowController {
     // MARK: Click Generate Image 
     
     @IBAction func clickGenerateImage(_ sender: NSButton) {
+        //guard self.promptView.stringValue != "" else { return }
+        guard self.promptTextView.string != "" else { return }
         self.historyArrayController.setSelectedObjects([])
         self.imageview.isHidden = true
         self.imageControlsView.isHidden = true
@@ -30,8 +32,8 @@ extension SDMainWindowController {
         self.seedView.stringValue = String(seed)
         
         // generate image
-        self.generateImage(prompt: self.promptView.stringValue,
-                           negativePrompt: self.negativePromptView.stringValue,
+        self.generateImage(prompt: self.promptTextView.string, //self.promptView.stringValue,
+                           negativePrompt: self.negativePromptTextView.string, //self.negativePromptView.stringValue,
                            startingImage: inputImage,
                            strength: inputImage != nil ? self.strengthLabel.floatValue : Float(1),
                            imageCount: self.imageCountSlider.integerValue, //self.imageCountStepper.integerValue,

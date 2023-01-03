@@ -47,13 +47,14 @@ extension SDMainWindowController {
     func setInfoPopover(item:HistoryItem) {
         self.info_date.stringValue = dateFormatter.string(from: item.date)
         self.info_model.stringValue = item.modelName
-        self.info_prompt.stringValue = item.prompt
+        self.info_promptTextView.string = item.prompt
         self.info_sampler.stringValue = item.sampler
-        self.info_negativePrompt.stringValue = item.negativePrompt
+        self.info_negPromptTextView.string = item.negativePrompt
         self.info_seed.stringValue = String(item.seed)
         self.info_steps.stringValue = String(item.steps)
         self.info_guidance.stringValue = String(item.guidanceScale)
         self.info_strength.stringValue = String(item.strength)
+        self.info_cu.stringValue = item.computeUnits
         self.info_inputImage.image = NSImage()
         if let cgimage = item.inputImage {
             self.info_inputImage.image = NSImage(cgImage: cgimage, size: .zero)
@@ -134,11 +135,13 @@ extension SDMainWindowController {
     
     // prompt
     @IBAction func infoCopyPrompt(_ sender: Any) {
-        self.promptView.stringValue = info_prompt.stringValue
+        //self.promptView.stringValue = info_promptTextView.string
+        self.promptTextView.string = info_promptTextView.string
     }
     // negative prompt
     @IBAction func infoCopyNegativePrompt(_ sender: Any) {
-        self.negativePromptView.stringValue = info_negativePrompt.stringValue
+        //self.negativePromptView.stringValue = info_negPromptTextView.string
+        self.negativePromptTextView.string = info_negPromptTextView.string
     }
     // seed
     @IBAction func infoCopySeed(_ sender: Any) {
@@ -175,4 +178,19 @@ extension SDMainWindowController {
         displayErrorAlert(txt: "Image to Image is not available with current model: VAEEncoder.mlmodelc not found")
     }
     
+    
+    
+    // MARK: Copy to clipboard
+    
+    @IBAction func copyPromptToClipBoard(_ sender: Any) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(self.info_promptTextView.string, forType: .string)
+    }
+    
+    @IBAction func copyNegativePromptToClipBoard(_ sender: Any) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([.string], owner: nil)
+        pasteboard.setString(self.info_negPromptTextView.string, forType: .string)
+    }
 }

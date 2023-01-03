@@ -13,8 +13,12 @@ extension SDMainWindowController {
     
     
     func storeControlsValues() {
-        UserDefaults.standard.setValue(self.promptView.stringValue, forKey: "prompt")
-        UserDefaults.standard.setValue(self.negativePromptView.stringValue, forKey: "negative")
+#if DEBUG
+        //UserDefaults.standard.setValue(self.promptView.stringValue, forKey: "prompt")
+        UserDefaults.standard.setValue(self.promptTextView.string, forKey: "prompt")
+        //UserDefaults.standard.setValue(self.negativePromptView.stringValue, forKey: "negative")
+        UserDefaults.standard.setValue(self.negativePromptTextView.string, forKey: "negative")
+#endif
         UserDefaults.standard.setValue(self.stepsSlider.doubleValue, forKey: "steps")
         UserDefaults.standard.setValue(self.upscaleCheckBox.state == .on, forKey: "upscale")
         UserDefaults.standard.setValue(self.guidanceLabel.floatValue, forKey: "guidance")
@@ -27,9 +31,16 @@ extension SDMainWindowController {
     }
     
     
+    
+    
+    
     func readStoredControlsValues() {
-        self.promptView.stringValue = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
-        self.negativePromptView.stringValue = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
+#if DEBUG
+        //self.promptView.stringValue = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
+        self.promptTextView.string = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
+        //self.negativePromptView.stringValue = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
+        self.negativePromptTextView.string = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
+#endif
         self.stepsSlider.integerValue = Int(UserDefaults.standard.value(forKey: "steps") as? Double ?? 25)
         self.stepsLabel.stringValue = String(self.stepsSlider.integerValue)
         self.upscaleCheckBox.state = (UserDefaults.standard.value(forKey: "upscale") as? Bool ?? true) ? .on : .off

@@ -127,24 +127,36 @@ extension AppDelegate {
     
     
     
-    // MLComputeUnits -> String -> MLComputeUnits
     
-    func cu2str(cu:MLComputeUnits) -> String {
-        switch cu {
-        case .cpuAndGPU: return "cpuAndGPU"
-        case .cpuAndNeuralEngine: return "cpuAndNeuralEngine"
-        case .cpuOnly: return "cpuOnly"
-        default: return "all"
-        }
+    
+}
+
+
+// MLComputeUnits -> String -> MLComputeUnits
+
+func cu2str(cu:MLComputeUnits) -> String {
+    switch cu {
+    case .cpuAndGPU: return "cpuAndGPU"
+    case .cpuAndNeuralEngine: return "cpuAndNeuralEngine"
+    case .cpuOnly: return "cpuOnly"
+    default: return "all"
     }
-    
-    func str2cu(str:String) -> MLComputeUnits {
-        switch str {
-        case "cpuAndGPU": return .cpuAndGPU
-        case "cpuAndNeuralEngine": return .cpuAndNeuralEngine
-        case "cpuOnly": return .cpuOnly
-        default: return .all
-        }
+}
+
+func cu2hrstr(cu:MLComputeUnits) -> String {
+    switch cu {
+    case .cpuAndGPU: return "CPU and GPU"
+    case .cpuAndNeuralEngine: return "CPU and Neural Engine"
+    case .cpuOnly: return "CPU only"
+    default: return "All Compute Units"
     }
-    
+}
+
+func str2cu(str:String) -> MLComputeUnits {
+    switch str {
+    case "cpuAndGPU": return .cpuAndGPU
+    case "cpuAndNeuralEngine": return .cpuAndNeuralEngine
+    case "cpuOnly": return .cpuOnly
+    default: return .all
+    }
 }

@@ -34,8 +34,10 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var indicator: NSProgressIndicator!
     @IBOutlet weak var indindicator: NSProgressIndicator!
     @IBOutlet weak var mainBtn: NSButton!
-    @IBOutlet weak var promptView: NSTextField!
-    @IBOutlet weak var negativePromptView: NSTextField!
+    @IBOutlet var promptTextView: NSTextView!
+    @IBOutlet var negativePromptTextView: NSTextView!
+    //@IBOutlet weak var promptView: NSTextField!
+    //@IBOutlet weak var negativePromptView: NSTextField!
     @IBOutlet weak var waitWin: NSWindow!
     @IBOutlet weak var waitProgr: NSProgressIndicator!
     @IBOutlet weak var waitLabel: NSTextField!
@@ -83,8 +85,6 @@ class SDMainWindowController: NSWindowController,
     var infoPopover : NSPopover? = nil
     @IBOutlet var infoPopoverView: NSView!
     @IBOutlet weak var info_date: NSTextField!
-    @IBOutlet weak var info_prompt: NSTextField!
-    @IBOutlet weak var info_negativePrompt: NSTextField!
     @IBOutlet weak var info_seed: NSTextField!
     @IBOutlet weak var info_steps: NSTextField!
     @IBOutlet weak var info_guidance: NSTextField!
@@ -96,8 +96,13 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var info_sampler: NSTextField!
     @IBOutlet weak var info_inputImageView: NSView!
     @IBOutlet weak var info_btn_copyStrength: NSButton!
+    @IBOutlet var info_promptTextView: NSTextView!
+    @IBOutlet var info_negPromptTextView: NSTextView!
+    @IBOutlet weak var info_cu: NSTextField!
+    
     @IBOutlet weak var info_btn_copyInputImage: NSButton!
     @IBOutlet var info_upscaledView: NSView!
+    
     // Settings
     @IBOutlet var settingsWindow: NSWindow!
     @IBOutlet weak var modelsPopupMenu: NSMenu!
@@ -130,7 +135,6 @@ class SDMainWindowController: NSWindowController,
     var zoomToFit : Bool = true
     // IKImageView image popup
     @IBOutlet weak var upscalePopup: NSPopUpButton!
-    @IBOutlet weak var imageItem_upscale: NSMenuItem!
     // model alert accessory view
     @IBOutlet var modelAlertView: NSView!
     @IBOutlet weak var modelAlertCUPopup: NSPopUpButton!
@@ -158,6 +162,14 @@ class SDMainWindowController: NSWindowController,
     @IBOutlet weak var item_exportUpscaled: NSMenuItem!
     @IBOutlet weak var item_exportOriginal: NSMenuItem!
     
+    // help button in main window
+    @IBAction func clickHelp(_ sender: Any) {
+        let url = "https://github.com/TheMurusTeam/PromptToImage"
+        if let url = URL(string: url) { NSWorkspace.shared.open(url) }
+    }
+    
+    
+    
     
     // MARK: Init
     
@@ -182,6 +194,18 @@ class SDMainWindowController: NSWindowController,
         self.imageview.hasVerticalScroller = true
         self.imageview.hasHorizontalScroller = true
         self.imageview.autohidesScrollers = false
+        // set prompt textViews
+        let attributes: [NSAttributedString.Key: Any] =
+        [.foregroundColor: NSColor.tertiaryLabelColor, .font: NSFont.systemFont(ofSize: 13)]
+        self.promptTextView.setValue(NSAttributedString(string: "Prompt", attributes: attributes),
+                          forKey: "placeholderAttributedString")
+        self.promptTextView.font = NSFont.systemFont(ofSize: 13)
+        self.negativePromptTextView.setValue(NSAttributedString(string: "Negative prompt", attributes: attributes),
+                          forKey: "placeholderAttributedString")
+        self.negativePromptTextView.font = NSFont.systemFont(ofSize: 13)
+        // info popover prompt textviews
+        self.info_promptTextView.font = NSFont.systemFont(ofSize: 13)
+        self.info_negPromptTextView.font = NSFont.systemFont(ofSize: 13)
     }
     
     
