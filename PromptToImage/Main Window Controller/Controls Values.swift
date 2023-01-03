@@ -37,9 +37,9 @@ extension SDMainWindowController {
     func readStoredControlsValues() {
 #if DEBUG
         //self.promptView.stringValue = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
-        self.promptTextView.string = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
+        //self.promptTextView.string = UserDefaults.standard.value(forKey: "prompt") as? String ?? String()
         //self.negativePromptView.stringValue = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
-        self.negativePromptTextView.string = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
+        //self.negativePromptTextView.string = UserDefaults.standard.value(forKey: "negative") as? String ?? String()
 #endif
         self.stepsSlider.integerValue = Int(UserDefaults.standard.value(forKey: "steps") as? Double ?? 25)
         self.stepsLabel.stringValue = String(self.stepsSlider.integerValue)

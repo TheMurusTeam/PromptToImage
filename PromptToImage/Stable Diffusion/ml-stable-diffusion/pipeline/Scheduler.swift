@@ -152,7 +152,7 @@ public final class PNDMScheduler: Scheduler {
     ) {
         self.trainStepCount = trainStepCount
         self.inferenceStepCount = stepCount
-
+ 
         switch betaSchedule {
         case .linear:
             self.betas = linspace(betaStart, betaEnd, trainStepCount)

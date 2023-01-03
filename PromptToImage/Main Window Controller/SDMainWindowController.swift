@@ -203,6 +203,7 @@ class SDMainWindowController: NSWindowController,
         self.negativePromptTextView.setValue(NSAttributedString(string: "Negative prompt", attributes: attributes),
                           forKey: "placeholderAttributedString")
         self.negativePromptTextView.font = NSFont.systemFont(ofSize: 13)
+        
         // info popover prompt textviews
         self.info_promptTextView.font = NSFont.systemFont(ofSize: 13)
         self.info_negPromptTextView.font = NSFont.systemFont(ofSize: 13)

@@ -89,7 +89,7 @@ public final class DPMSolverMultistepScheduler: Scheduler {
         // This could be optimized with a Metal kernel if we find we need to
         let x0_scalars = zip(modelOutput.scalars, sample.scalars).map { m, s in
             (s - m * sigma_t) / alpha_t
-        }
+        } 
         return MLShapedArray(scalars: x0_scalars, shape: modelOutput.shape)
     }
 
