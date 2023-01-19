@@ -1731,6 +1731,12 @@ DQ
                         <action selector="saveSelectedImages:" target="-2" id="Nqc-GS-Cas"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Remove Selected Images" id="saj-De-niw">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeSelectedImages:" target="-2" id="dYY-1T-Ihm"/>
+                    </connections>
+                </menuItem>
             </items>
             <connections>
                 <outlet property="delegate" destination="-2" id="Ik0-9f-3Ki"/>
