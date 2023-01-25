@@ -110,7 +110,13 @@ extension SDMainWindowController {
         return "Prompt:\n\(item.prompt)\n\nNegative Prompt:\n\(item.negativePrompt)\n\nModel:\n\(item.modelName)\n\nSeed: \(item.seed)\nSteps: \(item.steps)\nGuidance Scale: \(item.guidanceScale)\nScheduler: \(item.sampler)\nimg2img: \(item.upscaledImage != nil)\n\nMade with PromptToImage for macOS"
     }
 
-    
+    // MARK: Click Remove in tableview contextual menu
+
+    @IBAction func removeSelectedImages(_ sender: Any) {
+        guard let items = self.historyArrayController.selectedObjects as? [HistoryItem] else { return }
+        if !items.isEmpty { self.historyArrayController.remove(items) }
+    }
+
     // MARK: Click Save in tableview contextual menu
     
     @IBAction func saveSelectedImages(_ sender: Any) {
